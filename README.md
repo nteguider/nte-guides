@@ -1,14 +1,12 @@
 # Neverness to Everness: Guide Hub
 
-Добро пожаловать в архив Хесперии! Выберите нужный раздел:
-
-<div class="btn-container">
-  <a href="#/characters" class="nav-btn btn-red">👤 Characters</a>
-  <a href="#/tier-list" class="nav-btn btn-gold">🏆 Tier List</a>
-  <a href="#/arcs" class="nav-btn btn-outline">🎭 Arcs</a>
-</div>
+Welcome to the Hesperia Archives. This database provides all necessary information regarding anomalies, urban entities, and tactical gameplay.
 
 ---
-### Последние обновления
-* База данных запущена.
-* Добавлены разделы персонажей и тир-листа.
+
+### Latest Updates
+* **Project Initialized**: The English version of the database is now live.
+* **UI Update**: Navigation buttons integrated into the sidebar for faster access.
+
+> [!NOTE]
+> Use the sidebar menu to navigate through characters, rankings, and story arcs.
