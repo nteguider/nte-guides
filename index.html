@@ -18,35 +18,48 @@
     body { background-color: var(--content-background); }
     .sidebar { background-color: var(--sidebar-background); border-right: 1px solid #333; }
 
-    /* Buttons on the Main Page */
-    .btn-container {
-      display: flex;
-      gap: 15px;
-      margin: 25px 0;
-      flex-wrap: wrap;
-    }
-
-    .nav-btn {
-      padding: 14px 28px;
+    /* Стили для кнопок в боковом меню */
+    .sidebar-nav li > a {
+      margin: 10px 15px;
+      padding: 12px;
       border-radius: 4px;
-      font-weight: 800;
-      text-transform: uppercase;
-      text-decoration: none !important;
-      transition: all 0.2s ease-in-out;
-      display: inline-block;
       text-align: center;
-      min-width: 150px;
+      font-weight: bold;
+      text-transform: uppercase;
+      display: block;
+      transition: all 0.2s ease;
+      text-decoration: none !important;
     }
 
+    /* Кнопка Characters (Red) */
+    .sidebar-nav a[href="#/characters"] {
+      background-color: #ff3e3e !important;
+      color: white !important;
+    }
+
+    /* Кнопка Tier List (Gold) */
+    .sidebar-nav a[href="#/tier-list"] {
+      background-color: #d4af37 !important;
+      color: black !important;
+    }
+
+    /* Кнопка Arcs (Outline) */
+    .sidebar-nav a[href="#/arcs"] {
+      border: 2px solid #ff3e3e !important;
+      color: #ff3e3e !important;
+    }
+
+    .sidebar-nav a:hover {
+      transform: scale(1.05);
+      filter: brightness(1.2);
+    }
+    
+    /* Кнопки на главной странице */
+    .btn-container { display: flex; gap: 15px; margin: 25px 0; flex-wrap: wrap; }
+    .nav-btn { padding: 14px 28px; border-radius: 4px; font-weight: 800; text-transform: uppercase; text-decoration: none !important; display: inline-block; min-width: 150px; text-align: center; }
     .btn-red { background: #ff3e3e; color: white !important; }
     .btn-gold { background: #d4af37; color: black !important; }
     .btn-outline { border: 2px solid #ff3e3e; color: #ff3e3e !important; }
-
-    .nav-btn:hover {
-      transform: translateY(-3px);
-      filter: brightness(1.1);
-      box-shadow: 0 5px 15px rgba(255, 62, 62, 0.3);
-    }
   </style>
 </head>
 <body>
@@ -54,7 +67,7 @@
   <script>
     window.$docsify = {
       name: 'NTE Guide',
-      loadSidebar: true,
+      loadSidebar: true, // Обязательно для работы левого меню
       auto2top: true,
       homepage: 'README.md'
     }
