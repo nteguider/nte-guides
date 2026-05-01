@@ -12,4 +12,4 @@ Welcome to the Hesperia Archives! This database contains all the essential infor
 
 ### Latest Updates
 * **Database Online**: Initial setup for the Hesperia archive is complete.
-* **Navigation**: Sidebar and main buttons have been integrated.
+* **Navigation**: Sidebar buttons integrated.
