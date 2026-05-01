@@ -1,8 +1,10 @@
-* [🏠 Главная](README.md)
-* [🏆 Tier List](tier-list.md)
-* [👤 Characters](characters.md)
-* [🎭 Arcs](arcs.md)
+* [🏠 HOME](README.md)
 
-* **Дополнительно**
-  * [🚗 Транспорт](cars.md)
-  * [🏢 Недвижимость](housing.md)
+* **DATABASE**
+  * [👤 CHARACTERS](characters.md)
+  * [🏆 TIER LIST](tier-list.md)
+  * [🎭 ARCS](arcs.md)
+
+* **EXPLORATION**
+  * [🚗 Vehicles](cars.md)
+  * [🏢 Housing](housing.md)
