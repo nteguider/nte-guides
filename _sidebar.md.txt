@@ -3,11 +3,5 @@
 * **Гайды**
   * [🏆 Tier List](tier-list.md)
   * [👤 Characters](characters.md)
-  * [🎭 Arcs (Сюжет)](arcs.md)
+  * [🎭 Arcs (Дуги)](arcs.md)
 
-* **Город**
-  * [🚗 Транспорт](cars.md)
-  * [🏠 Недвижимость](housing.md)
-
-* **Полезное**
-  * [⚙️ Настройки графики](settings.md)
