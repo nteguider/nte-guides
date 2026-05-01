@@ -1,7 +1,8 @@
 * [🏠 Главная](README.md)
+* [🏆 Tier List](tier-list.md)
+* [👤 Characters](characters.md)
+* [🎭 Arcs](arcs.md)
 
-* **Гайды**
-  * [🏆 Tier List](tier-list.md)
-  * [👤 Characters](characters.md)
-  * [🎭 Arcs (Дуги)](arcs.md)
-
+* **Дополнительно**
+  * [🚗 Транспорт](cars.md)
+  * [🏢 Недвижимость](housing.md)
