@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NTE Database | Character Guides & Tier List</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&family=Inter:wght@300;500;700&display=swap" rel="stylesheet">
+    <style>
+        body { background-color: #0a0b0d; color: #e2e8f0; font-family: 'Inter', sans-serif; }
+        .nte-title { font-family: 'Orbitron', sans-serif; }
+        .tier-s { background: linear-gradient(90deg, #ff4d4d 0%, #b30000 100%); shadow: 0 0 15px rgba(255, 77, 77, 0.4); }
+        .tier-a { background: linear-gradient(90deg, #ff944d 0%, #b35900 100%); }
+    </style>
+</head>
+<body class="p-4 md:p-8">
+
+    <nav class="max-w-6xl mx-auto flex justify-between items-center mb-12 border-b border-white/5 pb-4">
+        <div class="nte-title text-2xl font-bold text-cyan-400 tracking-tighter">NTE.GG</div>
+        <div class="hidden md:flex space-x-8 text-xs uppercase tracking-widest font-bold">
+            <a href="#" class="text-white hover:text-cyan-400 transition">Characters</a>
+            <a href="#" class="text-gray-500 hover:text-cyan-400 transition">Tier List</a>
+            <a href="#" class="text-gray-500 hover:text-cyan-400 transition">Vehicles</a>
+        </div>
+    </nav>
+
+    <section class="max-w-6xl mx-auto mb-16">
+        <h2 class="nte-title text-xl mb-6 flex items-center">
+            <span class="w-2 h-6 bg-cyan-500 mr-3"></span> Global Meta Tier List
+        </h2>
+        <div class="grid gap-3">
+            <div class="flex items-center bg-white/5 rounded-xl border border-white/10 p-1">
+                <div class="w-14 h-14 flex items-center justify-center nte-title text-2xl font-black tier-s rounded-lg mr-4">S</div>
+                <div class="flex gap-2">
+                    <div class="w-12 h-12 bg-gray-800 rounded-full border-2 border-cyan-400 hover:scale-105 transition cursor-pointer" title="Nanami"></div>
+                    <div class="w-12 h-12 bg-gray-800 rounded-full border-2 border-cyan-400 hover:scale-105 transition cursor-pointer"></div>
+                </div>
+            </div>
+            <div class="flex items-center bg-white/5 rounded-xl border border-white/10 p-1">
+                <div class="w-14 h-14 flex items-center justify-center nte-title text-2xl font-black tier-a rounded-lg mr-4">A</div>
+                <div class="flex gap-2">
+                    <div class="w-12 h-12 bg-gray-800 rounded-full border-2 border-gray-600"></div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <main class="max-w-6xl mx-auto">
+        <div class="bg-[#12141a] rounded-3xl overflow-hidden border border-white/5 shadow-2xl flex flex-col md:row min-h-[600px] md:flex-row">
+            
+            <div class="md:w-2/5 relative bg-[#1c2129]">
+                <img src="https://via.placeholder.com/600x800" alt="Esper Art" class="w-full h-full object-cover grayscale hover:grayscale-0 transition duration-700">
+                <div class="absolute bottom-6 left-6">
+                    <p class="text-xs uppercase tracking-tighter text-cyan-400 font-bold mb-1">Anomaly / DPS</p>
+                    <h2 class="nte-title text-4xl font-bold">NANAMI</h2>
+                </div>
+            </div>
+
+            <div class="md:w-3/5 p-8 md:p-12">
+                <div class="flex space-x-8 border-b border-white/10 mb-8 overflow-x-auto">
+                    <button onclick="openTab(event, 'Skills')" class="tab-link pb-4 text-xs uppercase font-bold tracking-widest border-b-2 border-cyan-400 text-white">Abilities</button>
+                    <button onclick="openTab(event, 'Resonance')" class="tab-link pb-4 text-xs uppercase font-bold tracking-widest border-b-2 border-transparent text-gray-500 hover:text-white">Resonance</button>
+<button onclick="openTab(event, 'Build')" class="tab-link pb-4 text-xs uppercase font-bold tracking-widest border-b-2 border-transparent text-gray-500 hover:text-white">Best Build</button>
+                </div>
+
+                <div id="Skills" class="tab-content block animate-fadeIn">
+                    <div class="space-y-6">
+                        <div class="bg-white/5 p-4 rounded-xl border-l-4 border-cyan-500">
+                            <h4 class="text-cyan-400 font-bold text-xs uppercase mb-1">Normal Attack: Void Blade</h4>
+                            <p class="text-sm text-gray-300 leading-relaxed">Performs up to 5 rapid strikes. If the 3rd hit connects, creates a small gravity well.</p>
+                        </div>
+                        <div class="bg-white/5 p-4 rounded-xl border-l-4 border-purple-500">
+                            <h4 class="text-purple-400 font-bold text-xs uppercase mb-1">Ultimate: Chronos Burst</h4>
+                            <p class="text-sm text-gray-300 leading-relaxed">Deals massive AoE Anomaly damage and slows all enemies within 20m for 5 seconds.</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div id="Resonance" class="tab-content hidden animate-fadeIn">
+                    <div class="grid gap-4">
+                        <div class="flex items-center p-4 bg-gradient-to-r from-cyan-500/10 to-transparent rounded-lg border border-cyan-500/20">
+                            <span class="w-10 h-10 rounded-full bg-cyan-500 flex items-center justify-center font-bold text-black mr-4 flex-shrink-0">R1</span>
+                            <div>
+                                <h5 class="text-white font-bold text-sm">Spatial Echo</h5>
+                                <p class="text-xs text-gray-400">Increase Anomaly DMG by 15% when attacking slowed targets.</p>
+                            </div>
+                        </div>
+                        <div class="flex items-center p-4 bg-white/5 rounded-lg opacity-50">
+                            <span class="w-10 h-10 rounded-full bg-gray-700 flex items-center justify-center font-bold text-white mr-4 flex-shrink-0">R2</span>
+                            <div>
+                                <h5 class="text-white font-bold text-sm">Time Warp</h5>
+                                <p class="text-xs text-gray-400">Reduce Ultimate CD by 2 seconds for every enemy killed.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div id="Build" class="tab-content hidden animate-fadeIn">
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <div class="p-4 bg-white/5 rounded-xl border border-white/10">
+                            <p class="text-[10px] uppercase text-gray-500 font-bold">Recommended Weapon</p>
+                            <p class="text-white font-bold">Absolute Zero</p>
+                        </div>
+                        <div class="p-4 bg-white/5 rounded-xl border border-white/10">
+                            <p class="text-[10px] uppercase text-gray-500 font-bold">Main Stats</p>
+                            <p class="text-white font-bold">CRIT Rate / ATK%</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <script>
+        function openTab(evt, tabName) {
+            var i, tabcontent, tablinks;
+            tabcontent = document.getElementsByClassName("tab-content");
+            for (i = 0; i < tabcontent.length; i++) { tabcontent[i].classList.add("hidden"); }
+            tablinks = document.getElementsByClassName("tab-link");
+            for (i = 0; i < tablinks.length; i++) {tablinks[i].classList.remove("border-cyan-400", "text-white");
+                tablinks[i].classList.add("border-transparent", "text-gray-500");
+            }
+            document.getElementById(tabName).classList.remove("hidden");
+            evt.currentTarget.classList.add("border-cyan-400", "text-white");
+            evt.currentTarget.classList.remove("border-transparent", "text-gray-500");
+        }
+    </script>
+</body>
+</html>
