@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <title>NTE Guide Hub</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0">
+  <!-- Тема оформления (темная) -->
+  <link rel="stylesheet" href="//cdn.jsdelivr.net/npm/docsify@4/lib/themes/vue.css">
+  <style>
+    :root { --theme-color: #ff3e3e; } /* Акцентный цвет как в NTE */
+    body { background-color: #1a1a1a; color: #eee; }
+    .sidebar { background-color: #252525; border-right: 1px solid #333; }
+  </style>
+</head>
+<body>
+  <div id="app">Загрузка гайдов...</div>
+  <script>
+    window.$docsify = {
+      name: 'NTE Guide',
+      repo: '', // Ссылка на ваш репозиторий
+      loadSidebar: true,
+      subMaxLevel: 2,
+      coverpage: false,
+      auto2top: true,
+      search: 'auto', // Поиск по сайту
+    }
+  </script>
+  <!-- Скрипты Docsify -->
+  <script src="//cdn.jsdelivr.net/npm/docsify@4"></script>
+  <script src="//cdn.jsdelivr.net/npm/docsify/lib/plugins/search.min.js"></script>
+</body>
+</html>
