@@ -39,13 +39,11 @@
 <body>
   <div id="app">Loading Hesperia Archives...</div>
   <script>
-    window.$docsify = {
-      name: 'NTE Guide',
-      loadSidebar: true,
-      auto2top: true,
-      homepage: 'README.md'
+  window.$docsify = {
+    name: 'NTE Guide',
+    loadSidebar: true,
+    subMaxLevel: 2,
+    alias: {
+      '/.*/_sidebar.md': '/_sidebar.md'
     }
-  </script>
-  <script src="https://cdn.jsdelivr.net/npm/docsify@4"></script>
-</body>
-</html>
+  }
