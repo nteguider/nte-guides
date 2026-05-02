@@ -1,15 +1,12 @@
 # Neverness to Everness: Guide Hub
 
-Welcome to the Hesperia Archives! This database contains all the essential information regarding the city's anomalies and entities.
-
-<div class="btn-container">
-  <a href="#/characters" class="nav-btn btn-red">👤 Characters</a>
-  <a href="#/tier-list" class="nav-btn btn-gold">🏆 Tier List</a>
-  <a href="#/arcs" class="nav-btn btn-outline">🎭 Arcs</a>
-</div>
+Welcome to the ultimate Hesperia resource. Use the navigation sidebar to access tactical data, character builds, and latest news.
 
 ---
 
-### Latest Updates
-* **Database Online**: Initial setup for the Hesperia archive is complete.
-* **Navigation**: Sidebar buttons integrated.
+### Latest Site Updates
+* **Navigation Overhaul**: Side menu updated with an intuitive icon-based interface.
+* **Language Support**: All content is now officially in English.
+
+> [!IMPORTANT]
+> This database is updated in real-time as new Hesperia anomalies are discovered.
