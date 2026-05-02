@@ -1,14 +1,14 @@
 # Neverness to Everness: Guide Hub
 
-Welcome to the Hesperia Archives! 
+Добро пожаловать в архивы Хесперии! Здесь собрана вся информация по игре NTE.
 
-### Quick Navigation
-* **[Characters](#/characters)** — Database of all entities.
-* **[Tier List](#/tier-list)** — Current meta analysis.
-* **[Active Codes](#/codes)** — Get your rewards here.
+### Быстрая навигация
+* **[Персонажи](#/characters)** — База данных всех героев.
+* **[Тир-лист](#/tier-list)** — Анализ текущей меты.
+* **[Активные коды](#/codes)** — Получи свои награды.
 
 ---
 
-### Latest Updates
-* **System Restored**: The database is back online.
-* **UI**: Navigation sidebar is fully functional.
+### Последние обновления
+* **Система восстановлена**: База данных снова онлайн.
+* **Интерфейс**: Исправлена работа бокового меню.
