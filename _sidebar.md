@@ -1,5 +1,5 @@
-* **Основные разделы**
-  * [Главная](README.md)
-  * [Персонажи](characters.md)
-  * [Тир-лист](tier-list.md)
-  * [Оружия](arcs.md)
+* **Main Sections**
+  * [Home](README.md)
+  * [Characters](characters.md)
+  * [Tier List](tier-list.md)
+  * [Arcs](arcs.md)
