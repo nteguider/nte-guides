@@ -3,6 +3,10 @@
 <head>
   <meta charset="UTF-8">
   <title>NTE Guide Hub</title>
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0">
+  
+  <!-- Стили Docsify и Иконки -->
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/docsify@4/lib/themes/dark.css">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
   
@@ -10,11 +14,15 @@
     :root {
       --theme-color: #ff3e3e;
       --sidebar-bg: #121317;
+      --card-bg: #1c1e23;
+      --card-hover: #25282e;
+      --border-color: #2d2f34;
     }
 
+    /* --- Стили Бокового Меню --- */
     .sidebar {
       background-color: var(--sidebar-bg) !important;
-      border-right: 1px solid #2d2f34;
+      border-right: 1px solid var(--border-color);
     }
 
     .sidebar-nav ul li a {
@@ -44,16 +52,63 @@
       color: #fff !important;
       border-left: 3px solid var(--theme-color);
     }
+
+    /* --- Стили Плиток-Кнопок (справа) --- */
+    .grid-container {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 15px;
+      margin-top: 25px;
+    }
+
+    .guide-card {
+      display: flex;
+      align-items: center;
+      background: var(--card-bg);
+      border-radius: 6px;
+      padding: 0;
+      text-decoration: none !important;
+      color: #fff !important;
+      border: 1px solid var(--border-color);
+      transition: transform 0.2s, border-color 0.2s, background 0.2s;
+      overflow: hidden;
+    }
+
+    .guide-card:hover {
+      transform: translateY(-2px);
+      border-color: var(--theme-color);
+      background: var(--card-hover);
+    }
+
+    .guide-card img {
+      width: 80px;
+      height: 80px;
+      object-fit: cover;
+      border-right: 1px solid var(--border-color);
+    }
+
+    .guide-card span {
+      padding: 0 20px;
+      font-weight: 600;
+      flex-grow: 1;
+    }
+
+    .guide-card .arrow {
+      padding-right: 20px;
+      opacity: 0.4;
+      font-size: 14px;
+    }
   </style>
 </head>
 <body>
-  <div id="app">Loading Hesperia Data...</div>
+  <div id="app">Accessing Hesperia Archives...</div>
   <script>
     window.$docsify = {
       name: 'NTE Guide',
       loadSidebar: true,
       alias: { '/.*/_sidebar.md': '/_sidebar.md' },
-      subMaxLevel: 0
+      subMaxLevel: 0,
+      auto2top: true
     }
   </script>
   <script src="https://cdn.jsdelivr.net/npm/docsify@4"></script>
