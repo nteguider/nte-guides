@@ -3,113 +3,134 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>NTE | Hesperia Archives Admin</title>
+    <title>NTE | Hesperia Archives & Tier List</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@700&family=Inter:wght@400;600&display=swap" rel="stylesheet">
     <style>
         body { background-color: #1a1c1e; color: #d1d5db; font-family: 'Inter', sans-serif; display: flex; min-h-screen; }
         .nte-title { font-family: 'Orbitron', sans-serif; }
-        
-        /* Боковая панель */
         .sidebar { width: 260px; background-color: #0f1113; border-right: 1px solid #2d3136; flex-shrink: 0; position: sticky; top: 0; height: 100vh; }
-        .nav-link { padding: 1rem 1.5rem; display: flex; align-items: center; transition: 0.2s; cursor: pointer; border-left: 3px solid transparent; }
+        .nav-link { padding: 1rem 1.5rem; display: flex; align-items: center; transition: 0.2s; cursor: pointer; border-left: 3px solid transparent; text-transform: uppercase; font-size: 0.75rem; font-weight: 700; letter-spacing: 0.1em; }
         .nav-link:hover { background: #1e2124; color: #ef4444; }
         .nav-link.active { background: #1e2124; border-left-color: #ef4444; color: white; }
-
-        .main-content { flex-grow: 1; padding: 2rem; overflow-y: auto; }
+        .main-content { flex-grow: 1; padding: 2.5rem; overflow-y: auto; }
         .content-section { display: none; animation: fadeIn 0.3s ease-out; }
         .content-section.active { display: block; }
-
         @keyframes fadeIn { from { opacity: 0; transform: translateY(5px); } to { opacity: 1; transform: translateY(0); } }
+        
+        /* Tier Colors */
+        .t0 { background-color: #ef4444; } .t05 { background-color: #f97316; }
+        .t1 { background-color: #eab308; } .t2 { background-color: #3b82f6; }
+        .t3 { background-color: #6b7280; }
     </style>
 </head>
 <body>
 
-    <!-- SIDEBAR NAVIGATION -->
+    <!-- SIDEBAR -->
     <aside class="sidebar flex flex-col">
         <div class="p-6 border-b border-white/5">
             <h1 class="nte-title text-xl text-white tracking-tighter">NTE GUIDE</h1>
         </div>
-        
         <nav class="flex-grow mt-4">
-            <div onclick="showSection('home')" id="nav-home" class="nav-link active uppercase text-xs font-bold tracking-widest">Home</div>
-            <div onclick="showSection('characters')" id="nav-characters" class="nav-link uppercase text-xs font-bold tracking-widest">Characters</div>
-            <div onclick="showSection('arcs')" id="nav-arcs" class="nav-link uppercase text-xs font-bold tracking-widest">Arcs</div>
-            <div onclick="showSection('tierlist')" id="nav-tierlist" class="nav-link uppercase text-xs font-bold tracking-widest">Tier List</div>
+            <div onclick="showSection('home')" id="nav-home" class="nav-link active">Home</div>
+            <div onclick="showSection('characters')" id="nav-characters">Characters</div>
+            <div onclick="showSection('tierlist')" id="nav-tierlist">Tier List</div>
         </nav>
-
-        <div class="p-6 border-t border-white/5">
-            <button onclick="adminLogin()" class="text-[10px] text-gray-600 hover:text-red-500 uppercase font-bold tracking-widest transition">Admin Panel</button>
+        <div class="p-6 border-t border-white/5 text-center">
+            <button onclick="adminLogin()" class="text-[10px] text-gray-600 hover:text-red-500 font-bold uppercase tracking-widest transition">Admin Panel</button>
         </div>
     </aside>
 
-    <!-- MAIN AREA -->
+    <!-- MAIN CONTENT -->
     <main class="main-content">
         
-        <!-- HOME SECTION -->
+        <!-- SECTION: HOME -->
         <section id="sect-home" class="content-section active">
             <h2 class="nte-title text-2xl text-white mb-6">Welcome, Agent</h2>
             <div class="bg-[#24272b] p-8 rounded-xl border border-gray-700">
-                <p class="text-gray-400 mb-6 italic">Welcome to the Hesperia Tactical Archives. Select a section from the left menu to view database entries.</p>
-                <h4 class="text-white text-xs font-bold uppercase mb-4 text-red-500">Latest Logs</h4>
-                <ul class="text-sm text-gray-500 space-y-2">
-                    <li>• Sidebar navigation system integrated.</li>
-                    <li>• Character database updated.</li>
-                </ul>
+                <p class="text-gray-400 italic mb-6">Accessing encrypted files for Hesperia city anomalies.</p>
+                <div class="space-y-2">
+                    <p class="text-xs text-red-500 font-bold uppercase tracking-widest">• Tier List columns (T0-T3) activated</p>
+                    <p class="text-xs text-red-500 font-bold uppercase tracking-widest">• Real-time data injection module enabled</p>
+                </div>
             </div>
         </section>
 
-        <!-- CHARACTERS SECTION -->
+        <!-- SECTION: CHARACTERS -->
         <section id="sect-characters" class="content-section">
-            <h2 class="nte-title text-2xl text-white mb-6">Characters Database</h2>
-            <div class="bg-[#24272b] rounded-xl overflow-hidden border border-gray-700 flex flex-col md:flex-row">
-                <div class="md:w-1/3 bg-gray-800 h-64 md:h-auto">
-                    <img src="https://via.placeholder.com/400x600" class="w-full h-full object-cover opacity-70">
+            <h2 class="nte-title text-2xl text-white mb-6">Character Profile</h2>
+            <div class="bg-[#24272b] rounded-xl overflow-hidden border border-gray-700 flex flex-col md:flex-row max-w-4xl">
+                <div class="md:w-1/3 bg-gray-800 h-64 md:h-auto overflow-hidden">
+                    <img id="char-img-display" src="https://via.placeholder.com/400x600" class="w-full h-full object-cover">
                 </div>
                 <div class="p-8 md:w-2/3">
-                    <span id="char-tier-display" class="bg-red-600 text-white text-[10px] font-black px-2 py-1 rounded">S-RANK</span>
-                    <h3 id="char-name-display" class="nte-title text-4xl text-white my-3">Nanami</h3>
-                    <p id="char-desc-display" class="text-gray-400 text-sm leading-relaxed mb-6">Specialist in spatial manipulation and high-speed sword combat.</p>
+                    <span id="char-tier-badge" class="t0 text-white text-[10px] font-black px-3 py-1 rounded-full uppercase">T 0</span>
+                    <h3 id="char-name-display" class="nte-title text-5xl text-white my-4">Nanami</h3>
+                    <p id="char-desc-display" class="text-gray-400 leading-relaxed mb-6 italic">Specialist in spatial manipulation and high-speed combat.</p>
                 </div>
             </div>
         </section>
 
-        <!-- ARCS SECTION -->
-        <section id="sect-arcs" class="content-section">
-            <h2 class="nte-title text-2xl text-white mb-6">Tactical Arcs</h2>
-            <div class="bg-[#24272b] p-10 rounded-xl border border-dashed border-gray-700 text-center">
-                <p class="text-gray-500 italic">Arc Data synchronization in progress...</p>
-            </div>
-        </section>
-
-        <!-- TIER LIST SECTION -->
+        <!-- SECTION: TIER LIST (Columns) -->
         <section id="sect-tierlist" class="content-section">
-            <h2 class="nte-title text-2xl text-white mb-6">Global Tier List</h2>
-            <div class="bg-[#24272b] p-4 rounded-lg border border-gray-700 inline-flex items-center">
-                <div class="w-12 h-12 bg-red-600 flex items-center justify-center font-black text-white rounded">S</div>
-                <div class="ml-4 w-10 h-10 bg-gray-700 rounded-full border border-red-500"></div>
+            <h2 class="nte-title text-2xl text-white mb-8">Meta Tier Rankings</h2>
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-4">
+                <!-- T0 Column -->
+                <div class="bg-[#111315] border border-red-500/20 rounded-xl p-4 min-h-[300px]">
+                    <div class="t0 text-white nte-title text-center py-2 rounded-lg mb-6 shadow-lg shadow-red-900/20">T 0</div>
+                    <div id="tier-T0" class="flex flex-col gap-4 items-center"></div>
+                </div>
+                <!-- T0.5 Column -->
+                <div class="bg-[#111315] border border-orange-500/20 rounded-xl p-4 min-h-[300px]">
+                    <div class="t05 text-white nte-title text-center py-2 rounded-lg mb-6">T 0.5</div>
+                    <div id="tier-T05" class="flex flex-col gap-4 items-center"></div>
+                </div>
+                <!-- T1 Column -->
+                <div class="bg-[#111315] border border-yellow-500/20 rounded-xl p-4 min-h-[300px]">
+                    <div class="t1 text-black nte-title text-center py-2 rounded-lg mb-6 font-bold">T 1</div>
+                    <div id="tier-T1" class="flex flex-col gap-4 items-center"></div>
+                </div>
+                <!-- T2 Column -->
+                <div class="bg-[#111315] border border-blue-500/20 rounded-xl p-4 min-h-[300px]">
+                    <div class="t2 text-white nte-title text-center py-2 rounded-lg mb-6">T 2</div>
+                    <div id="tier-T2" class="flex flex-col gap-4 items-center"></div>
+                </div>
+                <!-- T3 Column -->
+                <div class="bg-[#111315] border border-gray-500/20 rounded-xl p-4 min-h-[300px]">
+                    <div class="t3 text-white nte-title text-center py-2 rounded-lg mb-6">T 3</div>
+                    <div id="tier-T3" class="flex flex-col gap-4 items-center"></div>
+                </div>
             </div>
         </section>
 
-        <!-- ADMIN PANEL SECTION (HIDDEN) -->
+        <!-- SECTION: ADMIN PANEL -->
         <section id="sect-admin" class="content-section">
-            <div class="max-w-xl bg-white/5 p-8 rounded-xl border-2 border-red-500/30">
-                <h2 class="nte-title text-xl text-white mb-6">Database Editor</h2>
+            <div class="max-w-xl bg-[#24272b] p-8 rounded-xl border-2 border-red-500/30">
+                <h2 class="nte-title text-xl text-white mb-6 uppercase tracking-wider">Database Editor</h2>
                 <div class="space-y-4 text-sm">
                     <div>
-                        <label class="block text-gray-500 mb-1">Character Name:</label>
-                        <input id="edit-name" type="text" class="w-full bg-black/40 border border-gray-700 p-2 rounded text-white focus:border-red-500 outline-none">
+                        <label class="text-gray-500 block mb-1">Character Name:</label>
+                        <input id="edit-name" type="text" class="w-full bg-black/40 border border-gray-700 p-3 rounded text-white outline-none focus:border-red-500">
                     </div>
                     <div>
-                        <label class="block text-gray-500 mb-1">Role/Description:</label>
-                        <textarea id="edit-desc" class="w-full bg-black/40 border border-gray-700 p-2 rounded text-white h-24 focus:border-red-500 outline-none"></textarea>
+                        <label class="text-gray-500 block mb-1">Select Tier Ranking:</label>
+                        <select id="edit-tier" class="w-full bg-black/40 border border-gray-700 p-3 rounded text-white outline-none focus:border-red-500">
+                            <option value="T0">T 0 (God Tier)</option>
+                            <option value="T05">T 0.5 (Top Tier)</option>
+                            <option value="T1">T 1 (High Tier)</option>
+                            <option value="T2">T 2 (Mid Tier)</option>
+                            <option value="T3">T 3 (Low Tier)</option>
+                        </select>
                     </div>
-                    <button onclick="saveData()" class="w-full bg-red-600 hover:bg-red-700 text-white font-bold py-3 rounded transition uppercase tracking-widest text-xs">Update Database & Get Code</button>
+                    <div>
+                        <label class="text-gray-500 block mb-1">Profile Bio:</label>
+                        <textarea id="edit-desc" class="w-full bg-black/40 border border-gray-700 p-3 rounded text-white h-32 outline-none focus:border-red-500"></textarea>
+                    </div>
+                    <button onclick="saveData()" class="w-full bg-red-600 hover:bg-red-700 text-white font-bold py-4 rounded-lg transition uppercase tracking-widest text-xs">Update Archive & Sync Code</button>
                 </div>
-
-                <div id="output-area" class="mt-8 hidden">
-                    <p class="text-[10px] text-yellow-500 mb-2 font-bold uppercase tracking-widest">Copy this code to GitHub index.html:</p>
-                    <textarea id="final-code" class="w-full h-32 bg-black text-[10px] p-2 border border-yellow-500/40 text-gray-500 font-mono" readonly></textarea>
+                <div id="output-area" class="mt-8 hidden animate-fadeIn">
+                    <p class="text-[10px] text-yellow-500 mb-2 font-black uppercase tracking-[0.2em]">Sync Required: Replace index.html on GitHub with this code</p>
+                    <textarea id="final-code" class="w-full h-40 bg-black text-[10px] p-3 border border-yellow-500/40 text-gray-500 font-mono" readonly></textarea>
                 </div>
             </div>
         </section>
@@ -117,42 +138,54 @@
 
     <script>
         function showSection(id) {
-            // Переключение контента
             document.querySelectorAll('.content-section').forEach(s => s.classList.remove('active'));
-            document.getElementById('sect-' + id).classList.add('active');
-            
-            // Переключение кнопок в меню
             document.querySelectorAll('.nav-link').forEach(l => l.classList.remove('active'));
-            const activeNav = document.getElementById('nav-' + id);
-            if(activeNav) activeNav.classList.add('active');
+            document.getElementById('sect-' + id).classList.add('active');
+            const nav = document.getElementById('nav-' + id);
+            if(nav) nav.classList.add('active');
         }
 
         function adminLogin() {
-            const pass = prompt("Enter Admin Password:");
-            if (pass === "1234") {
+            if (prompt("Enter Admin Password:") === "1234") {
                 showSection('admin');
                 document.getElementById('edit-name').value = document.getElementById('char-name-display').innerText;
                 document.getElementById('edit-desc').value = document.getElementById('char-desc-display').innerText;
-            } else {
-                alert("Unauthorized access.");
-            }
+            } else { alert("Unauthorized."); }
         }
 
         function saveData() {
-            const newName = document.getElementById('edit-name').value;
-            const newDesc = document.getElementById('edit-desc').value;
+            const name = document.getElementById('edit-name').value;
+            const tier = document.getElementById('edit-tier').value;
+            const desc = document.getElementById('edit-desc').value;
 
-            // Обновляем визуально
-            document.getElementById('char-name-display').innerText = newName;
-            document.getElementById('char-desc-display').innerText = newDesc;
+            // Update Character Card
+            document.getElementById('char-name-display').innerText = name;
+            document.getElementById('char-desc-display').innerText = desc;
+            
+            // Update Tier Badge
+            const badge = document.getElementById('char-tier-badge');
+            badge.innerText = tier.replace('T05', 'T 0.5').replace('T', 'T ');
+            badge.className = tier.toLowerCase() + " text-white text-[10px] font-black px-3 py-1 rounded-full uppercase";
 
-            // Генерируем новый код
-            const fullCode = "<!DOCTYPE html>\n" + document.documentElement.outerHTML;
+            // Update Tier List Columns (Clear and Rebuild)
+            document.querySelectorAll('[id^="tier-"]').forEach(col => col.innerHTML = '');
+            const targetCol = document.getElementById('tier-' + tier);
+            targetCol.innerHTML = `
+                <div class="flex flex-col items-center group cursor-pointer animate-fadeIn">
+                    <div class="w-16 h-16 bg-gray-800 rounded-full border-2 border-white/10 overflow-hidden group-hover:border-red-500 transition-all duration-300">
+                        <img src="https://via.placeholder.com/100" class="w-full h-full object-cover">
+                    </div>
+                    <span class="text-[10px] mt-2 font-bold text-gray-500 group-hover:text-white uppercase tracking-widest">${name}</span>
+                </div>`;
+
+            // Generate Final Source Code
             document.getElementById('output-area').classList.remove('hidden');
-            document.getElementById('final-code').value = fullCode;
-
-            alert("Local update successful. Please sync with GitHub.");
+            document.getElementById('final-code').value = "<!DOCTYPE html>\n" + document.documentElement.outerHTML;
+            alert("Archive updated locally! Copy the generated code to GitHub.");
         }
+
+        // Initial Boot: Set a default hero in T0
+        window.onload = () => { saveData(); };
     </script>
 </body>
 </html>
