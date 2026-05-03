@@ -27,6 +27,12 @@
 
         .skill-card { background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.05); border-radius: 12px; padding: 1.5rem; }
         .admin-input { background: #0f1113; border: 1px solid #1e2124; color: white; padding: 8px; font-size: 12px; border-radius: 4px; width: 100%; outline: none; }
+        
+        /* Tier Styles */
+        .t0 { background-color: #ef4444; } .t05 { background-color: #f97316; }
+        .t1 { background-color: #eab308; } .t2 { background-color: #3b82f6; }
+        .t3 { background-color: #6b7280; }
+
         @keyframes fadeIn { from { opacity: 0; transform: translateY(5px); } to { opacity: 1; transform: translateY(0); } }
     </style>
 </head>
@@ -41,7 +47,8 @@
             <div onclick="showSection('home')" id="nav-home" class="nav-link active">Home</div>
             <div class="nav-label">Archives</div>
             <div onclick="showSection('characters')" id="nav-characters" class="nav-link">Characters</div>
-            <div onclick="showSection('weapons')" id="nav-weapons" class="nav-link">Weapons</div>
+            <div onclick="showSection('weapons')" id="nav-weapons" class="nav-link">Arcs</div>
+            <div onclick="showSection('tierlist')" id="nav-tierlist" class="nav-link">Tier List</div>
         </nav>
         <div class="p-6 border-t border-white/5 text-center">
             <button onclick="adminLogin()" class="text-[10px] text-gray-800 hover:text-red-500 font-bold uppercase tracking-widest transition">System Admin</button>
@@ -49,19 +56,49 @@
     </aside>
 
     <main class="main-content">
+        <!-- Home -->
         <section id="sect-home" class="content-section active py-20 text-center">
             <h2 class="nte-title text-5xl text-white mb-6 uppercase tracking-tighter">HESPERIA ARCHIVES</h2>
             <div class="w-24 h-1 bg-red-600 mx-auto mb-6"></div>
-            <p class="text-gray-500 max-w-lg mx-auto italic font-light tracking-wide">Terminal for tactical data management.</p>
+            <p class="text-gray-500 max-w-lg mx-auto italic font-light tracking-wide">Data terminal online.</p>
         </section>
 
+        <!-- Characters Grid -->
         <section id="sect-characters" class="content-section">
             <h2 class="nte-title text-2xl text-white mb-8 uppercase tracking-widest">Personnel Database</h2>
             <div id="char-grid" class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-4"></div>
         </section>
 
+        <!-- Tier List -->
+        <section id="sect-tierlist" class="content-section">
+            <h2 class="nte-title text-2xl text-white mb-10 uppercase tracking-widest">Tactical Rankings</h2>
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-4">
+                <div class="bg-[#090a0c] border border-white/5 rounded-xl p-4 min-h-[400px]">
+                    <div class="t0 text-white text-[10px] font-black text-center py-2 mb-6 rounded-lg uppercase tracking-widest">Tier 0</div>
+                    <div id="tier-T0" class="flex flex-col gap-4 items-center"></div>
+                </div>
+                <div class="bg-[#090a0c] border border-white/5 rounded-xl p-4 min-h-[400px]">
+                    <div class="t05 text-white text-[10px] font-black text-center py-2 mb-6 rounded-lg uppercase tracking-widest">Tier 0.5</div>
+                    <div id="tier-T05" class="flex flex-col gap-4 items-center"></div>
+                </div>
+                <div class="bg-[#090a0c] border border-white/5 rounded-xl p-4 min-h-[400px]">
+                    <div class="t1 text-black text-[10px] font-black text-center py-2 mb-6 rounded-lg uppercase tracking-widest">Tier 1</div>
+                    <div id="tier-T1" class="flex flex-col gap-4 items-center"></div>
+                </div>
+                <div class="bg-[#090a0c] border border-white/5 rounded-xl p-4 min-h-[400px]">
+                    <div class="t2 text-white text-[10px] font-black text-center py-2 mb-6 rounded-lg uppercase tracking-widest">Tier 2</div>
+                    <div id="tier-T2" class="flex flex-col gap-4 items-center"></div>
+                </div>
+                <div class="bg-[#090a0c] border border-white/5 rounded-xl p-4 min-h-[400px]">
+                    <div class="t3 text-white text-[10px] font-black text-center py-2 mb-6 rounded-lg uppercase tracking-widest">Tier 3</div>
+                    <div id="tier-T3" class="flex flex-col gap-4 items-center"></div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Character Details -->
         <section id="sect-char-detail" class="content-section">
-            <button onclick="showSection('characters')" class="mb-6 text-red-500 text-[10px] font-bold uppercase tracking-widest hover:text-white transition flex items-center gap-2"><span>&larr;</span> Back to Archive</button>
+            <button onclick="showSection('characters')" class="mb-6 text-red-500 text-[10px] font-bold uppercase tracking-widest hover:text-white transition flex items-center gap-2"><span>&larr;</span> Back</button>
             
             <div class="bg-[#1a1c1e] rounded-2xl overflow-hidden border border-white/5 flex flex-col md:flex-row max-w-6xl shadow-2xl mb-10">
                 <div class="md:w-2/5 bg-[#090a0c] h-[400px] overflow-hidden">
@@ -74,48 +111,48 @@
                 </div>
             </div>
 
-            <!-- Abilities Accordion -->
-            <div class="max-w-6xl mb-6 bg-[#1a1c1e] border border-white/5 rounded-xl p-6">
-                <div class="collapsible-trigger" onclick="toggleAccordion('skills-content', 'skills-chevron')">
-                    <h4 class="nte-title text-lg text-white uppercase tracking-widest border-l-4 border-red-600 pl-4">Abilities</h4>
-                    <svg id="skills-chevron" class="chevron w-6 h-6 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
-                </div>
-                <div id="skills-content" class="collapsible-content">
-                    <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
-                        <div class="skill-card"><span class="text-red-500 text-[10px] font-black uppercase mb-2 block">Basic Attack</span><p id="char-basic-display" class="text-sm text-gray-400"></p></div>
-                        <div class="skill-card"><span class="text-red-500 text-[10px] font-black uppercase mb-2 block">Skill</span><p id="char-skill-display" class="text-sm text-gray-400"></p></div>
-                        <div class="skill-card"><span class="text-red-500 text-[10px] font-black uppercase mb-2 block">Ultimate</span><p id="char-ult-display" class="text-sm text-gray-400"></p></div>
+            <!-- Accordions -->
+            <div class="max-w-6xl space-y-4">
+                <div class="bg-[#1a1c1e] border border-white/5 rounded-xl p-6">
+                    <div class="collapsible-trigger" onclick="toggleAccordion('skills-content', 'skills-chevron')">
+                        <h4 class="nte-title text-lg text-white uppercase tracking-widest border-l-4 border-red-600 pl-4">Abilities</h4>
+                        <svg id="skills-chevron" class="chevron w-6 h-6 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
+                    </div>
+                    <div id="skills-content" class="collapsible-content">
+                        <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                            <div class="skill-card"><span class="text-red-500 text-[10px] font-black uppercase mb-2 block">Basic Attack</span><p id="char-basic-display" class="text-sm text-gray-400"></p></div>
+                            <div class="skill-card"><span class="text-red-500 text-[10px] font-black uppercase mb-2 block">Skill</span><p id="char-skill-display" class="text-sm text-gray-400"></p></div>
+                            <div class="skill-card"><span class="text-red-500 text-[10px] font-black uppercase mb-2 block">Ultimate</span><p id="char-ult-display" class="text-sm text-gray-400"></p></div>
+                        </div>
                     </div>
                 </div>
-            </div>
 
-            <!-- Resonance Accordion -->
-            <div class="max-w-6xl mb-6 bg-[#1a1c1e] border border-white/5 rounded-xl p-6">
-                <div class="collapsible-trigger" onclick="toggleAccordion('res-content', 'res-chevron')">
-                    <h4 class="nte-title text-lg text-white uppercase tracking-widest border-l-4 border-red-600 pl-4">Resonance Effects</h4>
-                    <svg id="res-chevron" class="chevron w-6 h-6 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
-                </div>
-                <div id="res-content" class="collapsible-content">
-                    <div class="space-y-4">
-                        <div class="bg-white/5 p-4 rounded-lg flex items-start"><span class="text-red-500 font-bold mr-4">R1</span><p id="char-r1-display" class="text-sm text-gray-400"></p></div>
-                        <div class="bg-white/5 p-4 rounded-lg flex items-start"><span class="text-red-500 font-bold mr-4">R2</span><p id="char-r2-display" class="text-sm text-gray-400"></p></div>
+                <div class="bg-[#1a1c1e] border border-white/5 rounded-xl p-6">
+                    <div class="collapsible-trigger" onclick="toggleAccordion('res-content', 'res-chevron')">
+                        <h4 class="nte-title text-lg text-white uppercase tracking-widest border-l-4 border-red-600 pl-4">Resonance Effects</h4>
+                        <svg id="res-chevron" class="chevron w-6 h-6 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
+                    </div>
+                    <div id="res-content" class="collapsible-content">
+                        <div class="space-y-4">
+                            <div class="bg-white/5 p-4 rounded-lg flex items-start"><span class="text-red-500 font-bold mr-4">R1</span><p id="char-r1-display" class="text-sm text-gray-400"></p></div>
+                            <div class="bg-white/5 p-4 rounded-lg flex items-start"><span class="text-red-500 font-bold mr-4">R2</span><p id="char-r2-display" class="text-sm text-gray-400"></p></div>
+                        </div>
                     </div>
                 </div>
-            </div>
 
-            <!-- Awakening (Constellations) Accordion -->
-            <div class="max-w-6xl mb-6 bg-[#1a1c1e] border border-white/5 rounded-xl p-6">
-                <div class="collapsible-trigger" onclick="toggleAccordion('awakening-content', 'awakening-chevron')">
-                    <h4 class="nte-title text-lg text-white uppercase tracking-widest border-l-4 border-red-600 pl-4">Awakening</h4>
-                    <svg id="awakening-chevron" class="chevron w-6 h-6 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
-                </div>
-                <div id="awakening-content" class="collapsible-content">
-                    <div id="char-awakening-display" class="space-y-3 text-sm text-gray-400 bg-white/5 p-6 rounded-lg"></div>
+                <div class="bg-[#1a1c1e] border border-white/5 rounded-xl p-6">
+                    <div class="collapsible-trigger" onclick="toggleAccordion('awakening-content', 'awakening-chevron')">
+                        <h4 class="nte-title text-lg text-white uppercase tracking-widest border-l-4 border-red-600 pl-4">Awakening</h4>
+                        <svg id="awakening-chevron" class="chevron w-6 h-6 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
+                    </div>
+                    <div id="awakening-content" class="collapsible-content">
+                        <div id="char-awakening-display" class="space-y-3 text-sm text-gray-400 bg-white/5 p-6 rounded-lg"></div>
+                    </div>
                 </div>
             </div>
         </section>
 
-        <!-- Admin Panel -->
+        <!-- Admin -->
         <section id="sect-admin" class="content-section">
             <div class="max-w-6xl bg-[#1a1c1e] p-10 rounded-2xl border border-red-600/20 shadow-2xl">
                 <h2 class="nte-title text-xl text-white mb-10 uppercase tracking-widest">Database Editor</h2>
@@ -162,7 +199,7 @@
                     <div class="grid grid-cols-3 gap-4 mb-4">
                         <input type="text" value="${char.name}" class="edit-char-name admin-input" placeholder="Name">
                         <input type="text" value="${char.element || ''}" class="edit-char-element admin-input" placeholder="Element">
-                        <input type="text" value="${char.class || ''}" class="edit-char-class admin-input" placeholder="Class">
+                        <select class="edit-char-tier admin-input"><option value="T0" ${char.tier=='T0'?'selected':''}>T0</option><option value="T05" ${char.tier=='T05'?'selected':''}>T0.5</option><option value="T1" ${char.tier=='T1'?'selected':''}>T1</option><option value="T2" ${char.tier=='T2'?'selected':''}>T2</option><option value="T3" ${char.tier=='T3'?'selected':''}>T3</option></select>
                     </div>
                     <div class="grid grid-cols-3 gap-4 mb-4">
                         <textarea class="edit-char-basic admin-input h-16" placeholder="Basic Attack">${char.basic || ''}</textarea>
@@ -187,7 +224,7 @@
                 characters.push({
                     name: div.querySelector('.edit-char-name').value,
                     element: div.querySelector('.edit-char-element').value,
-                    class: div.querySelector('.edit-char-class').value,
+                    tier: div.querySelector('.edit-char-tier').value,
                     basic: div.querySelector('.edit-char-basic').value,
                     skill: div.querySelector('.edit-char-skill').value,
                     ult: div.querySelector('.edit-char-ult').value,
@@ -206,12 +243,22 @@
         function updateSiteContent() {
             const grid = document.getElementById('char-grid');
             grid.innerHTML = '';
+            
+            // Clear Tiers
+            ['T0','T05','T1','T2','T3'].forEach(t => document.getElementById('tier-'+t).innerHTML = '');
+
             characters.forEach((char, index) => {
-                grid.innerHTML += `
+                const card = `
                 <div onclick="viewChar(${index})" class="bg-[#16181b] border border-white/5 rounded-lg overflow-hidden cursor-pointer hover:border-red-600 transition">
                     <img src="${char.img || 'https://via.placeholder.com/300'}" class="aspect-[3/4] object-cover w-full">
                     <div class="p-3 text-center"><div class="text-[10px] font-bold text-white uppercase">${char.name}</div></div>
                 </div>`;
+                grid.innerHTML += card;
+                
+                // Add to Tier List
+                const tierItem = `<div onclick="viewChar(${index})" class="cursor-pointer group relative"><img src="${char.img}" class="w-16 h-16 rounded-full border-2 border-white/10 group-hover:border-red-600 transition object-cover"><div class="absolute -bottom-2 left-1/2 -translate-x-1/2 bg-black text-[8px] px-2 py-0.5 rounded border border-white/5 opacity-0 group-hover:opacity-100 transition">${char.name}</div></div>`;
+                const tID = 'tier-' + char.tier;
+                if(document.getElementById(tID)) document.getElementById(tID).innerHTML += tierItem;
             });
         }
 
@@ -224,7 +271,7 @@
             document.getElementById('char-ult-display').innerText = char.ult || "N/A";
             document.getElementById('char-r1-display').innerText = char.r1 || "N/A";
             document.getElementById('char-r2-display').innerText = char.r2 || "N/A";
-            document.getElementById('char-tags-display').innerText = `${char.element} // ${char.class}`;
+            document.getElementById('char-tags-display').innerText = `${char.element} // ${char.tier}`;
             
             const awkList = document.getElementById('char-awakening-display');
             awkList.innerHTML = '';
@@ -232,14 +279,13 @@
                 if(line.trim()) awkList.innerHTML += `<div class="flex gap-4 border-b border-white/5 pb-2 last:border-0"><span class="text-red-600 font-black w-8">A${i+1}</span><span>${line}</span></div>`;
             });
 
-            // Reset accordions to closed on view
             document.querySelectorAll('.collapsible-content').forEach(c => c.classList.remove('open'));
             document.querySelectorAll('.chevron').forEach(c => c.classList.remove('rotate-180'));
-
             showSection('char-detail');
         }
 
-        function addCharEntry() { characters.push({name:"New", awakening:[]}); renderAdminUI(); }
+        function addCharEntry() { characters.push({name:"New", tier:"T0", awakening:[]}); renderAdminUI(); }
+        function deleteChar(i) { characters.splice(i,1); renderAdminUI(); }
         window.onload = updateSiteContent;
     </script>
 </body>
