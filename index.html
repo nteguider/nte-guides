@@ -149,7 +149,7 @@
             font-size: 10px;
             cursor: pointer;
             z-index: 10;
-            display: none; /* Видна только в админке */
+            display: none;
         }
 
         .admin-mode .delete-btn { display: block; }
@@ -174,6 +174,7 @@
             flex-direction: column;
             gap: 15px;
             border: 1px solid var(--border-color);
+            margin-bottom: 30px;
         }
 
         .admin-form input, .admin-form select, .admin-form textarea {
@@ -195,6 +196,13 @@
         }
 
         .admin-form button:hover { background: #0086cc; }
+
+        /* Текст обновлений на главной */
+        #home-news-content {
+            white-space: pre-wrap;
+            line-height: 1.6;
+            color: #ccc;
+        }
     </style>
 </head>
 <body class="user-view">
@@ -216,7 +224,7 @@
         <div id="home" class="page active">
             <div class="banner">NEVERNESS TO EVERNESS: DATABASE</div>
             <div class="section-header">Latest Updates</div>
-            <p>Добро пожаловать. Используйте меню слева для навигации. <br>Чтобы добавить контент, войдите в панель администратора.</p>
+            <div id="home-news-content">Загрузка обновлений...</div>
         </div>
 
         <!-- CHARACTERS -->
@@ -248,8 +256,17 @@
         <!-- ADMIN PANEL -->
         <div id="admin" class="page">
             <div class="section-header">Admin Control Panel</div>
+            
+            <!-- Форма для ГЛАВНОЙ -->
             <div class="admin-form">
-                <h3>Add New Entry</h3>
+                <h3>Edit Home Page Text</h3>
+                <textarea id="f-home-text" rows="5" placeholder="Введите текст новостей/обновлений для главной страницы..."></textarea>
+                <button onclick="saveHomeText()">Update Home Page</button>
+            </div>
+
+            <!-- Форма для ПЕРСОНАЖЕЙ/ПУШЕК -->
+            <div class="admin-form">
+                <h3>Add New Entry (Character/Weapon)</h3>
                 <select id="f-type">
                     <option value="char">Character</option>
                     <option value="weapon">Weapon/Arc</option>
@@ -265,15 +282,17 @@
                 </select>
                 <button onclick="saveToDB()">Add to Database</button>
             </div>
-            <p style="margin-top: 20px; color: var(--accent-red); font-size: 0.8rem;">
-                * В режиме админа у карточек в списках появляется кнопка удаления (X).
-            </p>
         </div>
     </main>
 
     <script>
-        // Инициализация данных
-        let database = JSON.parse(localStorage.getItem('nte_final_db')) || { chars: [], weapons: [] };
+        // Инициализация данных (добавлено поле homeText)
+        let defaultText = "Добро пожаловать в архив Hesperia! \n\n• База данных находится в режиме наполнения.\n• Используйте админ-панель для редактирования этого текста.";
+        let database = JSON.parse(localStorage.getItem('nte_final_db')) || { 
+            chars: [], 
+            weapons: [], 
+            homeText: defaultText 
+        };
 
         function showPage(pageId, el) {
             document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
@@ -282,8 +301,13 @@
             document.getElementById(pageId).classList.add('active');
             if(el) el.classList.add('active');
             
-            if(pageId === 'admin') document.body.classList.add('admin-mode');
-            else document.body.classList.remove('admin-mode');
+            if(pageId === 'admin') {
+                document.body.classList.add('admin-mode');
+                // Подгружаем текущий текст в текстовое поле админки
+                document.getElementById('f-home-text').value = database.homeText;
+            } else {
+                document.body.classList.remove('admin-mode');
+            }
 
             render();
         }
@@ -292,6 +316,14 @@
             const p = prompt("Введите пароль:");
             if(p === "1234") showPage('admin', document.querySelector('.admin-link'));
             else alert("Доступ запрещен");
+        }
+
+        // Сохранение текста для Home
+        function saveHomeText() {
+            database.homeText = document.getElementById('f-home-text').value;
+            localStorage.setItem('nte_final_db', JSON.stringify(database));
+            alert("Текст главной страницы обновлен!");
+            render();
         }
 
         function saveToDB() {
@@ -321,6 +353,9 @@
         }
 
         function render() {
+            // Рендер текста на главной
+            document.getElementById('home-news-content').textContent = database.homeText;
+
             // Рендер персонажей
             const charGrid = document.getElementById('chars-grid');
             charGrid.innerHTML = database.chars.map(c => `
@@ -353,7 +388,6 @@
             });
         }
 
-        // Запуск при загрузке
         render();
     </script>
 </body>
