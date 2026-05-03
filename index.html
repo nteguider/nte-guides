@@ -20,6 +20,14 @@
         .collapsible-content.open { max-height: 3000px; opacity: 1; margin-top: 1.5rem; }
         .admin-input { background: #0f1113; border: 1px solid #1e2124; color: white; padding: 10px; font-size: 12px; border-radius: 4px; width: 100%; outline: none; }
         .admin-label { font-size: 9px; font-weight: 800; color: #ef4444; text-transform: uppercase; margin-bottom: 4px; display: block; }
+        
+        .tier-row { background: #16181b; border: 1px solid rgba(255,255,255,0.05); border-radius: 12px; display: flex; align-items: center; margin-bottom: 1rem; overflow: hidden; }
+        .tier-label { width: 80px; height: 80px; display: flex; align-items: center; justify-content: center; font-family: 'Orbitron'; font-weight: 900; font-size: 1.5rem; flex-shrink: 0; }
+        .t-t0 { background: #ef4444; color: white; }
+        .t-t05 { background: #f97316; color: white; }
+        .t-t1 { background: #facc15; color: black; }
+        .t-t2 { background: #4ade80; color: black; }
+        .t-t3 { background: #3b82f6; color: white; }
     </style>
 </head>
 <body>
@@ -32,7 +40,7 @@
             <div onclick="showSection('weapons')" id="nav-weapons" class="nav-link">Arcs</div>
             <div onclick="showSection('tierlist')" id="nav-tierlist" class="nav-link">Tier List</div>
         </nav>
-        <div class="p-6 border-t border-white/5"><button onclick="adminLogin()" class="text-[10px] text-gray-700 hover:text-red-500 font-bold uppercase tracking-widest">Admin</button></div>
+        <div class="p-6 border-t border-white/5"><button onclick="adminLogin()" class="text-[10px] text-gray-700 hover:text-red-500 font-bold uppercase tracking-widest">Admin Control</button></div>
     </aside>
 
     <main class="main-content">
@@ -52,53 +60,52 @@
         </section>
 
         <section id="sect-tierlist" class="content-section">
-            <h2 class="nte-title text-2xl text-white mb-8 border-l-4 border-red-600 pl-4 uppercase">Tier List</h2>
-            <div class="grid grid-cols-1 gap-4" id="tier-list-container"></div>
+            <h2 class="nte-title text-2xl text-white mb-8 border-l-4 border-red-600 pl-4 uppercase">Tactical Rankings</h2>
+            <div id="tier-list-container" class="space-y-4"></div>
         </section>
 
         <section id="sect-char-detail" class="content-section">
-            <button onclick="showSection('characters')" class="mb-6 text-red-500 text-[10px] font-bold uppercase tracking-widest flex items-center gap-2"><span>&larr;</span> Back</button>
+            <button onclick="showSection('characters')" class="mb-6 text-red-500 text-[10px] font-bold uppercase tracking-widest flex items-center gap-2"><span>&larr;</span> Return</button>
             <div id="detail-view"></div>
         </section>
 
         <section id="sect-admin" class="content-section">
             <div class="max-w-6xl bg-[#1a1c1e] p-10 rounded-2xl border border-red-600/20 shadow-2xl">
                 <div class="flex justify-between items-center mb-10">
-                    <h2 class="nte-title text-xl text-white uppercase">System Editor</h2>
-                    <button onclick="commitAllChanges()" class="bg-red-600 text-white px-8 py-3 rounded-xl font-bold uppercase text-[10px]">Save & Sync</button>
+                    <h2 class="nte-title text-xl text-white uppercase">Database Sync</h2>
+                    <button onclick="commitAllChanges()" class="bg-red-600 text-white px-8 py-3 rounded-xl font-bold uppercase text-[10px]">Commit Changes</button>
                 </div>
-                <div class="space-y-12">
-                    <div>
-                        <h3 class="text-white font-bold mb-4 uppercase text-sm border-b border-white/5 pb-2">Characters</h3>
-                        <div id="admin-char-list" class="space-y-6"></div>
-                        <button onclick="addCharEntry()" class="w-full py-4 mt-4 bg-white/5 border border-white/10 text-white text-[10px] font-bold uppercase rounded-xl">+ Add Agent</button>
-                    </div>
-                    <div>
-                        <h3 class="text-white font-bold mb-4 uppercase text-sm border-b border-white/5 pb-2">Arcs (Weapons)</h3>
-                        <div id="admin-weapon-list" class="space-y-6"></div>
-                        <button onclick="addWeaponEntry()" class="w-full py-4 mt-4 bg-white/5 border border-white/10 text-white text-[10px] font-bold uppercase rounded-xl">+ Add Arc</button>
-                    </div>
+                <div id="admin-char-list" class="space-y-8"></div>
+                <button onclick="addCharEntry()" class="w-full py-4 mt-8 bg-white/5 border border-white/10 text-white text-[10px] font-bold uppercase rounded-xl">+ Add Agent</button>
+                
+                <div class="mt-12">
+                    <h3 class="text-white font-bold mb-4 uppercase text-sm border-b border-white/5 pb-2">Arcs</h3>
+                    <div id="admin-weapon-list" class="space-y-6"></div>
+                    <button onclick="addWeaponEntry()" class="w-full py-4 mt-4 bg-white/5 border border-white/10 text-white text-[10px] font-bold uppercase rounded-xl">+ Add Arc</button>
                 </div>
-                <div id="output-area" class="mt-10 hidden"><textarea id="final-code" class="w-full h-64 bg-black text-[10px] p-4 text-gray-500 font-mono" readonly></textarea></div>
+
+                <div id="output-area" class="mt-10 hidden">
+                    <textarea id="final-code" class="w-full h-64 bg-black text-[10px] p-4 text-gray-500 font-mono" readonly></textarea>
+                </div>
             </div>
         </section>
     </main>
 
     <script id="data-script">
-        let characters = []; let weapons = [];
+        let characters = []; 
+        let weapons = [];
 
         function showSection(id) {
             document.querySelectorAll('.content-section').forEach(s => s.classList.remove('active'));
             document.querySelectorAll('.nav-link').forEach(l => l.classList.remove('active'));
-            const target = document.getElementById('sect-' + id);
-            if(target) target.classList.add('active');
+            document.getElementById('sect-' + id).classList.add('active');
             const nav = document.getElementById('nav-' + id);
             if(nav) nav.classList.add('active');
+            window.scrollTo(0,0);
         }
 
         function toggleAccordion(id) { document.getElementById(id).classList.toggle('open'); }
-
-        function adminLogin() { if (prompt("Access Key:") === "1234") { renderAdminUI(); showSection('admin'); } }
+        function adminLogin() { if (prompt("Key:") === "1234") { renderAdminUI(); showSection('admin'); } }
 
         function renderAdminUI() {
             const charContainer = document.getElementById('admin-char-list');
@@ -107,19 +114,24 @@
                 const awk = char.awakening || ["","","","","",""];
                 charContainer.innerHTML += `
                 <div class="bg-black/40 p-6 rounded-xl border border-white/5 relative">
-                    <button onclick="deleteItem('char', ${i})" class="absolute top-4 right-4 text-red-600 text-[10px] font-bold uppercase">Del</button>
+                    <button onclick="deleteItem('char', ${i})" class="absolute top-4 right-4 text-red-600 text-[10px] font-bold uppercase">Remove</button>
                     <div class="grid grid-cols-4 gap-4 mb-4">
                         <div><label class="admin-label">Name</label><input type="text" value="${char.name}" class="edit-char-name admin-input"></div>
                         <div><label class="admin-label">Element</label><input type="text" value="${char.element || ''}" class="edit-char-element admin-input"></div>
                         <div><label class="admin-label">Tier</label><input type="text" value="${char.tier || ''}" class="edit-char-tier admin-input"></div>
                         <div><label class="admin-label">Img URL</label><input type="text" value="${char.img || ''}" class="edit-char-img admin-input"></div>
                     </div>
+                    <div class="grid grid-cols-3 gap-4 mb-4">
+                        <div><label class="admin-label">Basic Attack</label><textarea class="edit-char-basic admin-input h-20">${char.basic || ''}</textarea></div>
+                        <div><label class="admin-label">Skill</label><textarea class="edit-char-skill admin-input h-20">${char.skill || ''}</textarea></div>
+                        <div><label class="admin-label">Ultimate</label><textarea class="edit-char-ult admin-input h-20">${char.ult || ''}</textarea></div>
+                    </div>
                     <div class="grid grid-cols-2 gap-4 mb-4">
-                        <textarea class="edit-char-r1 admin-input h-20" placeholder="R1">${char.r1 || ''}</textarea>
-                        <textarea class="edit-char-r2 admin-input h-20" placeholder="R2">${char.r2 || ''}</textarea>
+                        <div><label class="admin-label">Resonance R1</label><textarea class="edit-char-r1 admin-input h-20">${char.r1 || ''}</textarea></div>
+                        <div><label class="admin-label">Resonance R2</label><textarea class="edit-char-r2 admin-input h-20">${char.r2 || ''}</textarea></div>
                     </div>
                     <div class="grid grid-cols-6 gap-2">
-                        ${awk.map((v, idx) => `<input type="text" value="${v}" placeholder="A${idx+1}" class="edit-char-awk-${idx} admin-input">`).join('')}
+                        ${awk.map((v, idx) => `<div><label class="admin-label">A${idx+1}</label><input type="text" value="${v}" class="edit-char-awk-${idx} admin-input"></div>`).join('')}
                     </div>
                 </div>`;
             });
@@ -129,7 +141,7 @@
             weapons.forEach((w, i) => {
                 weaponContainer.innerHTML += `
                 <div class="bg-black/40 p-6 rounded-xl border border-white/5 relative">
-                    <button onclick="deleteItem('weapon', ${i})" class="absolute top-4 right-4 text-red-600 text-[10px] font-bold uppercase">Del</button>
+                    <button onclick="deleteItem('weapon', ${i})" class="absolute top-4 right-4 text-red-600 text-[10px] font-bold uppercase">Remove</button>
                     <div class="grid grid-cols-3 gap-4 mb-4">
                         <div><label class="admin-label">Arc Name</label><input type="text" value="${w.name}" class="edit-w-name admin-input"></div>
                         <div><label class="admin-label">Stats</label><input type="text" value="${w.stats || ''}" class="edit-w-stats admin-input"></div>
@@ -140,9 +152,9 @@
             });
         }
 
-        function addCharEntry() { characters.push({name: "New", element: "", tier: "T0", awakening: ["","","","","",""]}); renderAdminUI(); }
-        function addWeaponEntry() { weapons.push({name: "New Arc"}); renderAdminUI(); }
-        function deleteItem(type, i) { if(confirm("Confirm?")) { if(type==='char') characters.splice(i,1); else weapons.splice(i,1); renderAdminUI(); } }
+        function addCharEntry() { characters.push({name: "New Agent", element: "Physical", tier: "T0", awakening: ["","","","","",""], basic:"", skill:"", ult:"", r1:"", r2:""}); renderAdminUI(); }
+        function addWeaponEntry() { weapons.push({name: "New Arc", stats: "ATK%", desc: "", img: ""}); renderAdminUI(); }
+        function deleteItem(type, i) { if(confirm("Delete?")) { if(type==='char') characters.splice(i,1); else weapons.splice(i,1); renderAdminUI(); } }
 
         function commitAllChanges() {
             const charDivs = document.querySelectorAll('#admin-char-list > div');
@@ -155,6 +167,9 @@
                     element: div.querySelector('.edit-char-element').value,
                     tier: div.querySelector('.edit-char-tier').value,
                     img: div.querySelector('.edit-char-img').value,
+                    basic: div.querySelector('.edit-char-basic').value,
+                    skill: div.querySelector('.edit-char-skill').value,
+                    ult: div.querySelector('.edit-char-ult').value,
                     r1: div.querySelector('.edit-char-r1').value,
                     r2: div.querySelector('.edit-char-r2').value,
                     awakening: awk
@@ -179,24 +194,44 @@
 
         function updateSiteContent() {
             const charGrid = document.getElementById('char-grid');
-            charGrid.innerHTML = '';
-            characters.forEach((char, index) => {
-                charGrid.innerHTML += `<div onclick="viewChar(${index})" class="bg-[#16181b] border border-white/5 rounded-lg overflow-hidden cursor-pointer hover:border-red-600 transition"><img src="${char.img}" class="aspect-[3/4] object-cover w-full"><div class="p-3 text-center text-[10px] font-bold text-white uppercase">${char.name}</div></div>`;
-            });
+            charGrid.innerHTML = characters.map((char, index) => `
+                <div onclick="viewChar(${index})" class="bg-[#16181b] border border-white/5 rounded-lg overflow-hidden cursor-pointer hover:border-red-600 transition">
+                    <img src="${char.img}" class="aspect-[3/4] object-cover w-full">
+                    <div class="p-3 text-center text-[10px] font-bold text-white uppercase">${char.name}</div>
+                </div>`).join('');
 
             const weaponGrid = document.getElementById('weapon-grid');
-            weaponGrid.innerHTML = '';
-            weapons.forEach(w => {
-                weaponGrid.innerHTML += `<div class="bg-[#16181b] p-6 rounded-xl border border-white/5"><img src="${w.img}" class="h-32 w-full object-contain mb-4"><h4 class="text-white font-bold uppercase text-sm mb-1">${w.name}</h4><div class="text-red-500 text-[10px] font-bold mb-3">${w.stats}</div><p class="text-xs text-gray-500">${w.desc}</p></div>`;
-            });
-
-            const tierContainer = document.getElementById('tier-list-container');
-            const tiers = ['T0', 'T1', 'T2'];
-            tierContainer.innerHTML = tiers.map(t => `
-                <div class="bg-[#16181b] p-4 rounded-xl border border-white/5 flex items-center gap-4">
-                    <div class="text-2xl font-black text-red-600 w-12">${t}</div>
-                    <div class="flex gap-2">${characters.filter(c => c.tier === t).map(c => `<img src="${c.img}" class="w-10 h-10 rounded-full border border-white/10" title="${c.name}">`).join('')}</div>
+            weaponGrid.innerHTML = weapons.map(w => `
+                <div class="bg-[#16181b] p-6 rounded-xl border border-white/5">
+                    <img src="${w.img}" class="h-32 w-full object-contain mb-4">
+                    <h4 class="text-white font-bold uppercase text-sm mb-1">${w.name}</h4>
+                    <div class="text-red-500 text-[10px] font-bold mb-3">${w.stats}</div>
+                    <p class="text-xs text-gray-500">${w.desc}</p>
                 </div>`).join('');
+
+            const tierMapping = [
+                { id: 'T0', label: 'T0', css: 't-t0' },
+                { id: 'T0.5', label: 'T0.5', css: 't-t05' },
+                { id: 'T1', label: 'T1', css: 't-t1' },
+                { id: 'T2', label: 'T2', css: 't-t2' },
+                { id: 'T3', label: 'T3', css: 't-t3' }
+            ];
+
+            document.getElementById('tier-list-container').innerHTML = tierMapping.map(t => {
+                const members = characters.filter(c => c.tier === t.id);
+                return `
+                <div class="tier-row">
+                    <div class="tier-label ${t.css}">${t.label}</div>
+                    <div class="flex flex-wrap gap-3 p-4">
+                        ${members.length > 0 ? members.map(c => `
+                            <div class="relative group cursor-pointer" onclick="viewChar(${characters.indexOf(c)})">
+                                <img src="${c.img}" class="w-14 h-14 rounded-lg object-cover border border-white/10 hover:border-red-600 transition">
+                                <div class="absolute -bottom-1 left-1/2 -translate-x-1/2 bg-black/80 px-1 rounded text-[8px] text-white opacity-0 group-hover:opacity-100 transition whitespace-nowrap z-20">${c.name}</div>
+                            </div>
+                        `).join('') : '<span class="text-gray-700 text-xs font-bold uppercase self-center">Empty</span>'}
+                    </div>
+                </div>`;
+            }).join('');
         }
 
         function viewChar(index) {
@@ -204,7 +239,7 @@
             const detail = document.getElementById('detail-view');
             detail.innerHTML = `
                 <div class="bg-[#1a1c1e] rounded-2xl overflow-hidden border border-white/5 flex flex-row shadow-2xl mb-6">
-                    <div class="w-1/2 bg-[#090a0c] h-[400px]"><img src="${char.img}" class="w-full h-full object-cover"></div>
+                    <div class="w-1/2 bg-[#090a0c] h-[450px]"><img src="${char.img}" class="w-full h-full object-cover"></div>
                     <div class="p-10 w-1/2 flex flex-col justify-center">
                         <span class="bg-red-600 text-white text-[10px] font-black px-2 py-1 rounded w-max mb-4 uppercase">${char.tier}</span>
                         <h3 class="nte-title text-5xl text-white mb-2 uppercase">${char.name}</h3>
@@ -213,19 +248,38 @@
                 </div>
                 <div class="space-y-4">
                     <div class="bg-[#1a1c1e] border border-white/5 rounded-xl p-6">
-                        <div class="cursor-pointer flex justify-between" onclick="toggleAccordion('res-c')"><h4 class="nte-title text-white uppercase border-l-4 border-red-600 pl-4">Resonance</h4><span>+</span></div>
-                        <div id="res-c" class="collapsible-content">
-                            <div class="grid grid-cols-2 gap-4 pt-4">
-                                <div class="bg-white/5 p-4 rounded-lg"><span class="text-red-500 text-[10px] font-black block mb-2">R1</span><p class="text-sm">${char.r1 || 'N/A'}</p></div>
-                                <div class="bg-white/5 p-4 rounded-lg"><span class="text-red-500 text-[10px] font-black block mb-2">R2</span><p class="text-sm">${char.r2 || 'N/A'}</p></div>
+                        <div class="cursor-pointer flex justify-between items-center" onclick="toggleAccordion('abi-c')">
+                            <h4 class="nte-title text-white uppercase border-l-4 border-red-600 pl-4">Abilities</h4>
+                            <span class="text-gray-500 text-[10px]">VIEW DATA</span>
+                        </div>
+                        <div id="abi-c" class="collapsible-content">
+                            <div class="grid grid-cols-1 gap-4 pt-6">
+                                <div class="bg-white/5 p-4 rounded border border-white/5"><span class="text-red-500 text-[10px] font-bold block mb-1">BASIC ATTACK</span><p class="text-sm">${char.basic || '---'}</p></div>
+                                <div class="bg-white/5 p-4 rounded border border-white/5"><span class="text-red-500 text-[10px] font-bold block mb-1">SKILL</span><p class="text-sm">${char.skill || '---'}</p></div>
+                                <div class="bg-white/5 p-4 rounded border border-white/5"><span class="text-red-500 text-[10px] font-bold block mb-1">ULTIMATE</span><p class="text-sm">${char.ult || '---'}</p></div>
                             </div>
                         </div>
                     </div>
                     <div class="bg-[#1a1c1e] border border-white/5 rounded-xl p-6">
-                        <div class="cursor-pointer flex justify-between" onclick="toggleAccordion('awk-c')"><h4 class="nte-title text-white uppercase border-l-4 border-red-600 pl-4">Awakening</h4><span>+</span></div>
+                        <div class="cursor-pointer flex justify-between items-center" onclick="toggleAccordion('res-c')">
+                            <h4 class="nte-title text-white uppercase border-l-4 border-red-600 pl-4">Resonance</h4>
+                            <span class="text-gray-500 text-[10px]">VIEW DATA</span>
+                        </div>
+                        <div id="res-c" class="collapsible-content">
+                            <div class="grid grid-cols-2 gap-4 pt-6">
+                                <div class="bg-white/5 p-5 rounded border border-white/5"><span class="text-red-500 text-[10px] font-bold block mb-2 uppercase">R1 Phase</span><p class="text-sm">${char.r1 || '---'}</p></div>
+                                <div class="bg-white/5 p-5 rounded border border-white/5"><span class="text-red-500 text-[10px] font-bold block mb-2 uppercase">R2 Phase</span><p class="text-sm">${char.r2 || '---'}</p></div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="bg-[#1a1c1e] border border-white/5 rounded-xl p-6">
+                        <div class="cursor-pointer flex justify-between items-center" onclick="toggleAccordion('awk-c')">
+                            <h4 class="nte-title text-white uppercase border-l-4 border-red-600 pl-4">Awakening Path</h4>
+                            <span class="text-gray-500 text-[10px]">VIEW DATA</span>
+                        </div>
                         <div id="awk-c" class="collapsible-content">
-                            <div class="space-y-2 pt-4">
-                                ${char.awakening.map((a, i) => a ? `<div class="bg-white/5 p-3 rounded flex gap-4"><span class="text-red-600 font-bold">A${i+1}</span><p class="text-sm">${a}</p></div>` : '').join('')}
+                            <div class="space-y-3 pt-6">
+                                ${char.awakening.map((a, i) => a ? `<div class="bg-white/5 p-4 rounded flex items-center gap-6 border border-white/5"><span class="text-red-600 font-black text-xs">A${i+1}</span><p class="text-sm text-gray-300">${a}</p></div>` : '').join('')}
                             </div>
                         </div>
                     </div>
