@@ -7,7 +7,7 @@
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@700&family=Inter:wght@400;600&display=swap" rel="stylesheet">
     <style>
-        body { background-color: #0f1113; color: #d1d5db; font-family: 'Inter', sans-serif; display: flex; min-h-screen; margin: 0; }
+        body { background-color: #0f1113; color: #d1d5db; font-family: 'Inter', sans-serif; display: flex; min-height: 100vh; margin: 0; }
         .nte-title { font-family: 'Orbitron', sans-serif; }
         .sidebar { width: 260px; background-color: #090a0c; border-right: 1px solid #1e2124; flex-shrink: 0; position: sticky; top: 0; height: 100vh; }
         .nav-link { padding: 0.8rem 1.5rem; display: block; transition: 0.2s; cursor: pointer; color: #9ca3af; font-weight: 600; font-size: 0.85rem; text-transform: uppercase; letter-spacing: 0.05em; }
@@ -17,12 +17,17 @@
         .main-content { flex-grow: 1; padding: 2.5rem; overflow-y: auto; background-color: #111315; width: 100%; }
         .content-section { display: none; }
         .content-section.active { display: block; animation: fadeIn 0.3s ease-out; }
+        
+        /* Accordion Styles */
+        .collapsible-trigger { cursor: pointer; display: flex; justify-content: space-between; align-items: center; width: 100%; transition: 0.3s; }
+        .collapsible-content { max-height: 0; overflow: hidden; transition: max-height 0.3s ease-out, opacity 0.2s; opacity: 0; }
+        .collapsible-content.open { max-height: 2000px; opacity: 1; margin-top: 1.5rem; }
+        .chevron { transition: transform 0.3s; }
+        .rotate-180 { transform: rotate(180deg); }
+
+        .skill-card { background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.05); border-radius: 12px; padding: 1.5rem; }
+        .admin-input { background: #0f1113; border: 1px solid #1e2124; color: white; padding: 8px; font-size: 12px; border-radius: 4px; width: 100%; outline: none; }
         @keyframes fadeIn { from { opacity: 0; transform: translateY(5px); } to { opacity: 1; transform: translateY(0); } }
-        .t0 { background-color: #ef4444; } .t05 { background-color: #f97316; }
-        .t1 { background-color: #eab308; } .t2 { background-color: #3b82f6; }
-        .t3 { background-color: #6b7280; }
-        .char-tile { transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1); }
-        .char-tile:hover { transform: translateY(-5px); border-color: #ef4444; box-shadow: 0 10px 20px -10px rgba(239, 68, 68, 0.3); }
     </style>
 </head>
 <body>
@@ -37,7 +42,6 @@
             <div class="nav-label">Archives</div>
             <div onclick="showSection('characters')" id="nav-characters" class="nav-link">Characters</div>
             <div onclick="showSection('weapons')" id="nav-weapons" class="nav-link">Weapons</div>
-            <div onclick="showSection('tierlist')" id="nav-tierlist" class="nav-link">Tier List</div>
         </nav>
         <div class="p-6 border-t border-white/5 text-center">
             <button onclick="adminLogin()" class="text-[10px] text-gray-800 hover:text-red-500 font-bold uppercase tracking-widest transition">System Admin</button>
@@ -45,95 +49,83 @@
     </aside>
 
     <main class="main-content">
-        <!-- HOME -->
         <section id="sect-home" class="content-section active py-20 text-center">
             <h2 class="nte-title text-5xl text-white mb-6 uppercase tracking-tighter">HESPERIA ARCHIVES</h2>
             <div class="w-24 h-1 bg-red-600 mx-auto mb-6"></div>
-            <p class="text-gray-500 max-w-lg mx-auto italic font-light tracking-wide">Secure terminal for anomaly tracking and equipment management.</p>
+            <p class="text-gray-500 max-w-lg mx-auto italic font-light tracking-wide">Terminal for tactical data management.</p>
         </section>
 
-        <!-- CHARACTERS GRID (Prydwen Style) -->
         <section id="sect-characters" class="content-section">
-            <h2 class="nte-title text-2xl text-white mb-8 uppercase tracking-widest">Database Entities</h2>
-            <div id="char-grid" class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-4">
-                <!-- Tiles injected here -->
-            </div>
+            <h2 class="nte-title text-2xl text-white mb-8 uppercase tracking-widest">Personnel Database</h2>
+            <div id="char-grid" class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-4"></div>
         </section>
 
-        <!-- CHARACTER DETAIL -->
         <section id="sect-char-detail" class="content-section">
-            <button onclick="showSection('characters')" class="mb-6 text-red-500 text-[10px] font-bold uppercase tracking-widest hover:text-white transition flex items-center gap-2">
-                <span>&larr;</span> Back to Grid
-            </button>
-            <div class="bg-[#1a1c1e] rounded-2xl overflow-hidden border border-white/5 flex flex-col md:row max-w-6xl shadow-2xl">
-                <div class="md:w-2/5 bg-[#090a0c] h-[600px] overflow-hidden relative">
+            <button onclick="showSection('characters')" class="mb-6 text-red-500 text-[10px] font-bold uppercase tracking-widest hover:text-white transition flex items-center gap-2"><span>&larr;</span> Back to Archive</button>
+            
+            <div class="bg-[#1a1c1e] rounded-2xl overflow-hidden border border-white/5 flex flex-col md:flex-row max-w-6xl shadow-2xl mb-10">
+                <div class="md:w-2/5 bg-[#090a0c] h-[400px] overflow-hidden">
                     <img id="char-img-display" src="" class="w-full h-full object-cover">
-                    <div id="char-info-overlay" class="absolute bottom-0 left-0 right-0 p-6 bg-gradient-to-t from-black to-transparent">
-                        <div id="char-tags-display" class="flex gap-2 text-[10px] font-bold text-white uppercase tracking-widest"></div>
+                </div>
+                <div class="p-10 md:w-3/5 flex flex-col justify-center">
+                    <h3 id="char-name-display" class="nte-title text-6xl text-white mb-4 tracking-tighter uppercase"></h3>
+                    <div id="char-tags-display" class="flex gap-4 text-[10px] font-bold text-red-500 uppercase mb-6"></div>
+                    <p id="char-desc-display" class="text-gray-400 italic leading-relaxed border-l-2 border-red-600 pl-6"></p>
+                </div>
+            </div>
+
+            <!-- Abilities Accordion -->
+            <div class="max-w-6xl mb-6 bg-[#1a1c1e] border border-white/5 rounded-xl p-6">
+                <div class="collapsible-trigger" onclick="toggleAccordion('skills-content', 'skills-chevron')">
+                    <h4 class="nte-title text-lg text-white uppercase tracking-widest border-l-4 border-red-600 pl-4">Abilities</h4>
+                    <svg id="skills-chevron" class="chevron w-6 h-6 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
+                </div>
+                <div id="skills-content" class="collapsible-content">
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                        <div class="skill-card"><span class="text-red-500 text-[10px] font-black uppercase mb-2 block">Basic Attack</span><p id="char-basic-display" class="text-sm text-gray-400"></p></div>
+                        <div class="skill-card"><span class="text-red-500 text-[10px] font-black uppercase mb-2 block">Skill</span><p id="char-skill-display" class="text-sm text-gray-400"></p></div>
+                        <div class="skill-card"><span class="text-red-500 text-[10px] font-black uppercase mb-2 block">Ultimate</span><p id="char-ult-display" class="text-sm text-gray-400"></p></div>
                     </div>
                 </div>
-                <div class="p-12 md:w-3/5 flex flex-col justify-center">
-                    <span id="char-tier-badge" class="text-white text-[11px] font-black px-4 py-1 rounded-full w-fit uppercase tracking-widest"></span>
-                    <h3 id="char-name-display" class="nte-title text-7xl text-white my-6 tracking-tighter uppercase"></h3>
-                    <div id="char-desc-display" class="text-gray-400 leading-relaxed text-xl font-light border-l-2 border-red-600/30 pl-6 italic"></div>
+            </div>
+
+            <!-- Resonance Accordion -->
+            <div class="max-w-6xl mb-6 bg-[#1a1c1e] border border-white/5 rounded-xl p-6">
+                <div class="collapsible-trigger" onclick="toggleAccordion('res-content', 'res-chevron')">
+                    <h4 class="nte-title text-lg text-white uppercase tracking-widest border-l-4 border-red-600 pl-4">Resonance Effects</h4>
+                    <svg id="res-chevron" class="chevron w-6 h-6 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
+                </div>
+                <div id="res-content" class="collapsible-content">
+                    <div class="space-y-4">
+                        <div class="bg-white/5 p-4 rounded-lg flex items-start"><span class="text-red-500 font-bold mr-4">R1</span><p id="char-r1-display" class="text-sm text-gray-400"></p></div>
+                        <div class="bg-white/5 p-4 rounded-lg flex items-start"><span class="text-red-500 font-bold mr-4">R2</span><p id="char-r2-display" class="text-sm text-gray-400"></p></div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Awakening (Constellations) Accordion -->
+            <div class="max-w-6xl mb-6 bg-[#1a1c1e] border border-white/5 rounded-xl p-6">
+                <div class="collapsible-trigger" onclick="toggleAccordion('awakening-content', 'awakening-chevron')">
+                    <h4 class="nte-title text-lg text-white uppercase tracking-widest border-l-4 border-red-600 pl-4">Awakening</h4>
+                    <svg id="awakening-chevron" class="chevron w-6 h-6 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
+                </div>
+                <div id="awakening-content" class="collapsible-content">
+                    <div id="char-awakening-display" class="space-y-3 text-sm text-gray-400 bg-white/5 p-6 rounded-lg"></div>
                 </div>
             </div>
         </section>
 
-        <!-- WEAPONS -->
-        <section id="sect-weapons" class="content-section">
-            <h2 class="nte-title text-2xl text-white mb-8 uppercase tracking-widest">Armament Data</h2>
-            <div id="weapons-container" class="grid grid-cols-1 md:grid-cols-2 gap-8 max-w-6xl"></div>
-        </section>
-
-        <!-- TIER LIST -->
-        <section id="sect-tierlist" class="content-section">
-            <h2 class="nte-title text-2xl text-white mb-10 uppercase tracking-widest">Tactical Rankings</h2>
-            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-4">
-                <div class="bg-[#090a0c] border border-white/5 rounded-xl p-4 min-h-[500px]">
-                    <div class="t0 text-white text-[10px] font-black text-center py-2 mb-6 rounded-lg uppercase tracking-widest">Tier 0</div>
-                    <div id="tier-T0" class="flex flex-col gap-6 items-center"></div>
-                </div>
-                <div class="bg-[#090a0c] border border-white/5 rounded-xl p-4 min-h-[500px]">
-                    <div class="t05 text-white text-[10px] font-black text-center py-2 mb-6 rounded-lg uppercase tracking-widest">Tier 0.5</div>
-                    <div id="tier-T05" class="flex flex-col gap-6 items-center"></div>
-                </div>
-                <div class="bg-[#090a0c] border border-white/5 rounded-xl p-4 min-h-[500px]">
-                    <div class="t1 text-black text-[10px] font-black text-center py-2 mb-6 rounded-lg uppercase tracking-widest">Tier 1</div>
-                    <div id="tier-T1" class="flex flex-col gap-6 items-center"></div>
-                </div>
-                <div class="bg-[#090a0c] border border-white/5 rounded-xl p-4 min-h-[500px]">
-                    <div class="t2 text-white text-[10px] font-black text-center py-2 mb-6 rounded-lg uppercase tracking-widest">Tier 2</div>
-                    <div id="tier-T2" class="flex flex-col gap-6 items-center"></div>
-                </div>
-                <div class="bg-[#090a0c] border border-white/5 rounded-xl p-4 min-h-[500px]">
-                    <div class="t3 text-white text-[10px] font-black text-center py-2 mb-6 rounded-lg uppercase tracking-widest">Tier 3</div>
-                    <div id="tier-T3" class="flex flex-col gap-6 items-center"></div>
-                </div>
-            </div>
-        </section>
-
-        <!-- ADMIN PANEL -->
+        <!-- Admin Panel -->
         <section id="sect-admin" class="content-section">
-            <div class="max-w-5xl bg-[#1a1c1e] p-10 rounded-2xl border border-red-600/20 shadow-2xl">
-                <h2 class="nte-title text-xl text-white mb-10 uppercase tracking-widest">Admin Control Unit</h2>
-                <div class="grid grid-cols-1 lg:grid-cols-2 gap-10">
-                    <div>
-                        <h3 class="text-red-500 text-[11px] font-black uppercase mb-6 tracking-widest">Personnel Files</h3>
-                        <div id="admin-char-list" class="space-y-6 mb-6"></div>
-                        <button onclick="addCharEntry()" class="w-full py-3 border border-white/10 text-gray-500 text-[10px] font-bold uppercase hover:bg-white/5 transition rounded-lg">+ Add New Character</button>
-                    </div>
-                    <div>
-                        <h3 class="text-red-500 text-[11px] font-black uppercase mb-6 tracking-widest">Armory Stock</h3>
-                        <div id="admin-wep-list" class="space-y-6 mb-6"></div>
-                        <button onclick="addWepEntry()" class="w-full py-3 border border-white/10 text-gray-500 text-[10px] font-bold uppercase hover:bg-white/5 transition rounded-lg">+ Add New Weapon</button>
-                    </div>
-                </div>
-                <div class="mt-12 pt-8 border-t border-white/5">
-                    <button onclick="commitAllChanges()" class="w-full bg-red-600 hover:bg-red-700 text-white font-bold py-4 rounded-xl transition uppercase text-xs tracking-[0.25em]">Finalize & Sync Database</button>
+            <div class="max-w-6xl bg-[#1a1c1e] p-10 rounded-2xl border border-red-600/20 shadow-2xl">
+                <h2 class="nte-title text-xl text-white mb-10 uppercase tracking-widest">Database Editor</h2>
+                <div id="admin-char-list" class="space-y-8"></div>
+                <div class="mt-12 flex gap-4">
+                    <button onclick="addCharEntry()" class="flex-grow py-4 bg-white/5 border border-white/10 text-white text-[10px] font-bold uppercase rounded-xl">+ Add Agent</button>
+                    <button onclick="commitAllChanges()" class="flex-grow py-4 bg-red-600 text-white font-bold rounded-xl uppercase text-[10px]">Save & Export</button>
                 </div>
                 <div id="output-area" class="mt-10 hidden">
-                    <textarea id="final-code" class="w-full h-48 bg-black text-[10px] p-4 border border-white/5 text-gray-600 font-mono" readonly></textarea>
+                    <textarea id="final-code" class="w-full h-64 bg-black text-[10px] p-4 text-gray-500 font-mono" readonly></textarea>
                 </div>
             </div>
         </section>
@@ -141,7 +133,13 @@
 
     <script id="data-script">
         let characters = [];
-        let weapons = [];
+
+        function toggleAccordion(contentId, chevronId) {
+            const content = document.getElementById(contentId);
+            const chevron = document.getElementById(chevronId);
+            content.classList.toggle('open');
+            chevron.classList.toggle('rotate-180');
+        }
 
         function showSection(id) {
             document.querySelectorAll('.content-section').forEach(s => s.classList.remove('active'));
@@ -152,138 +150,96 @@
         }
 
         function adminLogin() {
-            if (prompt("Security Key:") === "1234") {
-                renderAdminUI();
-                showSection('admin');
-            }
+            if (prompt("Key:") === "1234") { renderAdminUI(); showSection('admin'); }
         }
 
         function renderAdminUI() {
             const charContainer = document.getElementById('admin-char-list');
-            const wepContainer = document.getElementById('admin-wep-list');
-            charContainer.innerHTML = ''; wepContainer.innerHTML = '';
-            
+            charContainer.innerHTML = '';
             characters.forEach((char, i) => {
                 charContainer.innerHTML += `
-                <div class="bg-black/40 p-4 rounded-xl border border-white/5 relative">
-                    <button onclick="deleteItem('char', ${i})" class="absolute top-2 right-2 text-red-500 text-[9px] font-bold">DELETE</button>
-                    <input type="text" value="${char.name}" placeholder="Name" class="edit-char-name w-full bg-transparent border-b border-white/10 mb-3 text-white text-sm outline-none">
-                    <div class="grid grid-cols-2 gap-2 mb-3">
-                        <input type="text" value="${char.element || ''}" placeholder="Element (e.g. Fire)" class="edit-char-element bg-[#111] p-2 text-[10px] text-gray-300">
-                        <input type="text" value="${char.class || ''}" placeholder="Class (e.g. DPS)" class="edit-char-class bg-[#111] p-2 text-[10px] text-gray-300">
+                <div class="bg-black/30 p-6 rounded-xl border border-white/5">
+                    <div class="grid grid-cols-3 gap-4 mb-4">
+                        <input type="text" value="${char.name}" class="edit-char-name admin-input" placeholder="Name">
+                        <input type="text" value="${char.element || ''}" class="edit-char-element admin-input" placeholder="Element">
+                        <input type="text" value="${char.class || ''}" class="edit-char-class admin-input" placeholder="Class">
                     </div>
-                    <select class="edit-char-tier w-full bg-[#111] text-[10px] text-gray-400 p-2 mb-3">
-                        <option value="T0" ${char.tier=='T0'?'selected':''}>Tier 0</option>
-                        <option value="T05" ${char.tier=='T05'?'selected':''}>Tier 0.5</option>
-                        <option value="T1" ${char.tier=='T1'?'selected':''}>Tier 1</option>
-                        <option value="T2" ${char.tier=='T2'?'selected':''}>Tier 2</option>
-                        <option value="T3" ${char.tier=='T3'?'selected':''}>Tier 3</option>
-                    </select>
-                    <input type="text" value="${char.img}" placeholder="Img URL" class="edit-char-img w-full bg-transparent border-b border-white/10 mb-3 text-gray-500 text-[10px] outline-none">
-                    <textarea placeholder="Description" class="edit-char-desc w-full bg-transparent text-[10px] text-gray-400 h-16 outline-none">${char.desc}</textarea>
-                </div>`;
-            });
-
-            weapons.forEach((wep, i) => {
-                wepContainer.innerHTML += `
-                <div class="bg-black/40 p-4 rounded-xl border border-white/5 relative">
-                    <button onclick="deleteItem('wep', ${i})" class="absolute top-2 right-2 text-red-500 text-[9px] font-bold">DELETE</button>
-                    <input type="text" value="${wep.name}" placeholder="Weapon Name" class="edit-wep-name w-full bg-transparent border-b border-white/10 mb-3 text-white text-sm outline-none">
-                    <textarea placeholder="Stats" class="edit-wep-desc w-full bg-transparent text-[10px] text-gray-400 h-16 outline-none">${wep.desc}</textarea>
+                    <div class="grid grid-cols-3 gap-4 mb-4">
+                        <textarea class="edit-char-basic admin-input h-16" placeholder="Basic Attack">${char.basic || ''}</textarea>
+                        <textarea class="edit-char-skill admin-input h-16" placeholder="Skill">${char.skill || ''}</textarea>
+                        <textarea class="edit-char-ult admin-input h-16" placeholder="Ultimate">${char.ult || ''}</textarea>
+                    </div>
+                    <div class="grid grid-cols-2 gap-4 mb-4">
+                        <input type="text" value="${char.r1 || ''}" class="edit-char-r1 admin-input" placeholder="Resonance R1">
+                        <input type="text" value="${char.r2 || ''}" class="edit-char-r2 admin-input" placeholder="Resonance R2">
+                    </div>
+                    <textarea class="edit-char-awakening admin-input h-24 mb-4" placeholder="Awakening (6 lines)">${(char.awakening || []).join('\n')}</textarea>
+                    <input type="text" value="${char.img}" class="edit-char-img admin-input mb-2" placeholder="Image URL">
+                    <button onclick="deleteChar(${i})" class="text-red-500 text-[9px] font-bold">REMOVE AGENT</button>
                 </div>`;
             });
         }
 
-        function addCharEntry() { characters.push({name:"", tier:"T0", img:"", desc:"", element:"", class:""}); renderAdminUI(); }
-        function addWepEntry() { weapons.push({name:"", desc:""}); renderAdminUI(); }
-        function deleteItem(type, i) { type === 'char' ? characters.splice(i,1) : weapons.splice(i,1); renderAdminUI(); }
-
         function commitAllChanges() {
-            const charNames = document.querySelectorAll('.edit-char-name');
-            const charElements = document.querySelectorAll('.edit-char-element');
-            const charClasses = document.querySelectorAll('.edit-char-class');
-            const charTiers = document.querySelectorAll('.edit-char-tier');
-            const charImgs = document.querySelectorAll('.edit-char-img');
-            const charDescs = document.querySelectorAll('.edit-char-desc');
-            
+            const containers = document.querySelectorAll('#admin-char-list > div');
             characters = [];
-            charNames.forEach((n, i) => {
-                if(n.value) characters.push({
-                    name: n.value, 
-                    element: charElements[i].value, 
-                    class: charClasses[i].value, 
-                    tier: charTiers[i].value, 
-                    img: charImgs[i].value, 
-                    desc: charDescs[i].value
+            containers.forEach(div => {
+                characters.push({
+                    name: div.querySelector('.edit-char-name').value,
+                    element: div.querySelector('.edit-char-element').value,
+                    class: div.querySelector('.edit-char-class').value,
+                    basic: div.querySelector('.edit-char-basic').value,
+                    skill: div.querySelector('.edit-char-skill').value,
+                    ult: div.querySelector('.edit-char-ult').value,
+                    r1: div.querySelector('.edit-char-r1').value,
+                    r2: div.querySelector('.edit-char-r2').value,
+                    awakening: div.querySelector('.edit-char-awakening').value.split('\n'),
+                    img: div.querySelector('.edit-char-img').value
                 });
             });
-
-            const wepNames = document.querySelectorAll('.edit-wep-name');
-            const wepDescs = document.querySelectorAll('.edit-wep-desc');
-            weapons = [];
-            wepNames.forEach((n, i) => { if(n.value) weapons.push({name: n.value, desc: wepDescs[i].value}); });
-
             updateSiteContent();
-            
-            const dataHeader = `let characters = ${JSON.stringify(characters)};\nlet weapons = ${JSON.stringify(weapons)};`;
-            const currentScript = document.getElementById('data-script').innerHTML;
-            const newScript = dataHeader + currentScript.substring(currentScript.indexOf('\n\n        function showSection'));
-            
-            document.getElementById('data-script').innerHTML = newScript;
             document.getElementById('output-area').classList.remove('hidden');
             document.getElementById('final-code').value = "<!DOCTYPE html>\n" + document.documentElement.outerHTML;
-            
-            showSection('home');
-            alert("Database Synced! Copy the code below and update your GitHub file.");
+            showSection('characters');
         }
 
         function updateSiteContent() {
             const grid = document.getElementById('char-grid');
             grid.innerHTML = '';
-            document.querySelectorAll('[id^="tier-"]').forEach(col => col.innerHTML = '');
-            document.getElementById('weapons-container').innerHTML = '';
-
             characters.forEach((char, index) => {
-                // Grid render
                 grid.innerHTML += `
-                <div onclick="viewChar(${index})" class="char-tile relative bg-[#16181b] border border-white/5 rounded-lg overflow-hidden cursor-pointer">
-                    <div class="aspect-[3/4] bg-gray-900">
-                        <img src="${char.img || 'https://via.placeholder.com/300x400'}" class="w-full h-full object-cover">
-                    </div>
-                    <div class="absolute top-2 left-2 flex flex-col gap-1">
-                        <span class="bg-black/70 backdrop-blur text-[7px] text-white px-1.5 py-0.5 rounded font-black uppercase">${char.element}</span>
-                        <span class="bg-red-600/80 backdrop-blur text-[7px] text-white px-1.5 py-0.5 rounded font-black uppercase">${char.class}</span>
-                    </div>
-                    <div class="p-3 bg-gradient-to-t from-black to-transparent">
-                        <div class="text-white text-[10px] font-bold uppercase tracking-widest truncate">${char.name}</div>
-                    </div>
+                <div onclick="viewChar(${index})" class="bg-[#16181b] border border-white/5 rounded-lg overflow-hidden cursor-pointer hover:border-red-600 transition">
+                    <img src="${char.img || 'https://via.placeholder.com/300'}" class="aspect-[3/4] object-cover w-full">
+                    <div class="p-3 text-center"><div class="text-[10px] font-bold text-white uppercase">${char.name}</div></div>
                 </div>`;
-
-                // Tier list render
-                const col = document.getElementById('tier-' + char.tier);
-                if(col) col.innerHTML += `<div onclick="viewChar(${index})" class="cursor-pointer group"><div class="w-16 h-16 bg-gray-800 rounded-xl overflow-hidden border border-white/5 group-hover:border-red-500 transition"><img src="${char.img}" class="w-full h-full object-cover"></div></div>`;
-            });
-
-            weapons.forEach(wep => {
-                document.getElementById('weapons-container').innerHTML += `<div class="bg-[#1a1c1e] p-8 rounded-xl border border-white/5 border-l-4 border-red-600"><h3 class="text-white font-bold text-xl mb-4 uppercase tracking-widest">${wep.name}</h3><p class="text-gray-500 italic text-sm pt-4 border-t border-white/5">${wep.desc}</p></div>`;
             });
         }
 
         function viewChar(index) {
             const char = characters[index];
-            if(!char) return;
             document.getElementById('char-name-display').innerText = char.name;
-            document.getElementById('char-desc-display').innerText = char.desc;
-            document.getElementById('char-img-display').src = char.img || "https://via.placeholder.com/600x800";
-            document.getElementById('char-tags-display').innerText = `${char.element} | ${char.class}`;
+            document.getElementById('char-img-display').src = char.img;
+            document.getElementById('char-basic-display').innerText = char.basic || "N/A";
+            document.getElementById('char-skill-display').innerText = char.skill || "N/A";
+            document.getElementById('char-ult-display').innerText = char.ult || "N/A";
+            document.getElementById('char-r1-display').innerText = char.r1 || "N/A";
+            document.getElementById('char-r2-display').innerText = char.r2 || "N/A";
+            document.getElementById('char-tags-display').innerText = `${char.element} // ${char.class}`;
             
-            const badge = document.getElementById('char-tier-badge');
-            badge.innerText = char.tier.replace('05', ' 0.5').replace('T', 'T ');
-            badge.className = char.tier.toLowerCase() + " text-white text-[11px] font-black px-4 py-1 rounded-full w-fit uppercase tracking-widest";
-            
+            const awkList = document.getElementById('char-awakening-display');
+            awkList.innerHTML = '';
+            (char.awakening || []).forEach((line, i) => {
+                if(line.trim()) awkList.innerHTML += `<div class="flex gap-4 border-b border-white/5 pb-2 last:border-0"><span class="text-red-600 font-black w-8">A${i+1}</span><span>${line}</span></div>`;
+            });
+
+            // Reset accordions to closed on view
+            document.querySelectorAll('.collapsible-content').forEach(c => c.classList.remove('open'));
+            document.querySelectorAll('.chevron').forEach(c => c.classList.remove('rotate-180'));
+
             showSection('char-detail');
         }
 
+        function addCharEntry() { characters.push({name:"New", awakening:[]}); renderAdminUI(); }
         window.onload = updateSiteContent;
     </script>
 </body>
