@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>NTE Database & Admin Panel</title>
+    <title>NTE Database & Tier List Pro</title>
     <style>
         :root {
             --bg-body: #212126;
@@ -77,20 +77,6 @@
         .page.active { display: block; }
         @keyframes fadeIn { from { opacity: 0; transform: translateY(5px); } to { opacity: 1; transform: translateY(0); } }
 
-        .banner {
-            width: 100%;
-            height: 100px;
-            background: linear-gradient(90deg, #1f1f2e 0%, #2a2a40 100%);
-            border: 1px solid var(--border-color);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 1.5rem;
-            font-weight: bold;
-            color: var(--accent-blue);
-            margin-bottom: 30px;
-        }
-
         .section-header {
             background-color: var(--bg-panel);
             padding: 12px 15px;
@@ -113,8 +99,6 @@
             transition: 0.2s;
             border: 1px solid var(--border-color);
         }
-
-        .item-card:hover { transform: translateY(-3px); border-color: var(--accent-blue); }
 
         .item-card img {
             width: 100%;
@@ -157,12 +141,16 @@
         /* --- TIER LIST --- */
         .tier-row { display: flex; background-color: var(--bg-panel); margin-bottom: 8px; min-height: 110px; border: 1px solid var(--border-color); }
         .tier-label { 
-            width: 70px; display: flex; align-items: center; justify-content: center; 
-            font-size: 1.5rem; font-weight: bold; color: #fff; text-shadow: 1px 1px 2px #000;
+            width: 80px; display: flex; align-items: center; justify-content: center; 
+            font-size: 1.3rem; font-weight: bold; color: #fff; text-shadow: 1px 1px 2px #000;
         }
-        .t0 { background-color: #ff4d4d; }
-        .t1 { background-color: #ff7f50; }
-        .t2 { background-color: #ffb347; }
+        /* Цвета рангов */
+        .t0   { background-color: #ff4d4d; } /* Красный */
+        .t0-5 { background-color: #ff7f50; } /* Коралловый */
+        .t1   { background-color: #ffb347; } /* Оранжевый */
+        .t2   { background-color: #ffea70; color: #333; text-shadow: none; } /* Желтый */
+        .t3   { background-color: #98ff98; color: #333; text-shadow: none; } /* Салатовый */
+
         .tier-content { display: flex; padding: 10px; gap: 10px; flex-wrap: wrap; flex-grow: 1; }
 
         /* --- ADMIN FORM --- */
@@ -192,17 +180,9 @@
             padding: 15px;
             font-weight: bold;
             cursor: pointer;
-            transition: 0.2s;
         }
 
-        .admin-form button:hover { background: #0086cc; }
-
-        /* Текст обновлений на главной */
-        #home-news-content {
-            white-space: pre-wrap;
-            line-height: 1.6;
-            color: #ccc;
-        }
+        #home-news-content { white-space: pre-wrap; line-height: 1.6; color: #ccc; }
     </style>
 </head>
 <body class="user-view">
@@ -212,9 +192,8 @@
         <nav class="nav-menu">
             <a onclick="showPage('home', this)" class="nav-item active">🏠 Home</a>
             <a onclick="showPage('chars', this)" class="nav-item">👥 Characters</a>
-            <a onclick="showPage('weapons', this)" class="nav-item">🔫 Arcs/Weapons</a>
+            <a onclick="showPage('weapons', this)" class="nav-item">🔫 Weapons</a>
             <a onclick="showPage('tierlist', this)" class="nav-item">📊 Tier List</a>
-            <a onclick="showPage('codes', this)" class="nav-item">🎟️ Codes</a>
             <a onclick="checkAdmin()" class="nav-item admin-link">🔐 Admin Panel</a>
         </nav>
     </aside>
@@ -222,9 +201,8 @@
     <main class="main-content">
         <!-- HOME -->
         <div id="home" class="page active">
-            <div class="banner">NEVERNESS TO EVERNESS: DATABASE</div>
             <div class="section-header">Latest Updates</div>
-            <div id="home-news-content">Загрузка обновлений...</div>
+            <div id="home-news-content">Загрузка...</div>
         </div>
 
         <!-- CHARACTERS -->
@@ -235,94 +213,81 @@
 
         <!-- WEAPONS -->
         <div id="weapons" class="page">
-            <div class="section-header">Arcs & Tactical Equipment</div>
+            <div class="section-header">Weapons Database</div>
             <div id="weapons-grid" class="grid-container"></div>
         </div>
 
-        <!-- TIER LIST -->
+        <!-- TIER LIST (Обновленный список уровней) -->
         <div id="tierlist" class="page">
-            <div class="section-header">Character Ranking</div>
+            <div class="section-header">Character Tier List</div>
             <div class="tier-row"><div class="tier-label t0">T0</div><div id="tier-t0" class="tier-content"></div></div>
+            <div class="tier-row"><div class="tier-label t0-5">T0.5</div><div id="tier-t0-5" class="tier-content"></div></div>
             <div class="tier-row"><div class="tier-label t1">T1</div><div id="tier-t1" class="tier-content"></div></div>
             <div class="tier-row"><div class="tier-label t2">T2</div><div id="tier-t2" class="tier-content"></div></div>
-        </div>
-
-        <!-- CODES -->
-        <div id="codes" class="page">
-            <div class="section-header">Active Codes</div>
-            <p>Здесь будут отображаться активные промокоды игры.</p>
+            <div class="tier-row"><div class="tier-label t3">T3</div><div id="tier-t3" class="tier-content"></div></div>
         </div>
 
         <!-- ADMIN PANEL -->
         <div id="admin" class="page">
             <div class="section-header">Admin Control Panel</div>
             
-            <!-- Форма для ГЛАВНОЙ -->
             <div class="admin-form">
-                <h3>Edit Home Page Text</h3>
-                <textarea id="f-home-text" rows="5" placeholder="Введите текст новостей/обновлений для главной страницы..."></textarea>
-                <button onclick="saveHomeText()">Update Home Page</button>
+                <h3>Edit Home Text</h3>
+                <textarea id="f-home-text" rows="4"></textarea>
+                <button onclick="saveHomeText()">Update Home</button>
             </div>
 
-            <!-- Форма для ПЕРСОНАЖЕЙ/ПУШЕК -->
             <div class="admin-form">
-                <h3>Add New Entry (Character/Weapon)</h3>
+                <h3>Add New Entry</h3>
                 <select id="f-type">
                     <option value="char">Character</option>
-                    <option value="weapon">Weapon/Arc</option>
+                    <option value="weapon">Weapon</option>
                 </select>
                 <input type="text" id="f-name" placeholder="Name">
-                <input type="text" id="f-img" placeholder="Image URL (direct link)">
-                <textarea id="f-desc" rows="3" placeholder="Description or Stats"></textarea>
+                <input type="text" id="f-img" placeholder="Image URL">
+                <textarea id="f-desc" rows="2" placeholder="Description"></textarea>
                 <select id="f-tier">
-                    <option value="">No Tier (for weapons)</option>
-                    <option value="t0">Tier 0 (Top)</option>
-                    <option value="t1">Tier 1 (High)</option>
-                    <option value="t2">Tier 2 (Mid)</option>
+                    <option value="">No Tier</option>
+                    <option value="t0">Tier 0</option>
+                    <option value="t0-5">Tier 0.5</option>
+                    <option value="t1">Tier 1</option>
+                    <option value="t2">Tier 2</option>
+                    <option value="t3">Tier 3</option>
                 </select>
-                <button onclick="saveToDB()">Add to Database</button>
+                <button onclick="saveToDB()">Save Entry</button>
             </div>
         </div>
     </main>
 
     <script>
-        // Инициализация данных (добавлено поле homeText)
-        let defaultText = "Добро пожаловать в архив Hesperia! \n\n• База данных находится в режиме наполнения.\n• Используйте админ-панель для редактирования этого текста.";
         let database = JSON.parse(localStorage.getItem('nte_final_db')) || { 
             chars: [], 
             weapons: [], 
-            homeText: defaultText 
+            homeText: "Добро пожаловать в архив!" 
         };
 
         function showPage(pageId, el) {
             document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
             document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
-            
             document.getElementById(pageId).classList.add('active');
             if(el) el.classList.add('active');
             
             if(pageId === 'admin') {
                 document.body.classList.add('admin-mode');
-                // Подгружаем текущий текст в текстовое поле админки
                 document.getElementById('f-home-text').value = database.homeText;
             } else {
                 document.body.classList.remove('admin-mode');
             }
-
             render();
         }
 
         function checkAdmin() {
-            const p = prompt("Введите пароль:");
-            if(p === "1234") showPage('admin', document.querySelector('.admin-link'));
-            else alert("Доступ запрещен");
+            if(prompt("Пароль:") === "1234") showPage('admin', document.querySelector('.admin-link'));
         }
 
-        // Сохранение текста для Home
         function saveHomeText() {
             database.homeText = document.getElementById('f-home-text').value;
             localStorage.setItem('nte_final_db', JSON.stringify(database));
-            alert("Текст главной страницы обновлен!");
             render();
         }
 
@@ -331,21 +296,17 @@
             const newItem = {
                 id: Date.now(),
                 name: document.getElementById('f-name').value || "Unnamed",
-                img: document.getElementById('f-img').value || "https://via.placeholder.com/80x100?text=NTE",
+                img: document.getElementById('f-img').value || "https://via.placeholder.com/80x100",
                 desc: document.getElementById('f-desc').value,
                 tier: document.getElementById('f-tier').value
             };
-
             if(type === 'char') database.chars.push(newItem);
             else database.weapons.push(newItem);
-
             localStorage.setItem('nte_final_db', JSON.stringify(database));
-            alert("Успешно добавлено!");
             render();
         }
 
         function deleteItem(type, id) {
-            if(!confirm("Удалить?")) return;
             if(type === 'char') database.chars = database.chars.filter(i => i.id !== id);
             else database.weapons = database.weapons.filter(i => i.id !== id);
             localStorage.setItem('nte_final_db', JSON.stringify(database));
@@ -353,10 +314,8 @@
         }
 
         function render() {
-            // Рендер текста на главной
             document.getElementById('home-news-content').textContent = database.homeText;
 
-            // Рендер персонажей
             const charGrid = document.getElementById('chars-grid');
             charGrid.innerHTML = database.chars.map(c => `
                 <div class="item-card">
@@ -366,7 +325,6 @@
                 </div>
             `).join('');
 
-            // Рендер пушек
             const weapGrid = document.getElementById('weapons-grid');
             weapGrid.innerHTML = database.weapons.map(w => `
                 <div class="item-card">
@@ -376,15 +334,17 @@
                 </div>
             `).join('');
 
-            // Рендер Тир-листа
-            ['t0', 't1', 't2'].forEach(tRank => {
+            // Рендер всех 5 уровней тир-листа
+            ['t0', 't0-5', 't1', 't2', 't3'].forEach(tRank => {
                 const row = document.getElementById('tier-' + tRank);
-                row.innerHTML = database.chars.filter(c => c.tier === tRank).map(c => `
-                    <div class="item-card" style="width: 70px;">
-                        <img src="${c.img}" style="height: 85px;">
-                        <div class="name">${c.name}</div>
-                    </div>
-                `).join('');
+                if(row) {
+                    row.innerHTML = database.chars.filter(c => c.tier === tRank).map(c => `
+                        <div class="item-card" style="width: 70px;">
+                            <img src="${c.img}" style="height: 85px;">
+                            <div class="name">${c.name}</div>
+                        </div>
+                    `).join('');
+                }
             });
         }
 
