@@ -3,127 +3,155 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>NTE Admin-Panel System</title>
+    <title>NTE | Hesperia Archives Admin</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@700&family=Inter:wght@400;600&display=swap" rel="stylesheet">
     <style>
-        body { background-color: #1a1c1e; color: #d1d5db; font-family: 'Inter', sans-serif; }
+        body { background-color: #1a1c1e; color: #d1d5db; font-family: 'Inter', sans-serif; display: flex; min-h-screen; }
         .nte-title { font-family: 'Orbitron', sans-serif; }
-        .content-section { display: none; }
+        
+        /* Боковая панель */
+        .sidebar { width: 260px; background-color: #0f1113; border-right: 1px solid #2d3136; flex-shrink: 0; position: sticky; top: 0; height: 100vh; }
+        .nav-link { padding: 1rem 1.5rem; display: flex; align-items: center; transition: 0.2s; cursor: pointer; border-left: 3px solid transparent; }
+        .nav-link:hover { background: #1e2124; color: #ef4444; }
+        .nav-link.active { background: #1e2124; border-left-color: #ef4444; color: white; }
+
+        .main-content { flex-grow: 1; padding: 2rem; overflow-y: auto; }
+        .content-section { display: none; animation: fadeIn 0.3s ease-out; }
         .content-section.active { display: block; }
-        .admin-only { display: none; } /* Скрыто для обычных юзеров */
+
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(5px); } to { opacity: 1; transform: translateY(0); } }
     </style>
 </head>
-<body class="p-6">
+<body>
 
-    <header class="max-w-4xl mx-auto flex justify-between items-center mb-10">
-        <h1 class="nte-title text-2xl text-white">Hesperia Database</h1>
-        <button onclick="showSection('home')" class="text-xs uppercase tracking-widest text-gray-500 hover:text-white">Home</button>
-    </header>
+    <!-- SIDEBAR NAVIGATION -->
+    <aside class="sidebar flex flex-col">
+        <div class="p-6 border-b border-white/5">
+            <h1 class="nte-title text-xl text-white tracking-tighter">NTE GUIDE</h1>
+        </div>
+        
+        <nav class="flex-grow mt-4">
+            <div onclick="showSection('home')" id="nav-home" class="nav-link active uppercase text-xs font-bold tracking-widest">Home</div>
+            <div onclick="showSection('characters')" id="nav-characters" class="nav-link uppercase text-xs font-bold tracking-widest">Characters</div>
+            <div onclick="showSection('arcs')" id="nav-arcs" class="nav-link uppercase text-xs font-bold tracking-widest">Arcs</div>
+            <div onclick="showSection('tierlist')" id="nav-tierlist" class="nav-link uppercase text-xs font-bold tracking-widest">Tier List</div>
+        </nav>
 
-    <main class="max-w-4xl mx-auto">
-        <!-- ГЛАВНАЯ СТРАНИЦА (То что видят все) -->
+        <div class="p-6 border-t border-white/5">
+            <button onclick="adminLogin()" class="text-[10px] text-gray-600 hover:text-red-500 uppercase font-bold tracking-widest transition">Admin Panel</button>
+        </div>
+    </aside>
+
+    <!-- MAIN AREA -->
+    <main class="main-content">
+        
+        <!-- HOME SECTION -->
         <section id="sect-home" class="content-section active">
-            <div class="bg-[#24272b] p-6 rounded-lg border border-gray-700">
-                <h2 id="display-name" class="nte-title text-3xl text-red-500 mb-2">Nanami</h2>
-                <p id="display-desc" class="text-gray-400 mb-4">Space-time anomaly specialist.</p>
-                <div class="bg-black/20 p-4 rounded border-l-4 border-red-600">
-                    <span class="text-[10px] font-bold uppercase text-gray-500">Current Tier</span>
-                    <p id="display-tier" class="text-2xl font-black text-white">S</p>
+            <h2 class="nte-title text-2xl text-white mb-6">Welcome, Agent</h2>
+            <div class="bg-[#24272b] p-8 rounded-xl border border-gray-700">
+                <p class="text-gray-400 mb-6 italic">Welcome to the Hesperia Tactical Archives. Select a section from the left menu to view database entries.</p>
+                <h4 class="text-white text-xs font-bold uppercase mb-4 text-red-500">Latest Logs</h4>
+                <ul class="text-sm text-gray-500 space-y-2">
+                    <li>• Sidebar navigation system integrated.</li>
+                    <li>• Character database updated.</li>
+                </ul>
+            </div>
+        </section>
+
+        <!-- CHARACTERS SECTION -->
+        <section id="sect-characters" class="content-section">
+            <h2 class="nte-title text-2xl text-white mb-6">Characters Database</h2>
+            <div class="bg-[#24272b] rounded-xl overflow-hidden border border-gray-700 flex flex-col md:flex-row">
+                <div class="md:w-1/3 bg-gray-800 h-64 md:h-auto">
+                    <img src="https://via.placeholder.com/400x600" class="w-full h-full object-cover opacity-70">
+                </div>
+                <div class="p-8 md:w-2/3">
+                    <span id="char-tier-display" class="bg-red-600 text-white text-[10px] font-black px-2 py-1 rounded">S-RANK</span>
+                    <h3 id="char-name-display" class="nte-title text-4xl text-white my-3">Nanami</h3>
+                    <p id="char-desc-display" class="text-gray-400 text-sm leading-relaxed mb-6">Specialist in spatial manipulation and high-speed sword combat.</p>
                 </div>
             </div>
         </section>
 
-        <!-- ПАНЕЛЬ РЕДАКТИРОВАНИЯ (Видна только тебе после входа) -->
+        <!-- ARCS SECTION -->
+        <section id="sect-arcs" class="content-section">
+            <h2 class="nte-title text-2xl text-white mb-6">Tactical Arcs</h2>
+            <div class="bg-[#24272b] p-10 rounded-xl border border-dashed border-gray-700 text-center">
+                <p class="text-gray-500 italic">Arc Data synchronization in progress...</p>
+            </div>
+        </section>
+
+        <!-- TIER LIST SECTION -->
+        <section id="sect-tierlist" class="content-section">
+            <h2 class="nte-title text-2xl text-white mb-6">Global Tier List</h2>
+            <div class="bg-[#24272b] p-4 rounded-lg border border-gray-700 inline-flex items-center">
+                <div class="w-12 h-12 bg-red-600 flex items-center justify-center font-black text-white rounded">S</div>
+                <div class="ml-4 w-10 h-10 bg-gray-700 rounded-full border border-red-500"></div>
+            </div>
+        </section>
+
+        <!-- ADMIN PANEL SECTION (HIDDEN) -->
         <section id="sect-admin" class="content-section">
-            <div class="bg-white/10 p-8 rounded-xl border-2 border-red-500/50">
-                <h2 class="nte-title text-xl text-white mb-6 uppercase">Admin Control Panel</h2>
-                
-                <div class="space-y-4">
+            <div class="max-w-xl bg-white/5 p-8 rounded-xl border-2 border-red-500/30">
+                <h2 class="nte-title text-xl text-white mb-6">Database Editor</h2>
+                <div class="space-y-4 text-sm">
                     <div>
-                        <label class="block text-xs font-bold mb-1">Character Name:</label>
-                        <input id="edit-name" type="text" class="w-full bg-black/40 border border-gray-600 p-2 rounded text-white">
+                        <label class="block text-gray-500 mb-1">Character Name:</label>
+                        <input id="edit-name" type="text" class="w-full bg-black/40 border border-gray-700 p-2 rounded text-white focus:border-red-500 outline-none">
                     </div>
                     <div>
-                        <label class="block text-xs font-bold mb-1">Description:</label>
-                        <textarea id="edit-desc" class="w-full bg-black/40 border border-gray-600 p-2 rounded text-white"></textarea>
+                        <label class="block text-gray-500 mb-1">Role/Description:</label>
+                        <textarea id="edit-desc" class="w-full bg-black/40 border border-gray-700 p-2 rounded text-white h-24 focus:border-red-500 outline-none"></textarea>
                     </div>
-                    <div>
-                        <label class="block text-xs font-bold mb-1">Tier (S/A/B):</label>
-                        <select id="edit-tier" class="w-full bg-black/40 border border-gray-600 p-2 rounded text-white">
-                            <option value="S">S</option>
-                            <option value="A">A</option>
-                            <option value="B">B</option>
-                        </select>
-                    </div>
-                    
-                    <button onclick="saveChanges()" class="w-full bg-red-600 hover:bg-red-700 text-white font-bold py-3 rounded transition uppercase tracking-widest text-sm">
-                        Apply & Generate Code
-                    </button>
+                    <button onclick="saveData()" class="w-full bg-red-600 hover:bg-red-700 text-white font-bold py-3 rounded transition uppercase tracking-widest text-xs">Update Database & Get Code</button>
                 </div>
 
-                <div id="code-output-area" class="mt-8 hidden">
-                    <p class="text-xs text-yellow-500 mb-2 font-bold">! Copy the code below and paste it into your index.html on GitHub to update for everyone:</p>
-                    <textarea id="final-code" class="w-full h-32 bg-black text-[10px] p-2 border border-yellow-500/50 text-gray-400" readonly></textarea>
+                <div id="output-area" class="mt-8 hidden">
+                    <p class="text-[10px] text-yellow-500 mb-2 font-bold uppercase tracking-widest">Copy this code to GitHub index.html:</p>
+                    <textarea id="final-code" class="w-full h-32 bg-black text-[10px] p-2 border border-yellow-500/40 text-gray-500 font-mono" readonly></textarea>
                 </div>
             </div>
         </section>
     </main>
 
-    <footer class="max-w-4xl mx-auto mt-20 border-t border-white/5 pt-4 text-center">
-        <button onclick="adminLogin()" class="text-[10px] text-gray-700 hover:text-gray-400 uppercase tracking-widest">Admin Login</button>
-    </footer>
-
     <script>
-        // Имитация базы данных (LocalStorage сохраняет только в твоем браузере)
-        const db = {
-            name: localStorage.getItem('nte-name') || "Nanami",
-            desc: localStorage.getItem('nte-desc') || "Space-time anomaly specialist.",
-            tier: localStorage.getItem('nte-tier') || "S"
-        };
-
-        // Загрузка данных при старте
-        document.getElementById('display-name').innerText = db.name;
-        document.getElementById('display-desc').innerText = db.desc;
-        document.getElementById('display-tier').innerText = db.tier;
-
         function showSection(id) {
+            // Переключение контента
             document.querySelectorAll('.content-section').forEach(s => s.classList.remove('active'));
             document.getElementById('sect-' + id).classList.add('active');
+            
+            // Переключение кнопок в меню
+            document.querySelectorAll('.nav-link').forEach(l => l.classList.remove('active'));
+            const activeNav = document.getElementById('nav-' + id);
+            if(activeNav) activeNav.classList.add('active');
         }
 
         function adminLogin() {
             const pass = prompt("Enter Admin Password:");
-            if (pass === "1234") { // Твой пароль
+            if (pass === "1234") {
                 showSection('admin');
-                document.getElementById('edit-name').value = db.name;
-                document.getElementById('edit-desc').value = db.desc;
-                document.getElementById('edit-tier').value = db.tier;
+                document.getElementById('edit-name').value = document.getElementById('char-name-display').innerText;
+                document.getElementById('edit-desc').value = document.getElementById('char-desc-display').innerText;
             } else {
-                alert("Access Denied");
+                alert("Unauthorized access.");
             }
         }
 
-        function saveChanges() {
+        function saveData() {
             const newName = document.getElementById('edit-name').value;
             const newDesc = document.getElementById('edit-desc').value;
-            const newTier = document.getElementById('edit-tier').value;
 
-            // 1. Сохраняем локально (чтобы ты видел результат сразу)
-            localStorage.setItem('nte-name', newName);
-            localStorage.setItem('nte-desc', newDesc);
-            localStorage.setItem('nte-tier', newTier);
+            // Обновляем визуально
+            document.getElementById('char-name-display').innerText = newName;
+            document.getElementById('char-desc-display').innerText = newDesc;
 
-            // 2. Обновляем экран
-            document.getElementById('display-name').innerText = newName;
-            
-            // 3. Генерируем "чистый" код для GitHub
-            // Это магия: мы берем текущий HTML и подставляем в него новые значения
-            let currentHTML = document.documentElement.outerHTML;
-            document.getElementById('code-output-area').classList.remove('hidden');
-            document.getElementById('final-code').value = "<!-- Copy all this and replace index.html content -->\n" + currentHTML;
-            
-            alert("Changes applied locally! Now copy the code below and update your GitHub file.");
+            // Генерируем новый код
+            const fullCode = "<!DOCTYPE html>\n" + document.documentElement.outerHTML;
+            document.getElementById('output-area').classList.remove('hidden');
+            document.getElementById('final-code').value = fullCode;
+
+            alert("Local update successful. Please sync with GitHub.");
         }
     </script>
 </body>
