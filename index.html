@@ -5,14 +5,14 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>NTE Database & Tier List</title>
     <style>
-        /* Цветовая палитра на основе скриншотов */
+        /* --- ПАЛИТРА И БАЗА --- */
         :root {
-            --bg-body: #212126;      /* Основной фон сайта */
-            --bg-sidebar: #1b1b1e;   /* Фон боковой панели */
-            --bg-panel: #2a2a32;     /* Фон плашек и секций */
-            --text-main: #e0e0e0;    /* Основной текст */
-            --accent-blue: #00a8ff;  /* Синие полоски и активные элементы */
-            --border-color: #383842; /* Цвет границ */
+            --bg-body: #212126;
+            --bg-sidebar: #1b1b1e;
+            --bg-panel: #2a2a32;
+            --text-main: #e0e0e0;
+            --accent-blue: #00a8ff;
+            --border-color: #383842;
         }
 
         body {
@@ -24,7 +24,7 @@
             min-height: 100vh;
         }
 
-        /* --- БОКОВАЯ ПАНЕЛЬ (SIDEBAR) --- */
+        /* --- БОКОВАЯ ПАНЕЛЬ --- */
         .sidebar {
             width: 220px;
             background-color: var(--bg-sidebar);
@@ -53,7 +53,8 @@
             color: var(--text-main);
             text-decoration: none;
             font-size: 0.95rem;
-            transition: background 0.2s, color 0.2s;
+            transition: all 0.2s;
+            border-left: 3px solid transparent;
         }
 
         .nav-item:hover {
@@ -61,17 +62,37 @@
             color: var(--accent-blue);
         }
 
-        /* --- ОСНОВНОЙ КОНТЕНТ --- */
-        .main-content {
-            margin-left: 220px; /* Отступ на ширину сайдбара */
-            flex-grow: 1;
-            padding: 30px;
-            display: flex;
-            flex-direction: column;
-            gap: 30px;
+        /* Активный пункт меню */
+        .nav-item.active {
+            background-color: rgba(255, 255, 255, 0.1);
+            color: var(--accent-blue);
+            border-left: 3px solid var(--accent-blue);
         }
 
-        /* Заголовки секций с синей полоской */
+        /* --- ОСНОВНОЙ КОНТЕНТ --- */
+        .main-content {
+            margin-left: 220px;
+            flex-grow: 1;
+            padding: 30px;
+        }
+
+        /* Скрытие неактивных секций */
+        .page-section {
+            display: none;
+            flex-direction: column;
+            gap: 30px;
+            animation: fadeIn 0.3s ease;
+        }
+
+        .page-section.active-section {
+            display: flex;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
         .section-header {
             background-color: var(--bg-panel);
             padding: 12px 15px;
@@ -83,12 +104,11 @@
             margin-bottom: 15px;
         }
 
-        /* --- СЕТКА ПЕРСОНАЖЕЙ (CHARACTERS LIST) --- */
+        /* --- СЕТКА ПЕРСОНАЖЕЙ И ТИР-ЛИСТ --- */
         .grid-container {
             display: flex;
             flex-wrap: wrap;
             gap: 10px;
-            padding-bottom: 20px;
         }
 
         .char-card {
@@ -101,114 +121,46 @@
             border: 2px solid transparent;
         }
 
-        .char-card:hover {
-            transform: translateY(-3px);
-            border-color: var(--accent-blue);
-        }
+        .char-card:hover { transform: translateY(-3px); border-color: var(--accent-blue); }
+        .char-card img { width: 100%; height: 100%; object-fit: cover; background-color: #444; }
+        .char-card .name { font-size: 0.7rem; text-align: center; padding: 3px 0; background: rgba(0, 0, 0, 0.8); position: absolute; bottom: 0; width: 100%; box-sizing: border-box; }
 
-        .char-card img {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-            background-color: #444; /* Заглушка для картинки */
-        }
-
-        .char-card .name {
-            font-size: 0.7rem;
-            text-align: center;
-            padding: 3px 0;
-            background: rgba(0, 0, 0, 0.8);
-            position: absolute;
-            bottom: 0;
-            width: 100%;
-            box-sizing: border-box;
-        }
-
-        /* --- ТИР-ЛИСТ (TIER LIST) --- */
-        .tier-list {
-            display: flex;
-            flex-direction: column;
-            gap: 5px;
-        }
-
-        .tier-row {
-            display: flex;
-            background-color: var(--bg-panel);
-            min-height: 80px;
-            border-right: 1px solid var(--border-color);
-            border-bottom: 1px solid var(--border-color);
-            border-top: 1px solid var(--border-color);
-        }
-
-        .tier-label {
-            width: 60px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-weight: bold;
-            font-size: 1.2rem;
-            color: #fff;
-            text-shadow: 1px 1px 2px rgba(0,0,0,0.5);
-        }
-
-        /* Цвета рангов (T0, T0.5, T1) */
+        .tier-list { display: flex; flex-direction: column; gap: 5px; }
+        .tier-row { display: flex; background-color: var(--bg-panel); min-height: 80px; border: 1px solid var(--border-color); }
+        .tier-label { width: 60px; display: flex; align-items: center; justify-content: center; font-weight: bold; font-size: 1.2rem; color: #fff; text-shadow: 1px 1px 2px rgba(0,0,0,0.5); }
         .tier-t0 { background-color: #ff4d4d; }
         .tier-t0-5 { background-color: #ff7f50; }
-        .tier-t1 { background-color: #ff69b4; }
+        .tier-content { display: flex; padding: 10px; gap: 10px; flex-grow: 1; align-items: center; }
 
-        .tier-content {
-            display: flex;
-            padding: 10px;
-            gap: 10px;
-            flex-grow: 1;
-            align-items: center;
-        }
-
-        /* Баннер-заглушка */
-        .banner {
-            width: 100%;
-            height: 100px;
-            background: linear-gradient(90deg, #1f1f2e 0%, #2a2a40 100%);
-            border: 1px solid #444;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 1.5rem;
-            font-weight: bold;
-            color: var(--accent-blue);
-            margin-bottom: 20px;
-        }
+        .banner { width: 100%; height: 100px; background: linear-gradient(90deg, #1f1f2e 0%, #2a2a40 100%); border: 1px solid #444; display: flex; align-items: center; justify-content: center; font-size: 1.5rem; font-weight: bold; color: var(--accent-blue); }
     </style>
 </head>
 <body>
 
-    <!-- Боковое меню -->
+    <!-- Боковое меню (Добавлен onclick для JavaScript) -->
     <aside class="sidebar">
         <ul class="nav-menu">
-            <li><a href="#" class="nav-item">🏠 Home</a></li>
-            <li><a href="#" class="nav-item">👥 Characters</a></li>
-            <li><a href="#" class="nav-item">🔫 Arcs</a></li>
-            <li><a href="#" class="nav-item">🎮 Cartridges</a></li>
-            <li><a href="#" class="nav-item">📊 Tier list</a></li>
-            <li><a href="#" class="nav-item">🏆 Team Tier list</a></li>
-            <li><a href="#" class="nav-item">🛠️ Team Builder</a></li>
-            <li><a href="#" class="nav-item">🎟️ Codes</a></li>
+            <li><a onclick="switchTab('home', this)" class="nav-item active">🏠 Home</a></li>
+            <li><a onclick="switchTab('characters', this)" class="nav-item">👥 Characters</a></li>
+            <li><a onclick="switchTab('tierlist', this)" class="nav-item">📊 Tier list</a></li>
+            <li><a onclick="switchTab('codes', this)" class="nav-item">🎟️ Codes</a></li>
         </ul>
     </aside>
 
     <!-- Основной контент -->
     <main class="main-content">
         
-        <!-- Рекламный/Информационный баннер -->
-        <div class="banner">
-            NTE: NOW TO ENJOY - GLOBAL LAUNCH
+        <!-- СЕКЦИЯ: HOME -->
+        <div id="home" class="page-section active-section">
+            <div class="banner">NTE: NOW TO ENJOY - GLOBAL LAUNCH</div>
+            <div class="section-header">Welcome to the Database</div>
+            <p>Выберите раздел в меню слева, чтобы посмотреть персонажей, тир-листы или активные промокоды.</p>
         </div>
 
-        <!-- Секция персонажей -->
-        <div>
-            <div class="section-header">Characters (Showing 20)</div>
+        <!-- СЕКЦИЯ: CHARACTERS -->
+        <div id="characters" class="page-section">
+            <div class="section-header">Characters (Showing 8)</div>
             <div class="grid-container">
-                <!-- Карточки персонажей -->
                 <div class="char-card"><img src="" alt=""><div class="name">Aurelia</div></div>
                 <div class="char-card"><img src="" alt=""><div class="name">Nanally</div></div>
                 <div class="char-card"><img src="" alt=""><div class="name">Kiel</div></div>
@@ -220,12 +172,10 @@
             </div>
         </div>
 
-        <!-- Секция Тир-листа -->
-        <div>
+        <!-- СЕКЦИЯ: TIER LIST -->
+        <div id="tierlist" class="page-section">
             <div class="section-header">Tier List - Damage & Support</div>
             <div class="tier-list">
-                
-                <!-- Ряд T0 -->
                 <div class="tier-row">
                     <div class="tier-label tier-t0">T0</div>
                     <div class="tier-content">
@@ -233,28 +183,59 @@
                         <div class="char-card"><img src="" alt=""><div class="name">Nanally</div></div>
                     </div>
                 </div>
-
-                <!-- Ряд T0.5 -->
                 <div class="tier-row">
                     <div class="tier-label tier-t0-5">T0.5</div>
                     <div class="tier-content">
                         <div class="char-card"><img src="" alt=""><div class="name">Kiel</div></div>
                     </div>
                 </div>
+            </div>
+        </div>
 
-                <!-- Ряд T1 -->
-                <div class="tier-row">
-                    <div class="tier-label tier-t1">T1</div>
-                    <div class="tier-content">
-                        <div class="char-card"><img src="" alt=""><div class="name">Skia</div></div>
-                        <div class="char-card"><img src="" alt=""><div class="name">Mint</div></div>
-                    </div>
+        <!-- СЕКЦИЯ: CODES -->
+        <div id="codes" class="page-section">
+            <div class="section-header">Active Codes</div>
+            <div style="display: flex; gap: 20px; flex-wrap: wrap;">
+                <div style="background: var(--bg-panel); padding: 20px; border: 1px solid var(--border-color); flex-grow: 1; text-align: center;">
+                    <h3 style="margin: 0; color: var(--accent-blue);">NTE0429</h3>
+                    <p style="font-size: 0.8rem; color: #aaa;">Annulith x100 + Materials</p>
                 </div>
-
+                <div style="background: var(--bg-panel); padding: 20px; border: 1px solid var(--border-color); flex-grow: 1; text-align: center;">
+                    <h3 style="margin: 0; color: var(--accent-blue);">NTENANALLYGO</h3>
+                    <p style="font-size: 0.8rem; color: #aaa;">Annulith x100 + Materials</p>
+                </div>
             </div>
         </div>
 
     </main>
+
+    <!-- СКРИПТ ПЕРЕКЛЮЧЕНИЯ ВКЛАДОК -->
+    <script>
+        function switchTab(tabId, clickedElement) {
+            // 1. Скрываем все секции
+            const sections = document.querySelectorAll('.page-section');
+            sections.forEach(section => {
+                section.classList.remove('active-section');
+            });
+
+            // 2. Показываем нужную секцию
+            const activeSection = document.getElementById(tabId);
+            if (activeSection) {
+                activeSection.classList.add('active-section');
+            }
+
+            // 3. Убираем выделение со всех кнопок меню
+            const navItems = document.querySelectorAll('.nav-item');
+            navItems.forEach(item => {
+                item.classList.remove('active');
+            });
+
+            // 4. Добавляем выделение на ту кнопку, по которой кликнули
+            if (clickedElement) {
+                clickedElement.classList.add('active');
+            }
+        }
+    </script>
 
 </body>
 </html>
