@@ -3,34 +3,21 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>NTE | Archives</title>
+    <title>NTE | Archives Professional</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@700&family=Inter:wght@400;600&display=swap" rel="stylesheet">
     <style>
         body { background-color: #0f1113; color: #d1d5db; font-family: 'Inter', sans-serif; display: flex; min-h-screen; margin: 0; }
         .nte-title { font-family: 'Orbitron', sans-serif; }
-        
-        /* Sidebar Styles */
         .sidebar { width: 260px; background-color: #090a0c; border-right: 1px solid #1e2124; flex-shrink: 0; position: sticky; top: 0; height: 100vh; }
-        .nav-link { 
-            padding: 0.8rem 1.5rem; 
-            display: block; 
-            transition: 0.2s; 
-            cursor: pointer; 
-            color: #9ca3af; 
-            font-weight: 600;
-            font-size: 0.9rem;
-        }
+        .nav-link { padding: 0.8rem 1.5rem; display: block; transition: 0.2s; cursor: pointer; color: #9ca3af; font-weight: 600; font-size: 0.85rem; text-transform: uppercase; letter-spacing: 0.05em; }
         .nav-link:hover { color: #ffffff; background: #16181b; }
-        .nav-link.active { color: #ffffff; background: #16181b; border-right: 2px solid #ef4444; }
-        .nav-label { font-size: 0.7rem; color: #4b5563; padding: 1.5rem 1.5rem 0.5rem; text-transform: uppercase; letter-spacing: 0.1em; font-weight: 800; }
-
+        .nav-link.active { color: #ffffff; background: #16181b; border-right: 3px solid #ef4444; }
+        .nav-label { font-size: 0.65rem; color: #4b5563; padding: 1.5rem 1.5rem 0.5rem; text-transform: uppercase; letter-spacing: 0.15em; font-weight: 800; }
         .main-content { flex-grow: 1; padding: 2.5rem; overflow-y: auto; background-color: #111315; }
         .content-section { display: none; animation: fadeIn 0.3s ease-out; }
         .content-section.active { display: block; }
         @keyframes fadeIn { from { opacity: 0; transform: translateY(5px); } to { opacity: 1; transform: translateY(0); } }
-        
-        /* Tier Colors */
         .t0 { background-color: #ef4444; } .t05 { background-color: #f97316; }
         .t1 { background-color: #eab308; } .t2 { background-color: #3b82f6; }
         .t3 { background-color: #6b7280; }
@@ -40,108 +27,120 @@
 
     <!-- SIDEBAR -->
     <aside class="sidebar flex flex-col">
-        <div class="p-6 mb-4">
-            <h1 class="nte-title text-xl text-white tracking-widest border-b border-red-600 pb-2 inline-block">NTE</h1>
+        <div class="p-6 mb-2">
+            <h1 class="nte-title text-2xl text-white tracking-widest border-b-2 border-red-600 pb-1 inline-block">NTE</h1>
         </div>
-        
         <nav class="flex-grow">
-            <div class="nav-label">Main Menu</div>
-            <div onclick="showSection('home')" id="nav-home" class="nav-link active text-sm">HOME</div>
-            
-            <div class="nav-label">Database</div>
+            <div class="nav-label">Main Console</div>
+            <div onclick="showSection('home')" id="nav-home" class="nav-link active">Home</div>
+            <div class="nav-label">Archives</div>
             <div onclick="showSection('characters')" id="nav-characters" class="nav-link">Characters</div>
             <div onclick="showSection('arcs')" id="nav-arcs" class="nav-link">Arcs</div>
             <div onclick="showSection('tierlist')" id="nav-tierlist" class="nav-link">Tier List</div>
         </nav>
-
         <div class="p-6 border-t border-white/5">
-            <button onclick="adminLogin()" class="text-[10px] text-gray-600 hover:text-red-500 font-bold uppercase tracking-widest transition">Admin Panel</button>
+            <button onclick="adminLogin()" class="text-[10px] text-gray-700 hover:text-red-500 font-bold uppercase tracking-widest transition">System Admin</button>
         </div>
     </aside>
 
     <!-- MAIN CONTENT -->
     <main class="main-content">
         
-        <!-- SECTION: HOME -->
-        <section id="sect-home" class="content-section active text-center py-20">
-            <h2 class="nte-title text-4xl text-white mb-4">Hesperia Archives</h2>
-            <p class="text-gray-500 max-w-md mx-auto italic">Authorized personnel only. Use the sidebar to navigate through the database.</p>
+        <!-- HOME -->
+        <section id="sect-home" class="content-section active py-20 text-center">
+            <h2 class="nte-title text-5xl text-white mb-6 tracking-tighter">HESPERIA ARCHIVES</h2>
+            <div class="w-24 h-1 bg-red-600 mx-auto mb-6"></div>
+            <p class="text-gray-500 max-w-lg mx-auto italic font-light tracking-wide">Standard terminal for anomaly tracking and tactical data management. Navigation required.</p>
         </section>
 
-        <!-- SECTION: CHARACTERS -->
+        <!-- CHARACTERS -->
         <section id="sect-characters" class="content-section">
-            <h2 class="nte-title text-2xl text-white mb-6 uppercase tracking-widest">Profile: <span id="char-name-display">Nanami</span></h2>
-            <div class="bg-[#1a1c1e] rounded-xl overflow-hidden border border-white/5 flex flex-col md:flex-row max-w-4xl shadow-2xl">
-                <div class="md:w-1/3 bg-gray-900 h-80 md:h-auto overflow-hidden">
-                    <img id="char-img-display" src="https://via.placeholder.com/400x600" class="w-full h-full object-cover opacity-80">
+            <h2 class="nte-title text-2xl text-white mb-8 uppercase tracking-[0.2em]">Data Profile</h2>
+            <div class="bg-[#1a1c1e] rounded-2xl overflow-hidden border border-white/5 flex flex-col md:flex-row max-w-5xl shadow-2xl">
+                <div class="md:w-2/5 bg-gray-900 h-[500px] overflow-hidden">
+                    <img id="char-img-display" src="https://via.placeholder.com/600x800" class="w-full h-full object-cover shadow-inner">
                 </div>
-                <div class="p-10 md:w-2/3">
-                    <span id="char-tier-badge" class="t0 text-white text-[10px] font-black px-3 py-1 rounded uppercase tracking-tighter">T 0</span>
-                    <div id="char-desc-display" class="text-gray-400 leading-relaxed mt-6 text-lg italic font-light">"The data stream is clear... space-time anomaly detected."</div>
+                <div class="p-12 md:w-3/5 flex flex-col justify-center">
+                    <span id="char-tier-badge" class="t0 text-white text-[11px] font-black px-4 py-1 rounded-full w-fit uppercase tracking-widest">T 0</span>
+                    <h3 id="char-name-display" class="nte-title text-6xl text-white my-6 tracking-tighter">Nanami</h3>
+                    <div id="char-desc-display" class="text-gray-400 leading-relaxed text-xl font-light border-l-2 border-red-600/30 pl-6 italic">Enter character description via admin panel.</div>
                 </div>
             </div>
         </section>
 
-        <!-- SECTION: ARCS (ВЕРНУЛ) -->
+        <!-- ARCS -->
         <section id="sect-arcs" class="content-section">
-            <h2 class="nte-title text-2xl text-white mb-6 uppercase tracking-widest">Tactical Arcs</h2>
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                <div class="bg-[#1a1c1e] p-6 rounded-lg border border-white/5 hover:border-red-500/50 transition">
-                    <h3 class="text-white font-bold mb-2">Arc 1: The Beginning</h3>
-                    <p class="text-gray-500 text-sm">Initial investigation into the Hesperia breaches.</p>
-                </div>
-                <div class="bg-[#1a1c1e] p-6 rounded-lg border border-white/5 opacity-50">
-                    <h3 class="text-white font-bold mb-2">Arc 2: Deep Void</h3>
-                    <p class="text-gray-500 text-sm">Locked. Synchronization required.</p>
+            <h2 class="nte-title text-2xl text-white mb-8 uppercase tracking-[0.2em]">Story Arcs</h2>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                <div class="bg-[#1a1c1e] p-8 rounded-xl border border-white/5 border-l-4 border-l-red-600">
+                    <h3 class="text-white font-bold text-xl mb-3">Chapter I: Breach</h3>
+                    <p class="text-gray-500 leading-relaxed">The first documented appearance of the NTE phenomenon in downtown Hesperia.</p>
                 </div>
             </div>
         </section>
 
-        <!-- SECTION: TIER LIST (Columns) -->
+        <!-- TIER LIST -->
         <section id="sect-tierlist" class="content-section">
-            <h2 class="nte-title text-2xl text-white mb-8 uppercase tracking-widest">Global Meta</h2>
-            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-3">
-                <div class="bg-[#090a0c] border border-white/5 rounded p-3 min-h-[400px]">
-                    <div class="t0 text-white text-[10px] font-bold text-center py-1 mb-4 rounded-sm">T 0</div>
-                    <div id="tier-T0" class="flex flex-col gap-4 items-center"></div>
+            <h2 class="nte-title text-2xl text-white mb-10 uppercase tracking-[0.2em]">Tactical Rankings</h2>
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-4">
+                <!-- Колонки теперь с именами для скрипта -->
+                <div class="bg-[#090a0c] border border-white/5 rounded-xl p-4 min-h-[500px]">
+                    <div class="t0 text-white text-[10px] font-black text-center py-2 mb-6 rounded-lg uppercase tracking-widest">Tier 0</div>
+                    <div id="tier-T0" class="flex flex-col gap-6 items-center"></div>
                 </div>
-                <div class="bg-[#090a0c] border border-white/5 rounded p-3 min-h-[400px]">
-                    <div class="t05 text-white text-[10px] font-bold text-center py-1 mb-4 rounded-sm">T 0.5</div>
-                    <div id="tier-T05" class="flex flex-col gap-4 items-center"></div>
+                <div class="bg-[#090a0c] border border-white/5 rounded-xl p-4 min-h-[500px]">
+                    <div class="t05 text-white text-[10px] font-black text-center py-2 mb-6 rounded-lg uppercase tracking-widest">Tier 0.5</div>
+                    <div id="tier-T05" class="flex flex-col gap-6 items-center"></div>
                 </div>
-                <div class="bg-[#090a0c] border border-white/5 rounded p-3 min-h-[400px]">
-                    <div class="t1 text-black text-[10px] font-bold text-center py-1 mb-4 rounded-sm">T 1</div>
-                    <div id="tier-T1" class="flex flex-col gap-4 items-center"></div>
+                <div class="bg-[#090a0c] border border-white/5 rounded-xl p-4 min-h-[500px]">
+                    <div class="t1 text-black text-[10px] font-black text-center py-2 mb-6 rounded-lg uppercase tracking-widest">Tier 1</div>
+                    <div id="tier-T1" class="flex flex-col gap-6 items-center"></div>
                 </div>
-                <div class="bg-[#090a0c] border border-white/5 rounded p-3 min-h-[400px]">
-                    <div class="t2 text-white text-[10px] font-bold text-center py-1 mb-4 rounded-sm">T 2</div>
-                    <div id="tier-T2" class="flex flex-col gap-4 items-center"></div>
+                <div class="bg-[#090a0c] border border-white/5 rounded-xl p-4 min-h-[500px]">
+                    <div class="t2 text-white text-[10px] font-black text-center py-2 mb-6 rounded-lg uppercase tracking-widest">Tier 2</div>
+                    <div id="tier-T2" class="flex flex-col gap-6 items-center"></div>
                 </div>
-                <div class="bg-[#090a0c] border border-white/5 rounded p-3 min-h-[400px]">
-                    <div class="t3 text-white text-[10px] font-bold text-center py-1 mb-4 rounded-sm">T 3</div>
-                    <div id="tier-T3" class="flex flex-col gap-4 items-center"></div>
+                <div class="bg-[#090a0c] border border-white/5 rounded-xl p-4 min-h-[500px]">
+                    <div class="t3 text-white text-[10px] font-black text-center py-2 mb-6 rounded-lg uppercase tracking-widest">Tier 3</div>
+                    <div id="tier-T3" class="flex flex-col gap-6 items-center"></div>
                 </div>
             </div>
         </section>
 
-        <!-- SECTION: ADMIN PANEL -->
+        <!-- ADMIN PANEL -->
         <section id="sect-admin" class="content-section">
-            <div class="max-w-xl bg-[#1a1c1e] p-8 rounded border border-red-500/20">
-                <h2 class="nte-title text-xl text-white mb-6 uppercase">Control Center</h2>
-                <div class="space-y-4 text-sm">
-                    <input id="edit-name" type="text" placeholder="Name" class="w-full bg-black/40 border border-white/10 p-3 rounded text-white outline-none focus:border-red-500">
-                    <select id="edit-tier" class="w-full bg-black/40 border border-white/10 p-3 rounded text-white outline-none">
-                        <option value="T0">T 0</option>
-                        <option value="T05">T 0.5</option>
-                        <option value="T1">T 1</option>
-                        <option value="T2">T 2</option>
-                        <option value="T3">T 3</option>
-                    </select>
-                    <textarea id="edit-desc" placeholder="Character Bio / Quote" class="w-full bg-black/40 border border-white/10 p-3 rounded text-white h-24 outline-none focus:border-red-500"></textarea>
-                    <button onclick="saveData()" class="w-full bg-red-600 hover:bg-red-700 text-white font-bold py-3 rounded transition uppercase text-xs tracking-widest">Update & Generate Code</button>
+            <div class="max-w-2xl bg-[#1a1c1e] p-10 rounded-2xl border border-red-600/20 shadow-2xl">
+                <h2 class="nte-title text-xl text-white mb-8 uppercase tracking-widest">Database Management</h2>
+                <div class="space-y-6">
+                    <div class="grid grid-cols-2 gap-4">
+                        <div>
+                            <label class="text-[10px] text-gray-500 uppercase font-bold mb-2 block">Subject Name</label>
+                            <input id="edit-name" type="text" class="w-full bg-black/40 border border-white/10 p-3 rounded text-white outline-none focus:border-red-600 transition">
+                        </div>
+                        <div>
+                            <label class="text-[10px] text-gray-500 uppercase font-bold mb-2 block">Assign Tier</label>
+                            <select id="edit-tier" class="w-full bg-black/40 border border-white/10 p-3 rounded text-white outline-none focus:border-red-600 transition">
+                                <option value="T0">T 0</option>
+                                <option value="T05">T 0.5</option>
+                                <option value="T1">T 1</option>
+                                <option value="T2">T 2</option>
+                                <option value="T3">T 3</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div>
+                        <label class="text-[10px] text-gray-500 uppercase font-bold mb-2 block">Image URL (Direct link)</label>
+                        <input id="edit-img" type="text" placeholder="https://..." class="w-full bg-black/40 border border-white/10 p-3 rounded text-white outline-none focus:border-red-600 transition">
+                    </div>
+                    <div>
+                        <label class="text-[10px] text-gray-500 uppercase font-bold mb-2 block">Biographical Data</label>
+                        <textarea id="edit-desc" class="w-full bg-black/40 border border-white/10 p-4 rounded text-white h-32 outline-none focus:border-red-600 transition" placeholder="Enter character background..."></textarea>
+                    </div>
+                    <button onclick="saveData()" class="w-full bg-red-600 hover:bg-red-700 text-white font-bold py-4 rounded-xl transition uppercase text-xs tracking-[0.2em] shadow-lg shadow-red-900/20">Finalize & Update Source</button>
                 </div>
-                <div id="output-area" class="mt-8 hidden">
-                    <textarea id="final-code" class="w-full h-32 bg-black text-[10px] p-3 border border-yellow-500/20 text-gray-500 font-mono" readonly></textarea>
+                <div id="output-area" class="mt-10 hidden animate-fadeIn">
+                    <p class="text-[9px] text-yellow-600 mb-2 font-bold uppercase tracking-widest">Manual Sync Required: Replace index.html on GitHub with this code</p>
+                    <textarea id="final-code" class="w-full h-40 bg-black/60 text-[10px] p-4 border border-white/5 text-gray-600 font-mono rounded" readonly></textarea>
                 </div>
             </div>
         </section>
@@ -157,10 +156,11 @@
         }
 
         function adminLogin() {
-            if (prompt("Access Key:") === "1234") {
+            if (prompt("Security Key:") === "1234") {
                 showSection('admin');
                 document.getElementById('edit-name').value = document.getElementById('char-name-display').innerText;
                 document.getElementById('edit-desc').value = document.getElementById('char-desc-display').innerText;
+                document.getElementById('edit-img').value = document.getElementById('char-img-display').src;
             }
         }
 
@@ -168,30 +168,37 @@
             const name = document.getElementById('edit-name').value;
             const tier = document.getElementById('edit-tier').value;
             const desc = document.getElementById('edit-desc').value;
+            const imgUrl = document.getElementById('edit-img').value || "https://via.placeholder.com/600x800";
 
+            // Update Profiles
             document.getElementById('char-name-display').innerText = name;
             document.getElementById('char-desc-display').innerText = desc;
+            document.getElementById('char-img-display').src = imgUrl;
             
+            // Update Badge
             const badge = document.getElementById('char-tier-badge');
             badge.innerText = tier.replace('T05', 'T 0.5').replace('T', 'T ');
-            badge.className = tier.toLowerCase() + " text-white text-[10px] font-black px-3 py-1 rounded uppercase tracking-tighter";
+            badge.className = tier.toLowerCase() + " text-white text-[11px] font-black px-4 py-1 rounded-full w-fit uppercase tracking-widest";
 
+            // Update Tier List Columns
             document.querySelectorAll('[id^="tier-"]').forEach(col => col.innerHTML = '');
             const targetCol = document.getElementById('tier-' + tier);
             targetCol.innerHTML = `
-                <div class="flex flex-col items-center group cursor-pointer animate-fadeIn">
-                    <div class="w-12 h-12 bg-gray-800 rounded-full border border-white/10 overflow-hidden group-hover:border-red-500 transition-all">
-                        <img src="https://via.placeholder.com/100" class="w-full h-full object-cover">
+                <div class="flex flex-col items-center group cursor-pointer animate-fadeIn w-full">
+                    <div class="w-20 h-20 bg-gray-900 rounded-2xl border border-white/10 overflow-hidden group-hover:border-red-600 group-hover:scale-105 transition-all duration-300">
+                        <img src="${imgUrl}" class="w-full h-full object-cover">
                     </div>
-                    <span class="text-[9px] mt-2 font-bold text-gray-500 group-hover:text-white uppercase">${name}</span>
+                    <span class="text-[10px] mt-3 font-bold text-gray-500 group-hover:text-white uppercase tracking-tighter">${name}</span>
                 </div>`;
 
+            // Prepare Source
             document.getElementById('output-area').classList.remove('hidden');
             document.getElementById('final-code').value = "<!DOCTYPE html>\n" + document.documentElement.outerHTML;
-            alert("Updated! Use the code in the box to sync with GitHub.");
+            alert("Local database updated. Copy code to GitHub to publish.");
         }
 
-        window.onload = () => { saveData(); };
+        // Initial setup for visual demo
+        window.onload = () => { if(document.getElementById('char-name-display').innerText === "Nanami") saveData(); };
     </script>
 </body>
 </html>
