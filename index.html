@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>NTE Admin Panel & DB</title>
+    <title>NTE Database & Admin Panel</title>
     <style>
         :root {
             --bg-body: #212126;
@@ -17,30 +17,45 @@
 
         body {
             margin: 0;
-            font-family: 'Segoe UI', sans-serif;
+            font-family: 'Segoe UI', Roboto, sans-serif;
             background-color: var(--bg-body);
             color: var(--text-main);
             display: flex;
             min-height: 100vh;
         }
 
-        /* SIDEBAR */
+        /* --- SIDEBAR --- */
         .sidebar {
-            width: 220px;
+            width: 230px;
             background-color: var(--bg-sidebar);
             border-right: 1px solid var(--border-color);
             position: fixed;
             height: 100%;
+            display: flex;
+            flex-direction: column;
         }
+
+        .sidebar-logo {
+            padding: 20px;
+            font-size: 1.2rem;
+            font-weight: bold;
+            color: #fff;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .nav-menu { list-style: none; padding: 0; margin: 0; }
 
         .nav-item {
             padding: 15px 20px;
-            display: block;
+            display: flex;
+            align-items: center;
+            gap: 12px;
             cursor: pointer;
             color: var(--text-main);
             text-decoration: none;
-            border-left: 3px solid transparent;
             transition: 0.2s;
+            border-left: 3px solid transparent;
+            font-size: 0.95rem;
         }
 
         .nav-item:hover, .nav-item.active {
@@ -49,108 +64,185 @@
             border-left-color: var(--accent-blue);
         }
 
-        .admin-btn { color: var(--accent-red); margin-top: 20px; border-top: 1px solid var(--border-color); }
+        .admin-link {
+            margin-top: auto;
+            color: var(--accent-red);
+            border-top: 1px solid var(--border-color);
+        }
 
-        /* MAIN CONTENT */
-        .main-content { margin-left: 220px; flex-grow: 1; padding: 30px; }
-        .page { display: none; animation: fadeIn 0.3s; }
+        /* --- MAIN CONTENT --- */
+        .main-content { margin-left: 230px; flex-grow: 1; padding: 30px; }
+
+        .page { display: none; animation: fadeIn 0.3s ease; }
         .page.active { display: block; }
-        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(5px); } to { opacity: 1; transform: translateY(0); } }
+
+        .banner {
+            width: 100%;
+            height: 100px;
+            background: linear-gradient(90deg, #1f1f2e 0%, #2a2a40 100%);
+            border: 1px solid var(--border-color);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            font-weight: bold;
+            color: var(--accent-blue);
+            margin-bottom: 30px;
+        }
 
         .section-header {
             background-color: var(--bg-panel);
-            padding: 12px;
+            padding: 12px 15px;
             border-top: 2px solid var(--accent-blue);
-            margin-bottom: 20px;
             font-weight: bold;
+            font-size: 0.85rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: 20px;
         }
 
-        /* ADMIN FORM */
+        /* --- CARDS & GRID --- */
+        .grid-container { display: flex; flex-wrap: wrap; gap: 12px; }
+
+        .item-card {
+            width: 80px;
+            background-color: var(--bg-panel);
+            position: relative;
+            cursor: pointer;
+            transition: 0.2s;
+            border: 1px solid var(--border-color);
+        }
+
+        .item-card:hover { transform: translateY(-3px); border-color: var(--accent-blue); }
+
+        .item-card img {
+            width: 100%;
+            height: 100px;
+            object-fit: cover;
+            background-color: #444;
+        }
+
+        .item-card .name {
+            font-size: 0.7rem;
+            text-align: center;
+            padding: 4px 2px;
+            background: rgba(0, 0, 0, 0.8);
+            position: absolute;
+            bottom: 0;
+            width: 100%;
+            box-sizing: border-box;
+            white-space: nowrap;
+            overflow: hidden;
+        }
+
+        .delete-btn {
+            position: absolute;
+            top: -5px;
+            right: -5px;
+            background: var(--accent-red);
+            color: white;
+            border: none;
+            border-radius: 50%;
+            width: 18px;
+            height: 18px;
+            font-size: 10px;
+            cursor: pointer;
+            z-index: 10;
+            display: none; /* Видна только в админке */
+        }
+
+        .admin-mode .delete-btn { display: block; }
+
+        /* --- TIER LIST --- */
+        .tier-row { display: flex; background-color: var(--bg-panel); margin-bottom: 8px; min-height: 110px; border: 1px solid var(--border-color); }
+        .tier-label { 
+            width: 70px; display: flex; align-items: center; justify-content: center; 
+            font-size: 1.5rem; font-weight: bold; color: #fff; text-shadow: 1px 1px 2px #000;
+        }
+        .t0 { background-color: #ff4d4d; }
+        .t1 { background-color: #ff7f50; }
+        .t2 { background-color: #ffb347; }
+        .tier-content { display: flex; padding: 10px; gap: 10px; flex-wrap: wrap; flex-grow: 1; }
+
+        /* --- ADMIN FORM --- */
         .admin-form {
             background: var(--bg-panel);
-            padding: 20px;
-            border-radius: 4px;
+            padding: 25px;
+            max-width: 600px;
             display: flex;
             flex-direction: column;
             gap: 15px;
-            max-width: 500px;
+            border: 1px solid var(--border-color);
         }
 
-        input, select, textarea {
+        .admin-form input, .admin-form select, .admin-form textarea {
             background: #1b1b1e;
             border: 1px solid var(--border-color);
             color: white;
-            padding: 10px;
+            padding: 12px;
             border-radius: 4px;
         }
 
-        button {
+        .admin-form button {
             background: var(--accent-blue);
-            border: none;
             color: white;
-            padding: 12px;
-            cursor: pointer;
+            border: none;
+            padding: 15px;
             font-weight: bold;
+            cursor: pointer;
+            transition: 0.2s;
         }
 
-        button:hover { opacity: 0.8; }
-
-        /* LISTS */
-        .grid { display: flex; flex-wrap: wrap; gap: 15px; }
-        .item-card {
-            width: 120px;
-            background: var(--bg-panel);
-            border: 1px solid var(--border-color);
-            text-align: center;
-            padding-bottom: 10px;
-            position: relative;
-        }
-        .item-card img { width: 100%; height: 120px; object-fit: cover; background: #444; }
-        .delete-btn { position: absolute; top: 5px; right: 5px; background: red; font-size: 10px; padding: 2px 5px; }
-
-        /* TIER LIST */
-        .tier-row { display: flex; background: var(--bg-panel); margin-bottom: 5px; min-height: 100px; border: 1px solid var(--border-color); }
-        .tier-label { width: 80px; display: flex; align-items: center; justify-content: center; font-size: 24px; font-weight: bold; }
-        .t0 { background: #ff4d4d; } .t1 { background: #ff7f50; } .t2 { background: #ffb347; }
-        .tier-items { display: flex; padding: 10px; gap: 10px; flex-wrap: wrap; }
+        .admin-form button:hover { background: #0086cc; }
     </style>
 </head>
-<body>
+<body class="user-view">
 
     <aside class="sidebar">
-        <div style="padding: 20px; font-weight: bold; color: var(--accent-blue);">NTE DATABASE</div>
-        <a onclick="showPage('home')" class="nav-item active" id="btn-home">🏠 Home</a>
-        <a onclick="showPage('chars')" class="nav-item" id="btn-chars">👥 Characters</a>
-        <a onclick="showPage('weapons')" class="nav-item" id="btn-weapons">🔫 Weapons</a>
-        <a onclick="showPage('tierlist')" class="nav-item" id="btn-tierlist">📊 Tier List</a>
-        <a onclick="loginAdmin()" class="nav-item admin-btn">🔐 Admin Panel</a>
+        <div class="sidebar-logo">NTE GUIDE</div>
+        <nav class="nav-menu">
+            <a onclick="showPage('home', this)" class="nav-item active">🏠 Home</a>
+            <a onclick="showPage('chars', this)" class="nav-item">👥 Characters</a>
+            <a onclick="showPage('weapons', this)" class="nav-item">🔫 Arcs/Weapons</a>
+            <a onclick="showPage('tierlist', this)" class="nav-item">📊 Tier List</a>
+            <a onclick="showPage('codes', this)" class="nav-item">🎟️ Codes</a>
+            <a onclick="checkAdmin()" class="nav-item admin-link">🔐 Admin Panel</a>
+        </nav>
     </aside>
 
     <main class="main-content">
         <!-- HOME -->
         <div id="home" class="page active">
-            <h1>Welcome</h1>
-            <p>Используйте панель администратора (пароль 1234), чтобы наполнить базу данными.</p>
+            <div class="banner">NEVERNESS TO EVERNESS: DATABASE</div>
+            <div class="section-header">Latest Updates</div>
+            <p>Добро пожаловать. Используйте меню слева для навигации. <br>Чтобы добавить контент, войдите в панель администратора.</p>
         </div>
 
-        <!-- CHARACTERS PAGE -->
+        <!-- CHARACTERS -->
         <div id="chars" class="page">
             <div class="section-header">Characters List</div>
-            <div id="chars-grid" class="grid"></div>
+            <div id="chars-grid" class="grid-container"></div>
         </div>
 
-        <!-- WEAPONS PAGE -->
+        <!-- WEAPONS -->
         <div id="weapons" class="page">
-            <div class="section-header">Weapons Database</div>
-            <div id="weapons-grid" class="grid"></div>
+            <div class="section-header">Arcs & Tactical Equipment</div>
+            <div id="weapons-grid" class="grid-container"></div>
         </div>
 
         <!-- TIER LIST -->
         <div id="tierlist" class="page">
-            <div class="section-header">Character Tier List</div>
-            <div class="tier-row"><div class="tier-label t0">T0</div><div id="tier-T0" class="tier-items"></div></div>
-            <div class="tier-row"><div class="tier-label t1">T1</div><div id="tier-T1" class="tier-items"></div></div>
-            <div class="tier-row"><div class="tier-label t2">T2</div><div id="tier-T2" class="tier-items"></div></div>
+            <div class="section-header">Character Ranking</div>
+            <div class="tier-row"><div class="tier-label t0">T0</div><div id="tier-t0" class="tier-content"></div></div>
+            <div class="tier-row"><div class="tier-label t1">T1</div><div id="tier-t1" class="tier-content"></div></div>
+            <div class="tier-row"><div class="tier-label t2">T2</div><div id="tier-t2" class="tier-content"></div></div>
+        </div>
+
+        <!-- CODES -->
+        <div id="codes" class="page">
+            <div class="section-header">Active Codes</div>
+            <p>Здесь будут отображаться активные промокоды игры.</p>
         </div>
 
         <!-- ADMIN PANEL -->
@@ -158,106 +250,111 @@
             <div class="section-header">Admin Control Panel</div>
             <div class="admin-form">
                 <h3>Add New Entry</h3>
-                <select id="entry-type">
+                <select id="f-type">
                     <option value="char">Character</option>
-                    <option value="weapon">Weapon</option>
+                    <option value="weapon">Weapon/Arc</option>
                 </select>
-                <input type="text" id="entry-name" placeholder="Name">
-                <input type="text" id="entry-img" placeholder="Image URL (link)">
-                <textarea id="entry-desc" placeholder="Description / Stats"></textarea>
-                <select id="entry-tier">
-                    <option value="none">No Tier (for weapons)</option>
-                    <option value="T0">Tier 0</option>
-                    <option value="T1">Tier 1</option>
-                    <option value="T2">Tier 2</option>
+                <input type="text" id="f-name" placeholder="Name">
+                <input type="text" id="f-img" placeholder="Image URL (direct link)">
+                <textarea id="f-desc" rows="3" placeholder="Description or Stats"></textarea>
+                <select id="f-tier">
+                    <option value="">No Tier (for weapons)</option>
+                    <option value="t0">Tier 0 (Top)</option>
+                    <option value="t1">Tier 1 (High)</option>
+                    <option value="t2">Tier 2 (Mid)</option>
                 </select>
-                <button onclick="saveEntry()">Save Entry</button>
+                <button onclick="saveToDB()">Add to Database</button>
             </div>
+            <p style="margin-top: 20px; color: var(--accent-red); font-size: 0.8rem;">
+                * В режиме админа у карточек в списках появляется кнопка удаления (X).
+            </p>
         </div>
     </main>
 
     <script>
-        let db = JSON.parse(localStorage.getItem('nte_db')) || { chars: [], weapons: [] };
+        // Инициализация данных
+        let database = JSON.parse(localStorage.getItem('nte_final_db')) || { chars: [], weapons: [] };
 
-        function showPage(pageId) {
+        function showPage(pageId, el) {
             document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
-            document.querySelectorAll('.nav-item').forEach(btn => btn.classList.remove('active'));
+            document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
+            
             document.getElementById(pageId).classList.add('active');
-            if(document.getElementById('btn-'+pageId)) document.getElementById('btn-'+pageId).classList.add('active');
-            renderData();
+            if(el) el.classList.add('active');
+            
+            if(pageId === 'admin') document.body.classList.add('admin-mode');
+            else document.body.classList.remove('admin-mode');
+
+            render();
         }
 
-        function loginAdmin() {
-            const pass = prompt("Enter Admin Password:");
-            if(pass === "1234") {
-                showPage('admin');
-            } else {
-                alert("Wrong password!");
-            }
+        function checkAdmin() {
+            const p = prompt("Введите пароль:");
+            if(p === "1234") showPage('admin', document.querySelector('.admin-link'));
+            else alert("Доступ запрещен");
         }
 
-        function saveEntry() {
-            const type = document.getElementById('entry-type').value;
-            const entry = {
+        function saveToDB() {
+            const type = document.getElementById('f-type').value;
+            const newItem = {
                 id: Date.now(),
-                name: document.getElementById('entry-name').value,
-                img: document.getElementById('entry-img').value || 'https://via.placeholder.com/120',
-                desc: document.getElementById('entry-desc').value,
-                tier: document.getElementById('entry-tier').value
+                name: document.getElementById('f-name').value || "Unnamed",
+                img: document.getElementById('f-img').value || "https://via.placeholder.com/80x100?text=NTE",
+                desc: document.getElementById('f-desc').value,
+                tier: document.getElementById('f-tier').value
             };
 
-            if(type === 'char') db.chars.push(entry);
-            else db.weapons.push(entry);
+            if(type === 'char') database.chars.push(newItem);
+            else database.weapons.push(newItem);
 
-            localStorage.setItem('nte_db', JSON.stringify(db));
-            alert("Saved!");
-            renderData();
+            localStorage.setItem('nte_final_db', JSON.stringify(database));
+            alert("Успешно добавлено!");
+            render();
         }
 
         function deleteItem(type, id) {
-            if(type === 'char') db.chars = db.chars.filter(i => i.id !== id);
-            else db.weapons = db.weapons.filter(i => i.id !== id);
-            localStorage.setItem('nte_db', JSON.stringify(db));
-            renderData();
+            if(!confirm("Удалить?")) return;
+            if(type === 'char') database.chars = database.chars.filter(i => i.id !== id);
+            else database.weapons = database.weapons.filter(i => i.id !== id);
+            localStorage.setItem('nte_final_db', JSON.stringify(database));
+            render();
         }
 
-        function renderData() {
-            // Render Chars
+        function render() {
+            // Рендер персонажей
             const charGrid = document.getElementById('chars-grid');
-            charGrid.innerHTML = db.chars.map(i => `
+            charGrid.innerHTML = database.chars.map(c => `
                 <div class="item-card">
-                    <button class="delete-btn" onclick="deleteItem('char', ${i.id})">X</button>
-                    <img src="${i.img}">
-                    <div><b>${i.name}</b></div>
-                    <div style="font-size:10px">${i.desc}</div>
+                    <button class="delete-btn" onclick="deleteItem('char', ${c.id})">✕</button>
+                    <img src="${c.img}">
+                    <div class="name">${c.name}</div>
                 </div>
             `).join('');
 
-            // Render Weapons
+            // Рендер пушек
             const weapGrid = document.getElementById('weapons-grid');
-            weapGrid.innerHTML = db.weapons.map(i => `
+            weapGrid.innerHTML = database.weapons.map(w => `
                 <div class="item-card">
-                    <button class="delete-btn" onclick="deleteItem('weapon', ${i.id})">X</button>
-                    <img src="${i.img}">
-                    <div><b>${i.name}</b></div>
-                    <div style="font-size:10px">${i.desc}</div>
+                    <button class="delete-btn" onclick="deleteItem('weapon', ${w.id})">✕</button>
+                    <img src="${w.img}">
+                    <div class="name">${w.name}</div>
                 </div>
             `).join('');
 
-            // Render Tier List
-            ['T0', 'T1', 'T2'].forEach(t => {
-                const container = document.getElementById('tier-'+t);
-                container.innerHTML = db.chars.filter(c => c.tier === t).map(i => `
-                    <div class="item-card" style="width:70px; height:auto;">
-                        <img src="${i.img}" style="height:70px">
-                        <div style="font-size:10px">${i.name}</div>
+            // Рендер Тир-листа
+            ['t0', 't1', 't2'].forEach(tRank => {
+                const row = document.getElementById('tier-' + tRank);
+                row.innerHTML = database.chars.filter(c => c.tier === tRank).map(c => `
+                    <div class="item-card" style="width: 70px;">
+                        <img src="${c.img}" style="height: 85px;">
+                        <div class="name">${c.name}</div>
                     </div>
                 `).join('');
             });
         }
 
-        // Initial Load
-        renderData();
+        // Запуск при загрузке
+        render();
     </script>
 </body>
 </html>
