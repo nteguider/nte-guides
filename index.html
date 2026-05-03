@@ -44,9 +44,18 @@
     </aside>
 
     <main class="main-content">
-        <section id="sect-home" class="content-section active text-center py-20">
-            <h2 class="nte-title text-6xl text-white mb-6 uppercase">Hesperia Archives</h2>
-            <div class="w-24 h-1 bg-red-600 mx-auto"></div>
+        <section id="sect-home" class="content-section active">
+            <div class="text-center py-12 mb-10">
+                <h2 class="nte-title text-6xl text-white mb-6 uppercase">Hesperia Archives</h2>
+                <div class="w-24 h-1 bg-red-600 mx-auto"></div>
+            </div>
+            
+            <div class="max-w-4xl mx-auto">
+                <h3 class="nte-title text-xl text-white mb-6 border-l-4 border-red-600 pl-4 uppercase">Latest Updates</h3>
+                <div id="home-updates" class="space-y-4">
+                    <!-- Updates will render here -->
+                </div>
+            </div>
         </section>
 
         <section id="sect-characters" class="content-section">
@@ -75,6 +84,14 @@
                     <h2 class="nte-title text-xl text-white uppercase">Database Sync</h2>
                     <button onclick="commitAllChanges()" class="bg-red-600 text-white px-8 py-3 rounded-xl font-bold uppercase text-[10px]">Commit Changes</button>
                 </div>
+
+                <!-- Admin Updates Section -->
+                <div class="mb-12">
+                    <h3 class="text-white font-bold mb-4 uppercase text-sm border-b border-white/5 pb-2">Site News & Updates</h3>
+                    <div id="admin-update-list" class="space-y-4"></div>
+                    <button onclick="addUpdateEntry()" class="w-full py-3 mt-4 bg-white/5 border border-white/10 text-white text-[10px] font-bold uppercase rounded-xl">+ Add News Entry</button>
+                </div>
+
                 <div id="admin-char-list" class="space-y-8"></div>
                 <button onclick="addCharEntry()" class="w-full py-4 mt-8 bg-white/5 border border-white/10 text-white text-[10px] font-bold uppercase rounded-xl">+ Add Agent</button>
                 
@@ -94,6 +111,7 @@
     <script id="data-script">
         let characters = []; 
         let weapons = [];
+        let updates = []; // New data array for news
 
         function showSection(id) {
             document.querySelectorAll('.content-section').forEach(s => s.classList.remove('active'));
@@ -108,6 +126,17 @@
         function adminLogin() { if (prompt("Key:") === "1234") { renderAdminUI(); showSection('admin'); } }
 
         function renderAdminUI() {
+            // Admin Updates
+            const updateContainer = document.getElementById('admin-update-list');
+            updateContainer.innerHTML = updates.map((upd, i) => `
+                <div class="flex gap-4 items-start bg-black/20 p-4 rounded-lg">
+                    <input type="text" value="${upd.date}" class="edit-upd-date admin-input w-32" placeholder="Date">
+                    <textarea class="edit-upd-text admin-input h-12 flex-grow" placeholder="Update description...">${upd.text}</textarea>
+                    <button onclick="deleteItem('update', ${i})" class="text-red-600 font-bold p-2 text-xs">✕</button>
+                </div>
+            `).join('');
+
+            // Admin Characters
             const charContainer = document.getElementById('admin-char-list');
             charContainer.innerHTML = '';
             characters.forEach((char, i) => {
@@ -136,10 +165,9 @@
                 </div>`;
             });
 
+            // Admin Weapons
             const weaponContainer = document.getElementById('admin-weapon-list');
-            weaponContainer.innerHTML = '';
-            weapons.forEach((w, i) => {
-                weaponContainer.innerHTML += `
+            weaponContainer.innerHTML = weapons.map((w, i) => `
                 <div class="bg-black/40 p-6 rounded-xl border border-white/5 relative">
                     <button onclick="deleteItem('weapon', ${i})" class="absolute top-4 right-4 text-red-600 text-[10px] font-bold uppercase">Remove</button>
                     <div class="grid grid-cols-3 gap-4 mb-4">
@@ -148,21 +176,28 @@
                         <div><label class="admin-label">Img URL</label><input type="text" value="${w.img || ''}" class="edit-w-img admin-input"></div>
                     </div>
                     <textarea class="edit-w-desc admin-input h-16" placeholder="Passive Effect">${w.desc || ''}</textarea>
-                </div>`;
-            });
+                </div>`).join('');
         }
 
+        function addUpdateEntry() { updates.unshift({date: new Date().toLocaleDateString(), text: "New site update..."}); renderAdminUI(); }
         function addCharEntry() { characters.push({name: "New Agent", element: "Physical", tier: "T0", awakening: ["","","","","",""], basic:"", skill:"", ult:"", r1:"", r2:""}); renderAdminUI(); }
         function addWeaponEntry() { weapons.push({name: "New Arc", stats: "ATK%", desc: "", img: ""}); renderAdminUI(); }
-        function deleteItem(type, i) { if(confirm("Delete?")) { if(type==='char') characters.splice(i,1); else weapons.splice(i,1); renderAdminUI(); } }
+        function deleteItem(type, i) { if(confirm("Delete?")) { if(type==='char') characters.splice(i,1); else if(type==='weapon') weapons.splice(i,1); else updates.splice(i,1); renderAdminUI(); } }
 
         function commitAllChanges() {
+            // Save Updates
+            const updDivs = document.querySelectorAll('#admin-update-list > div');
+            updates = Array.from(updDivs).map(div => ({
+                date: div.querySelector('.edit-upd-date').value,
+                text: div.querySelector('.edit-upd-text').value
+            }));
+
+            // Save Characters
             const charDivs = document.querySelectorAll('#admin-char-list > div');
-            characters = [];
-            charDivs.forEach(div => {
+            characters = Array.from(charDivs).map(div => {
                 const awk = [];
                 for(let i=0; i<6; i++) awk.push(div.querySelector(`.edit-char-awk-${i}`).value);
-                characters.push({
+                return {
                     name: div.querySelector('.edit-char-name').value,
                     element: div.querySelector('.edit-char-element').value,
                     tier: div.querySelector('.edit-char-tier').value,
@@ -173,19 +208,17 @@
                     r1: div.querySelector('.edit-char-r1').value,
                     r2: div.querySelector('.edit-char-r2').value,
                     awakening: awk
-                });
+                };
             });
 
+            // Save Weapons
             const weaponDivs = document.querySelectorAll('#admin-weapon-list > div');
-            weapons = [];
-            weaponDivs.forEach(div => {
-                weapons.push({
-                    name: div.querySelector('.edit-w-name').value,
-                    stats: div.querySelector('.edit-w-stats').value,
-                    img: div.querySelector('.edit-w-img').value,
-                    desc: div.querySelector('.edit-w-desc').value
-                });
-            });
+            weapons = Array.from(weaponDivs).map(div => ({
+                name: div.querySelector('.edit-w-name').value,
+                stats: div.querySelector('.edit-w-stats').value,
+                img: div.querySelector('.edit-w-img').value,
+                desc: div.querySelector('.edit-w-desc').value
+            }));
 
             updateSiteContent();
             document.getElementById('output-area').classList.remove('hidden');
@@ -193,15 +226,23 @@
         }
 
         function updateSiteContent() {
-            const charGrid = document.getElementById('char-grid');
-            charGrid.innerHTML = characters.map((char, index) => `
+            // Home Updates
+            document.getElementById('home-updates').innerHTML = updates.map(upd => `
+                <div class="bg-[#16181b] border-l-2 border-red-600 p-5 rounded-r-xl">
+                    <span class="text-[9px] font-black text-gray-500 uppercase tracking-widest mb-1 block">${upd.date}</span>
+                    <p class="text-sm text-gray-300 leading-relaxed">${upd.text}</p>
+                </div>
+            `).join('') || '<p class="text-gray-700 text-center uppercase text-xs font-bold">No recent updates</p>';
+
+            // Characters
+            document.getElementById('char-grid').innerHTML = characters.map((char, index) => `
                 <div onclick="viewChar(${index})" class="bg-[#16181b] border border-white/5 rounded-lg overflow-hidden cursor-pointer hover:border-red-600 transition">
                     <img src="${char.img}" class="aspect-[3/4] object-cover w-full">
                     <div class="p-3 text-center text-[10px] font-bold text-white uppercase">${char.name}</div>
                 </div>`).join('');
 
-            const weaponGrid = document.getElementById('weapon-grid');
-            weaponGrid.innerHTML = weapons.map(w => `
+            // Weapons
+            document.getElementById('weapon-grid').innerHTML = weapons.map(w => `
                 <div class="bg-[#16181b] p-6 rounded-xl border border-white/5">
                     <img src="${w.img}" class="h-32 w-full object-contain mb-4">
                     <h4 class="text-white font-bold uppercase text-sm mb-1">${w.name}</h4>
@@ -209,6 +250,7 @@
                     <p class="text-xs text-gray-500">${w.desc}</p>
                 </div>`).join('');
 
+            // Tier List
             const tierMapping = [
                 { id: 'T0', label: 'T0', css: 't-t0' },
                 { id: 'T0.5', label: 'T0.5', css: 't-t05' },
@@ -216,7 +258,6 @@
                 { id: 'T2', label: 'T2', css: 't-t2' },
                 { id: 'T3', label: 'T3', css: 't-t3' }
             ];
-
             document.getElementById('tier-list-container').innerHTML = tierMapping.map(t => {
                 const members = characters.filter(c => c.tier === t.id);
                 return `
