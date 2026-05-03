@@ -1,9 +1,9 @@
 <!DOCTYPE html>
-<html lang="ru">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>NTE Ultimate - 4-Slot & Data Recovery</title>
+    <title>NTE Master Database</title>
     <style>
         :root {
             --bg-body: #1a1a1e;
@@ -15,31 +15,30 @@
             --border-color: #2f2f35;
         }
 
-        body { margin: 0; font-family: 'Segoe UI', sans-serif; background: var(--bg-body); color: var(--text-main); display: flex; min-height: 100vh; overflow-x: hidden; }
+        body { margin: 0; font-family: 'Segoe UI', sans-serif; background: var(--bg-body); color: var(--text-main); display: flex; min-height: 100vh; }
 
         /* SIDEBAR */
         .sidebar { width: 240px; background: var(--bg-sidebar); border-right: 1px solid var(--border-color); position: fixed; height: 100%; display: flex; flex-direction: column; z-index: 100; }
-        .sidebar-logo { padding: 20px; font-weight: bold; border-bottom: 1px solid var(--border-color); color: var(--accent-blue); text-align: center; font-size: 1.2rem; }
+        .sidebar-logo { padding: 20px; font-weight: bold; border-bottom: 1px solid var(--border-color); color: var(--accent-blue); text-align: center; font-size: 1.1rem; letter-spacing: 1px; }
         .nav-item { padding: 12px 20px; display: flex; align-items: center; gap: 10px; cursor: pointer; transition: 0.2s; border-left: 3px solid transparent; font-size: 0.9rem; color: #aaa; }
         .nav-item:hover, .nav-item.active { background: #1e1e22; color: var(--accent-blue); border-left-color: var(--accent-blue); }
         .admin-link { color: var(--accent-red) !important; border-top: 1px solid var(--border-color); margin-top: auto; }
 
         /* MAIN CONTENT */
-        .main-content { margin-left: 240px; flex-grow: 1; padding: 25px; max-width: 1200px; }
+        .main-content { margin-left: 240px; flex-grow: 1; padding: 25px; width: calc(100% - 240px); }
         .page { display: none; animation: fadeIn 0.3s; }
         .page.active { display: block; }
         @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
 
-        .section-header { background: var(--bg-panel); padding: 12px 15px; border-left: 4px solid var(--accent-blue); margin-bottom: 20px; font-weight: bold; font-size: 0.85rem; text-transform: uppercase; letter-spacing: 1px; }
+        .section-header { background: var(--bg-panel); padding: 12px 15px; border-left: 4px solid var(--accent-blue); margin-bottom: 20px; font-weight: bold; font-size: 0.85rem; text-transform: uppercase; }
 
         /* CARDS */
         .grid { display: flex; flex-wrap: wrap; gap: 12px; }
-        .card { width: 95px; background: var(--bg-panel); border: 1px solid var(--border-color); position: relative; cursor: pointer; border-radius: 4px; overflow: hidden; transition: transform 0.1s; }
-        .card:hover { transform: scale(1.03); border-color: var(--accent-blue); }
+        .card { width: 95px; background: var(--bg-panel); border: 1px solid var(--border-color); position: relative; cursor: pointer; border-radius: 4px; overflow: hidden; }
         .card img { width: 100%; height: 120px; object-fit: cover; display: block; }
         .card .name { font-size: 0.7rem; text-align: center; padding: 5px; background: rgba(0,0,0,0.85); position: absolute; bottom: 0; width: 100%; box-sizing: border-box; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
         
-        .delete-btn { position: absolute; top: 2px; right: 2px; background: var(--accent-red); border: none; border-radius: 50%; width: 20px; height: 20px; color: white; cursor: pointer; display: none; z-index: 10; font-size: 12px; font-weight: bold; }
+        .delete-btn { position: absolute; top: 2px; right: 2px; background: var(--accent-red); border: none; border-radius: 50%; width: 20px; height: 20px; color: white; cursor: pointer; display: none; z-index: 10; font-size: 10px; }
         .admin-mode .delete-btn { display: block; }
 
         /* TIER ROWS */
@@ -49,137 +48,131 @@
         .rank-t05 { background: #ff7f50; }
         .rank-t1 { background: #ffb347; }
         .rank-t2 { background: #ffea70; }
-        .tier-items { display: flex; padding: 10px; gap: 10px; flex-wrap: wrap; align-items: center; }
+        .tier-items { display: flex; padding: 10px; gap: 10px; flex-wrap: wrap; }
 
-        /* TEAM BUILDER 4 SLOTS */
-        .builder-ui { background: var(--bg-panel); padding: 25px; border-radius: 8px; border: 1px solid var(--border-color); margin-bottom: 30px; text-align: center; }
-        .builder-slots { display: flex; gap: 15px; justify-content: center; flex-wrap: wrap; }
+        /* BUILDER */
+        .builder-ui { background: var(--bg-panel); padding: 25px; border-radius: 8px; border: 1px solid var(--border-color); margin-bottom: 30px; }
+        .builder-slots { display: flex; gap: 15px; justify-content: center; }
         .slot { width: 110px; height: 150px; border: 2px dashed #444; display: flex; flex-direction: column; align-items: center; justify-content: center; background: rgba(0,0,0,0.3); position: relative; cursor: pointer; border-radius: 6px; }
-        .slot:hover { border-color: var(--accent-blue); }
         .slot span { font-size: 2rem; color: #555; }
         .slot img { width: 100%; height: 100%; object-fit: cover; display: none; border-radius: 4px; }
         .slot.filled img { display: block; }
         .slot.filled span { display: none; }
-        .slot-tag { position: absolute; top: -22px; font-size: 0.65rem; color: #888; text-transform: uppercase; }
+        .slot-tag { position: absolute; top: -22px; font-size: 0.65rem; color: #888; }
 
-        /* ADMIN FORM */
-        .admin-form { background: var(--bg-panel); padding: 20px; max-width: 500px; display: flex; flex-direction: column; gap: 12px; border: 1px solid var(--border-color); margin-bottom: 20px; border-radius: 6px; }
-        input, select, textarea { background: #121214; border: 1px solid var(--border-color); color: white; padding: 10px; border-radius: 4px; outline: none; }
-        input:focus { border-color: var(--accent-blue); }
-        button.primary { background: var(--accent-blue); color: white; border: none; padding: 12px; cursor: pointer; font-weight: bold; border-radius: 4px; transition: 0.2s; }
-        button.primary:hover { opacity: 0.9; }
+        /* ADMIN */
+        .admin-form { background: var(--bg-panel); padding: 20px; max-width: 500px; display: flex; flex-direction: column; gap: 12px; border: 1px solid var(--border-color); border-radius: 6px; margin-bottom: 20px; }
+        input, select, textarea { background: #121214; border: 1px solid var(--border-color); color: white; padding: 10px; border-radius: 4px; }
+        button.primary { background: var(--accent-blue); color: white; border: none; padding: 12px; cursor: pointer; font-weight: bold; border-radius: 4px; }
     </style>
 </head>
 <body>
 
     <aside class="sidebar">
-        <div class="sidebar-logo">NTE ULTIMATE</div>
+        <div class="sidebar-logo">NTE DATABASE</div>
         <nav class="nav-menu">
-            <div class="nav-item active" onclick="showPage('home', this)">🏠 Главная</div>
-            <div class="nav-item" onclick="showPage('chars', this)">👥 Персонажи</div>
-            <div class="nav-item" onclick="showPage('weapons', this)">🔫 Оружие (Arcs)</div>
-            <div class="nav-item" onclick="showPage('cartridges', this)">💾 Картриджи</div>
-            <div class="nav-item" onclick="showPage('tierlist', this)">📊 Тир-лист героев</div>
-            <div class="nav-item" onclick="showPage('teamtier', this)">🏆 Тир-лист команд</div>
-            <div class="nav-item" onclick="showPage('builder', this)">🛠️ Тим-билдер (4х)</div>
-            <div class="nav-item admin-link" onclick="checkAdmin()">🔐 Админ-панель</div>
+            <div class="nav-item active" onclick="showPage('home', this)">🏠 Home</div>
+            <div class="nav-item" onclick="showPage('chars', this)">👥 Characters</div>
+            <div class="nav-item" onclick="showPage('weapons', this)">🔫 Weapons (Arcs)</div>
+            <div class="nav-item" onclick="showPage('cartridges', this)">💾 Cartridges</div>
+            <div class="nav-item" onclick="showPage('tierlist', this)">📊 Hero Tier List</div>
+            <div class="nav-item" onclick="showPage('teamtier', this)">🏆 Team Tier List</div>
+            <div class="nav-item" onclick="showPage('builder', this)">🛠️ Team Builder (4x)</div>
+            <div class="nav-item admin-link" onclick="checkAdmin()">🔐 Admin Panel</div>
         </nav>
     </aside>
 
     <main class="main-content">
-        <!-- HOME -->
         <div id="home" class="page active">
-            <div class="section-header">Новости и Обновления</div>
-            <div id="home-text" style="white-space: pre-wrap; line-height: 1.6; background: var(--bg-panel); padding: 20px; border-radius: 6px; border: 1px solid var(--border-color);"></div>
+            <div class="section-header">News & Updates</div>
+            <div id="home-text" style="white-space: pre-wrap; background: var(--bg-panel); padding: 20px; border-radius: 6px; border: 1px solid var(--border-color);"></div>
         </div>
 
-        <!-- GRIDS -->
-        <div id="chars" class="page"><div class="section-header">Список персонажей</div><div id="grid-chars" class="grid"></div></div>
-        <div id="weapons" class="page"><div class="section-header">Список оружия</div><div id="grid-weapons" class="grid"></div></div>
-        <div id="cartridges" class="page"><div class="section-header">Список картриджей</div><div id="grid-carts" class="grid"></div></div>
+        <div id="chars" class="page"><div class="section-header">Character Roster</div><div id="grid-chars" class="grid"></div></div>
+        <div id="weapons" class="page"><div class="section-header">Weapon List</div><div id="grid-weapons" class="grid"></div></div>
+        <div id="cartridges" class="page"><div class="section-header">Cartridge List</div><div id="grid-carts" class="grid"></div></div>
 
-        <!-- TIER LISTS -->
         <div id="tierlist" class="page">
-            <div class="section-header">Рейтинг персонажей</div>
+            <div class="section-header">Character Ranking</div>
             <div id="char-tiers"></div>
         </div>
 
         <div id="teamtier" class="page">
-            <div class="section-header">Лучшие сборки команд</div>
+            <div class="section-header">Meta Team Comps</div>
             <div id="team-tiers"></div>
         </div>
 
-        <!-- BUILDER -->
         <div id="builder" class="page">
-            <div class="section-header">Конструктор отряда (4 героя)</div>
+            <div class="section-header">Squad Builder (4 Units)</div>
             <div class="builder-ui">
                 <div class="builder-slots">
-                    <div class="slot" id="slot0" onclick="removeFromTeam(0)"><div class="slot-tag">Slot 1</div><span>+</span><img src=""></div>
-                    <div class="slot" id="slot1" onclick="removeFromTeam(1)"><div class="slot-tag">Slot 2</div><span>+</span><img src=""></div>
-                    <div class="slot" id="slot2" onclick="removeFromTeam(2)"><div class="slot-tag">Slot 3</div><span>+</span><img src=""></div>
-                    <div class="slot" id="slot3" onclick="removeFromTeam(3)"><div class="slot-tag">Slot 4</div><span>+</span><img src=""></div>
+                    <div class="slot" id="slot0" onclick="removeFromTeam(0)"><div class="slot-tag">Unit 1</div><span>+</span><img src=""></div>
+                    <div class="slot" id="slot1" onclick="removeFromTeam(1)"><div class="slot-tag">Unit 2</div><span>+</span><img src=""></div>
+                    <div class="slot" id="slot2" onclick="removeFromTeam(2)"><div class="slot-tag">Unit 3</div><span>+</span><img src=""></div>
+                    <div class="slot" id="slot3" onclick="removeFromTeam(3)"><div class="slot-tag">Unit 4</div><span>+</span><img src=""></div>
                 </div>
             </div>
-            <div class="section-header">Выберите персонажа</div>
+            <div class="section-header">Select Character</div>
             <div id="builder-pool" class="grid"></div>
         </div>
 
-        <!-- ADMIN -->
         <div id="admin" class="page">
-            <div class="section-header">Панель управления</div>
+            <div class="section-header">Admin Control</div>
             <div class="admin-form">
-                <h3>Текст на главной</h3>
+                <h3>Home Text</h3>
                 <textarea id="f-home" rows="4"></textarea>
-                <button class="primary" onclick="updateHome()">Сохранить текст</button>
+                <button class="primary" onclick="updateHome()">Save Text</button>
             </div>
             <div class="admin-form">
-                <h3>Добавить контент</h3>
+                <h3>Add New Content</h3>
                 <select id="f-type">
-                    <option value="chars">Персонаж</option>
-                    <option value="weapons">Оружие</option>
-                    <option value="carts">Картридж</option>
-                    <option value="teams">Команда (для Тир-листа)</option>
+                    <option value="chars">Character</option>
+                    <option value="weapons">Weapon</option>
+                    <option value="carts">Cartridge</option>
+                    <option value="teams">Team (for Tier List)</option>
                 </select>
-                <input type="text" id="f-name" placeholder="Название">
-                <input type="text" id="f-img" placeholder="Ссылка на картинку">
+                <input type="text" id="f-name" placeholder="Name">
+                <input type="text" id="f-img" placeholder="Image URL">
                 <select id="f-tier">
-                    <option value="">Без ранга</option>
-                    <option value="t0">T0 (Имба)</option>
+                    <option value="">No Tier</option>
+                    <option value="t0">T0 (Meta)</option>
                     <option value="t05">T0.5</option>
                     <option value="t1">T1</option>
                     <option value="t2">T2</option>
                 </select>
-                <button class="primary" onclick="addItem()">Добавить в базу</button>
+                <button class="primary" onclick="addItem()">Add to Database</button>
             </div>
         </div>
     </main>
 
     <script>
-        // СКРИПТ МИГРАЦИИ: Проверяем все старые ключи, чтобы данные не пропали
-        function migrateData() {
-            const keys = ['nte_v4_db', 'nte_final_db', 'nte_pro_db'];
-            let recoveredData = null;
+        // DEEP SCAN RECOVERY
+        function deepRecover() {
+            const keys = ['nte_master_db', 'nte_v4_db', 'nte_final_db', 'nte_pro_db'];
+            let master = { chars: [], weapons: [], carts: [], teams: [], home: "Welcome!" };
             
-            for (let key of keys) {
-                const old = localStorage.getItem(key);
-                if (old) {
-                    recoveredData = JSON.parse(old);
-                    console.log("Данные восстановлены из ключа:", key);
-                    break; 
+            keys.forEach(k => {
+                const raw = localStorage.getItem(k);
+                if (raw) {
+                    const parsed = JSON.parse(raw);
+                    // Merge arrays, avoid duplicates by ID
+                    if (parsed.chars) master.chars = [...new Map([...master.chars, ...parsed.chars].map(item => [item.id, item])).values()];
+                    if (parsed.weapons) master.weapons = [...new Map([...master.weapons, ...parsed.weapons].map(item => [item.id, item])).values()];
+                    if (parsed.carts) master.carts = [...new Map([...master.carts, ...parsed.carts].map(item => [item.id, item])).values()];
+                    if (parsed.teams) master.teams = [...new Map([...master.teams, ...parsed.teams].map(item => [item.id, item])).values()];
+                    if (parsed.home && master.home === "Welcome!") master.home = parsed.home;
                 }
-            }
-            return recoveredData;
+            });
+            return master;
         }
 
-        const MAIN_KEY = 'nte_master_db';
-        let db = JSON.parse(localStorage.getItem(MAIN_KEY)) || migrateData() || {
-            chars: [], weapons: [], carts: [], teams: [], home: "Добро пожаловать в NTE Guide!"
-        };
+        const KEY = 'nte_master_db';
+        let db = deepRecover();
 
         let activeTeam = [null, null, null, null];
 
         function save() {
-            localStorage.setItem(MAIN_KEY, JSON.stringify(db));
+            localStorage.setItem(KEY, JSON.stringify(db));
             render();
         }
 
@@ -188,25 +181,22 @@
             document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
             document.getElementById(pageId).classList.add('active');
             if(el) el.classList.add('active');
-            
-            if(pageId === 'admin') document.body.classList.add('admin-mode');
-            else document.body.classList.remove('admin-mode');
+            document.body.classList.toggle('admin-mode', pageId === 'admin');
             render();
         }
 
         function checkAdmin() {
-            if(prompt("Пароль:") === "1234") showPage('admin', document.querySelector('.admin-link'));
+            if(prompt("Pass:") === "1234") showPage('admin', document.querySelector('.admin-link'));
         }
 
         function addItem() {
             const type = document.getElementById('f-type').value;
-            const newItem = {
+            db[type].push({
                 id: Date.now(),
-                name: document.getElementById('f-name').value || "Без имени",
+                name: document.getElementById('f-name').value || "New Item",
                 img: document.getElementById('f-img').value || "https://via.placeholder.com/100",
                 tier: document.getElementById('f-tier').value
-            };
-            db[type].push(newItem);
+            });
             save();
         }
 
@@ -221,9 +211,9 @@
         }
 
         function addToTeam(item) {
-            const emptyIdx = activeTeam.indexOf(null);
-            if(emptyIdx !== -1 && !activeTeam.some(i => i && i.id === item.id)) {
-                activeTeam[emptyIdx] = item;
+            const idx = activeTeam.indexOf(null);
+            if(idx !== -1 && !activeTeam.some(i => i && i.id === item.id)) {
+                activeTeam[idx] = item;
                 renderTeam();
             }
         }
@@ -289,7 +279,6 @@
             drawTier('team-tiers', db.teams);
         }
 
-        // Первоначальный запуск
         render();
     </script>
 </body>
