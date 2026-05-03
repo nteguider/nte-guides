@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>NTE Guide - Professional Edition</title>
+    <title>NTE Guide - 4-Slot Team Edition</title>
     <style>
         :root {
             --bg-body: #1a1a1e;
@@ -34,15 +34,15 @@
 
         /* CARDS */
         .grid { display: flex; flex-wrap: wrap; gap: 12px; }
-        .card { width: 90px; background: var(--bg-panel); border: 1px solid var(--border-color); position: relative; cursor: pointer; overflow: hidden; }
+        .card { width: 90px; background: var(--bg-panel); border: 1px solid var(--border-color); position: relative; cursor: pointer; overflow: hidden; border-radius: 4px; }
         .card img { width: 100%; height: 110px; object-fit: cover; }
         .card .name { font-size: 0.7rem; text-align: center; padding: 5px; background: rgba(0,0,0,0.8); position: absolute; bottom: 0; width: 100%; box-sizing: border-box; }
-        .delete-btn { position: absolute; top: 2px; right: 2px; background: var(--accent-red); border: none; border-radius: 50%; width: 18px; height: 18px; color: white; cursor: pointer; display: none; z-index: 5; font-size: 10px; }
+        .delete-btn { position: absolute; top: 2px; right: 2px; background: var(--accent-red); border: none; border-radius: 50%; width: 18px; height: 18px; color: white; cursor: pointer; display: none; z-index: 5; font-size: 10px; line-height: 1; }
         .admin-mode .delete-btn { display: block; }
 
         /* TIER ROWS */
-        .tier-row { display: flex; background: var(--bg-panel); margin-bottom: 10px; min-height: 110px; border: 1px solid var(--border-color); }
-        .tier-label { width: 80px; display: flex; align-items: center; justify-content: center; font-size: 1.4rem; font-weight: bold; color: #111; }
+        .tier-row { display: flex; background: var(--bg-panel); margin-bottom: 10px; min-height: 110px; border: 1px solid var(--border-color); border-radius: 4px; }
+        .tier-label { width: 80px; display: flex; align-items: center; justify-content: center; font-size: 1.4rem; font-weight: bold; color: #111; border-radius: 4px 0 0 4px; }
         .rank-t0 { background: #ff4d4d; }
         .rank-t05 { background: #ff7f50; }
         .rank-t1 { background: #ffb347; }
@@ -50,16 +50,21 @@
         .rank-t3 { background: #98ff98; }
         .tier-items { display: flex; padding: 10px; gap: 10px; flex-wrap: wrap; flex-grow: 1; }
 
-        /* TEAM BUILDER SPECIFIC */
-        .builder-slots { display: flex; gap: 15px; margin-bottom: 30px; justify-content: center; }
-        .slot { width: 100px; height: 130px; border: 2px dashed #444; display: flex; align-items: center; justify-content: center; background: var(--bg-panel); position: relative; cursor: pointer; }
-        .slot img { width: 100%; height: 100%; object-fit: cover; display: none; }
+        /* TEAM BUILDER (4 slots) */
+        .builder-container { background: var(--bg-panel); padding: 30px; border-radius: 8px; border: 1px solid var(--border-color); margin-bottom: 30px; }
+        .builder-slots { display: flex; gap: 15px; justify-content: center; }
+        .slot { width: 110px; height: 145px; border: 2px dashed #444; display: flex; flex-direction: column; align-items: center; justify-content: center; background: rgba(0,0,0,0.2); position: relative; cursor: pointer; transition: 0.2s; border-radius: 6px; }
+        .slot:hover { border-color: var(--accent-blue); background: rgba(0,168,255,0.05); }
+        .slot span { font-size: 2rem; color: #444; }
+        .slot img { width: 100%; height: 100%; object-fit: cover; display: none; border-radius: 4px; }
         .slot.filled img { display: block; }
+        .slot.filled span { display: none; }
+        .slot-label { position: absolute; top: -20px; font-size: 0.7rem; color: #888; text-transform: uppercase; }
 
         /* ADMIN FORMS */
-        .admin-form { background: var(--bg-panel); padding: 20px; max-width: 500px; display: flex; flex-direction: column; gap: 10px; border: 1px solid var(--border-color); margin-bottom: 20px; }
-        input, select, textarea { background: #121214; border: 1px solid var(--border-color); color: white; padding: 10px; }
-        button.primary { background: var(--accent-blue); color: white; border: none; padding: 10px; cursor: pointer; font-weight: bold; }
+        .admin-form { background: var(--bg-panel); padding: 20px; max-width: 500px; display: flex; flex-direction: column; gap: 10px; border: 1px solid var(--border-color); margin-bottom: 20px; border-radius: 4px; }
+        input, select, textarea { background: #121214; border: 1px solid var(--border-color); color: white; padding: 10px; border-radius: 4px; }
+        button.primary { background: var(--accent-blue); color: white; border: none; padding: 12px; cursor: pointer; font-weight: bold; border-radius: 4px; }
     </style>
 </head>
 <body>
@@ -81,36 +86,38 @@
     <main class="main-content">
         <!-- HOME -->
         <div id="home" class="page active">
-            <div class="section-header">Welcome / Updates</div>
-            <div id="home-text" style="background: var(--bg-panel); padding: 20px; border: 1px solid var(--border-color);"></div>
+            <div class="section-header">News & Updates</div>
+            <div id="home-text" style="background: var(--bg-panel); padding: 20px; border: 1px solid var(--border-color); line-height: 1.6; border-radius: 4px;"></div>
         </div>
 
         <!-- LISTS -->
-        <div id="chars" class="page"><div class="section-header">All Characters</div><div id="chars-grid" class="grid"></div></div>
-        <div id="weapons" class="page"><div class="section-header">All Arcs & Weapons</div><div id="weapons-grid" class="grid"></div></div>
-        <div id="cartridges" class="page"><div class="section-header">All Cartridges</div><div id="carts-grid" class="grid"></div></div>
+        <div id="chars" class="page"><div class="section-header">Characters</div><div id="chars-grid" class="grid"></div></div>
+        <div id="weapons" class="page"><div class="section-header">Arcs & Weapons</div><div id="weapons-grid" class="grid"></div></div>
+        <div id="cartridges" class="page"><div class="section-header">Cartridges</div><div id="carts-grid" class="grid"></div></div>
 
-        <!-- CHAR TIER LIST -->
+        <!-- TIER LISTS -->
         <div id="tierlist" class="page">
             <div class="section-header">Character Ranking</div>
             <div id="char-tier-container"></div>
         </div>
 
-        <!-- TEAM TIER LIST -->
         <div id="teamtier" class="page">
-            <div class="section-header">Meta Team Ranking</div>
+            <div class="section-header">Team Ranking (Meta)</div>
             <div id="team-tier-container"></div>
         </div>
 
-        <!-- TEAM BUILDER -->
+        <!-- TEAM BUILDER (4 slots) -->
         <div id="builder" class="page">
-            <div class="section-header">Team Builder</div>
-            <div class="builder-slots">
-                <div class="slot" id="s0" onclick="clearSlot(0)"><span>+</span><img src=""></div>
-                <div class="slot" id="s1" onclick="clearSlot(1)"><span>+</span><img src=""></div>
-                <div class="slot" id="s2" onclick="clearSlot(2)"><span>+</span><img src=""></div>
+            <div class="section-header">Interactive Team Builder</div>
+            <div class="builder-container">
+                <div class="builder-slots">
+                    <div class="slot" id="s0" onclick="clearSlot(0)"><div class="slot-label">Unit 1</div><span>+</span><img src=""></div>
+                    <div class="slot" id="s1" onclick="clearSlot(1)"><div class="slot-label">Unit 2</div><span>+</span><img src=""></div>
+                    <div class="slot" id="s2" onclick="clearSlot(2)"><div class="slot-label">Unit 3</div><span>+</span><img src=""></div>
+                    <div class="slot" id="s3" onclick="clearSlot(3)"><div class="slot-label">Unit 4</div><span>+</span><img src=""></div>
+                </div>
             </div>
-            <div class="section-header">Choose Characters</div>
+            <div class="section-header">Select Characters to add</div>
             <div id="builder-pool" class="grid"></div>
         </div>
 
@@ -118,12 +125,12 @@
         <div id="admin" class="page">
             <div class="section-header">Admin Control</div>
             <div class="admin-form">
-                <h3>Home Update</h3>
-                <textarea id="f-home" rows="3"></textarea>
-                <button class="primary" onclick="updateHome()">Save Text</button>
+                <h3>Update Home Text</h3>
+                <textarea id="f-home" rows="4"></textarea>
+                <button class="primary" onclick="updateHome()">Save Updates</button>
             </div>
             <div class="admin-form">
-                <h3>Add Content</h3>
+                <h3>Add New Entry</h3>
                 <select id="f-type">
                     <option value="char">Character</option>
                     <option value="weapon">Weapon</option>
@@ -133,24 +140,24 @@
                 <input type="text" id="f-name" placeholder="Name">
                 <input type="text" id="f-img" placeholder="Image URL">
                 <select id="f-tier">
-                    <option value="">No Tier</option>
+                    <option value="">No Tier / Rank</option>
                     <option value="t0">T0</option>
                     <option value="t05">T0.5</option>
                     <option value="t1">T1</option>
                     <option value="t2">T2</option>
                     <option value="t3">T3</option>
                 </select>
-                <button class="primary" onclick="addToDB()">Add Item</button>
+                <button class="primary" onclick="addToDB()">Confirm Add</button>
             </div>
         </div>
     </main>
 
     <script>
-        let db = JSON.parse(localStorage.getItem('nte_final_db')) || {
-            chars: [], weapons: [], carts: [], teams: [], home: "Initial text."
+        let db = JSON.parse(localStorage.getItem('nte_v4_db')) || {
+            chars: [], weapons: [], carts: [], teams: [], home: "Welcome to the NTE Database. Use the Team Builder to plan your squads!"
         };
 
-        let currentTeam = [null, null, null];
+        let currentTeam = [null, null, null, null];
 
         function showPage(pageId, el) {
             document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
@@ -164,7 +171,7 @@
         }
 
         function checkAdmin() {
-            if(prompt("Pass:") === "1234") showPage('admin', document.querySelector('.admin-link'));
+            if(prompt("Admin Password:") === "1234") showPage('admin', document.querySelector('.admin-link'));
         }
 
         function updateHome() {
@@ -175,15 +182,12 @@
         function addToDB() {
             const newItem = {
                 id: Date.now(),
-                name: document.getElementById('f-name').value,
+                name: document.getElementById('f-name').value || "Unknown",
                 img: document.getElementById('f-img').value || 'https://via.placeholder.com/100',
                 tier: document.getElementById('f-tier').value
             };
             const type = document.getElementById('f-type').value;
-            if(type === 'char') db.chars.push(newItem);
-            else if(type === 'weapon') db.weapons.push(newItem);
-            else if(type === 'cart') db.carts.push(newItem);
-            else if(type === 'team') db.teams.push(newItem);
+            db[type === 'char' ? 'chars' : type === 'weapon' ? 'weapons' : type === 'cart' ? 'carts' : 'teams'].push(newItem);
             save();
         }
 
@@ -193,13 +197,13 @@
         }
 
         function save() {
-            localStorage.setItem('nte_final_db', JSON.stringify(db));
+            localStorage.setItem('nte_v4_db', JSON.stringify(db));
             render();
         }
 
         function addToTeam(char) {
             let idx = currentTeam.indexOf(null);
-            if(idx !== -1 && !currentTeam.includes(char)) {
+            if(idx !== -1 && !currentTeam.some(c => c && c.id === char.id)) {
                 currentTeam[idx] = char;
                 renderTeam();
             }
@@ -221,11 +225,10 @@
         function render() {
             document.getElementById('home-text').textContent = db.home;
             
-            // Render Grids
             const simpleRender = (id, data, cat) => {
                 document.getElementById(id).innerHTML = data.map(i => `
                     <div class="card" onclick="${id === 'builder-pool' ? `addToTeam(${JSON.stringify(i).replace(/"/g, '&quot;')})` : ''}">
-                        <button class="delete-btn" onclick="deleteItem('${cat}', ${i.id})">✕</button>
+                        <button class="delete-btn" onclick="event.stopPropagation(); deleteItem('${cat}', ${i.id})">✕</button>
                         <img src="${i.img}">
                         <div class="name">${i.name}</div>
                     </div>
@@ -237,7 +240,6 @@
             simpleRender('carts-grid', db.carts, 'carts');
             simpleRender('builder-pool', db.chars, 'chars');
 
-            // Render Tiers (Char & Team)
             const ranks = [
                 {k: 't0', l: 'T0', c: 'rank-t0'},
                 {k: 't05', l: 'T0.5', c: 'rank-t05'},
@@ -246,10 +248,10 @@
                 {k: 't3', l: 'T3', c: 'rank-t3'}
             ];
 
-            const drawTier = (containerId, data, categoryName) => {
+            const drawTier = (containerId, data) => {
                 document.getElementById(containerId).innerHTML = ranks.map(r => {
                     const items = data.filter(i => i.tier === r.k);
-                    if(items.length === 0 && categoryName === 'teams' && r.k === 't3') return ''; // Не показываем пустые Т3 для команд
+                    if(items.length === 0) return '';
                     return `
                         <div class="tier-row">
                             <div class="tier-label ${r.c}">${r.l}</div>
@@ -259,8 +261,8 @@
                 }).join('');
             };
 
-            drawTier('char-tier-container', db.chars, 'chars');
-            drawTier('team-tier-container', db.teams, 'teams');
+            drawTier('char-tier-container', db.chars);
+            drawTier('team-tier-container', db.teams);
         }
 
         render();
