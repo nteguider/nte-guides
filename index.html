@@ -2,45 +2,34 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>NTE | Hesperia Database</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@700&family=Inter:wght@400;600&display=swap" rel="stylesheet">
     <style>
-        body { background-color: #0f1113; color: #d1d5db; font-family: 'Inter', sans-serif; display: flex; flex-direction: column; min-height: 100vh; margin: 0; }
+        body { background-color: #0f1113; color: #d1d5db; font-family: 'Inter', sans-serif; display: flex; min-height: 100vh; margin: 0; overflow: hidden; }
         .nte-title { font-family: 'Orbitron', sans-serif; }
         
-        /* Sidebar Desktop */
-        .sidebar { width: 260px; background-color: #090a0c; border-right: 1px solid #1e2124; flex-shrink: 0; position: sticky; top: 0; height: 100vh; display: none; flex-direction: column; }
+        /* Sidebar */
+        .sidebar { width: 260px; background-color: #090a0c; border-right: 1px solid #1e2124; flex-shrink: 0; display: flex; flex-direction: column; height: 100vh; }
         
-        /* Bottom Nav Mobile */
-        .bottom-nav { position: fixed; bottom: 0; left: 0; right: 0; background: #090a0c; border-top: 1px solid #1e2124; display: flex; justify-content: space-around; padding: 12px; z-index: 9999; }
-        .nav-item { color: #4b5563; font-size: 10px; font-weight: 800; text-transform: uppercase; text-align: center; flex: 1; cursor: pointer; transition: 0.2s; }
-        .nav-item.active { color: #ef4444; }
-
-        @media (min-width: 768px) {
-            body { flex-direction: row; }
-            .sidebar { display: flex; }
-            .bottom-nav { display: none; }
-        }
-
-        .nav-link { padding: 0.8rem 1.5rem; display: block; transition: 0.2s; cursor: pointer; color: #9ca3af; font-weight: 600; font-size: 0.85rem; text-transform: uppercase; }
+        .nav-link { padding: 0.8rem 1.5rem; display: block; transition: 0.2s; cursor: pointer; color: #9ca3af; font-weight: 600; font-size: 0.85rem; text-transform: uppercase; letter-spacing: 0.05em; }
+        .nav-link:hover { color: #ffffff; background: #16181b; }
         .nav-link.active { color: #ffffff; background: #16181b; border-right: 3px solid #ef4444; }
 
-        .main-content { flex-grow: 1; padding: 1rem; padding-bottom: 90px; overflow-y: auto; background-color: #111315; width: 100%; position: relative; }
-        @media (min-width: 768px) { .main-content { padding: 2.5rem; padding-bottom: 2.5rem; } }
+        .main-content { flex-grow: 1; padding: 2.5rem; overflow-y: auto; background-color: #111315; height: 100vh; }
 
-        /* СТРОГОЕ СКРЫТИЕ СЕКЦИЙ */
-        .content-section { display: none !important; width: 100%; }
-        .content-section.active { display: block !important; animation: fadeIn 0.3s ease-out; }
+        /* Sections */
+        .content-section { display: none; }
+        .content-section.active { display: block; animation: fadeIn 0.3s ease-out; }
         
-        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(5px); } to { opacity: 1; transform: translateY(0); } }
 
         .collapsible-content { max-height: 0; overflow: hidden; transition: max-height 0.3s ease-out, opacity 0.2s; opacity: 0; }
-        .collapsible-content.open { max-height: 5000px; opacity: 1; margin-top: 1.5rem; }
+        .collapsible-content.open { max-height: 2000px; opacity: 1; margin-top: 1.5rem; }
         
-        .admin-input { background: #0f1113; border: 1px solid #1e2124; color: white; padding: 12px; font-size: 14px; border-radius: 8px; width: 100%; outline: none; }
-        .admin-label { font-size: 10px; font-weight: 800; color: #ef4444; text-transform: uppercase; margin-bottom: 4px; display: block; }
+        .admin-input { background: #0f1113; border: 1px solid #1e2124; color: white; padding: 10px; font-size: 12px; border-radius: 4px; width: 100%; outline: none; }
+        .admin-label { font-size: 9px; font-weight: 800; color: #ef4444; text-transform: uppercase; margin-bottom: 4px; display: block; }
     </style>
 </head>
 <body>
@@ -55,88 +44,68 @@
             <div onclick="showSection('weapons')" id="nav-weapons" class="nav-link">Arcs</div>
             <div onclick="showSection('tierlist')" id="nav-tierlist" class="nav-link">Tier List</div>
         </nav>
-        <button onclick="adminLogin()" class="p-6 text-[10px] text-gray-700 hover:text-red-500 font-bold uppercase tracking-widest transition">System Admin</button>
+        <div class="p-6 border-t border-white/5">
+            <button onclick="adminLogin()" class="text-[10px] text-gray-700 hover:text-red-500 font-bold uppercase tracking-widest transition">System Admin</button>
+        </div>
     </aside>
-
-    <div class="bottom-nav">
-        <div onclick="showSection('home')" id="m-nav-home" class="nav-item active">Home</div>
-        <div onclick="showSection('characters')" id="m-nav-characters" class="nav-item">Agents</div>
-        <div onclick="showSection('weapons')" id="m-nav-weapons" class="nav-item">Arcs</div>
-        <div onclick="showSection('tierlist')" id="m-nav-tierlist" class="nav-item">Tactical</div>
-    </div>
 
     <main class="main-content">
         <section id="sect-home" class="content-section active">
             <div class="py-20 text-center">
-                <h2 class="nte-title text-4xl md:text-6xl text-white mb-6 uppercase tracking-tighter">HESPERIA ARCHIVES</h2>
-                <div class="w-16 h-1 bg-red-600 mx-auto"></div>
+                <h2 class="nte-title text-6xl text-white mb-6 uppercase tracking-tighter">HESPERIA ARCHIVES</h2>
+                <div class="w-24 h-1 bg-red-600 mx-auto"></div>
             </div>
         </section>
 
         <section id="sect-characters" class="content-section">
-            <h2 class="nte-title text-xl text-white mb-8 uppercase tracking-widest border-l-4 border-red-600 pl-4">Personnel</h2>
-            <div id="char-grid" class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-3 md:gap-4"></div>
+            <h2 class="nte-title text-2xl text-white mb-8 uppercase tracking-widest border-l-4 border-red-600 pl-4">Personnel Database</h2>
+            <div id="char-grid" class="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-6 gap-4"></div>
         </section>
 
         <section id="sect-weapons" class="content-section">
-            <h2 class="nte-title text-xl text-white mb-8 uppercase tracking-widest border-l-4 border-red-600 pl-4">Arc Inventory</h2>
-            <div id="weapon-grid" class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4"></div>
+            <h2 class="nte-title text-2xl text-white mb-8 uppercase tracking-widest border-l-4 border-red-600 pl-4">Arc Inventory</h2>
+            <div id="weapon-grid" class="grid grid-cols-1 md:grid-cols-3 gap-6"></div>
         </section>
 
         <section id="sect-tierlist" class="content-section">
-            <h2 class="nte-title text-xl text-white mb-8 uppercase tracking-widest border-l-4 border-red-600 pl-4">Tier List</h2>
-            <p class="text-gray-500 italic text-sm">Strategic data analysis in progress...</p>
+            <h2 class="nte-title text-2xl text-white mb-8 uppercase tracking-widest border-l-4 border-red-600 pl-4">Tactical Tier List</h2>
+            <p class="text-gray-500">Tier list data is being synchronized...</p>
         </section>
 
         <section id="sect-char-detail" class="content-section">
-            <button onclick="showSection('characters')" class="mb-6 text-red-500 text-[10px] font-bold uppercase tracking-widest flex items-center gap-2"><span>&larr;</span> Back to Grid</button>
+            <button onclick="showSection('characters')" class="mb-6 text-red-500 text-[10px] font-bold uppercase tracking-widest flex items-center gap-2 hover:text-white transition"><span>&larr;</span> Back to Archive</button>
             <div id="detail-view"></div>
         </section>
 
         <section id="sect-admin" class="content-section">
-            <div class="max-w-6xl bg-[#1a1c1e] p-5 md:p-10 rounded-2xl border border-red-600/20 shadow-2xl">
-                <div class="flex flex-col md:flex-row justify-between items-center gap-4 mb-10">
-                    <h2 class="nte-title text-lg text-white uppercase tracking-widest">Database Editor</h2>
-                    <button onclick="commitAllChanges()" class="w-full md:w-auto bg-red-600 text-white px-8 py-3 rounded-xl font-bold uppercase text-[10px] tracking-widest hover:bg-red-700 transition">Save & Sync</button>
+            <div class="max-w-6xl bg-[#1a1c1e] p-10 rounded-2xl border border-red-600/20 shadow-2xl">
+                <div class="flex justify-between items-center mb-10">
+                    <h2 class="nte-title text-xl text-white uppercase tracking-widest">Database Editor</h2>
+                    <button onclick="commitAllChanges()" class="bg-red-600 text-white px-8 py-3 rounded-xl font-bold uppercase text-[10px] tracking-widest hover:bg-red-700 transition">Save & Sync</button>
                 </div>
+                
                 <div id="admin-char-list" class="space-y-6"></div>
                 <button onclick="addCharEntry()" class="w-full py-4 mt-6 bg-white/5 border border-white/10 text-white text-[10px] font-bold uppercase rounded-xl hover:bg-white/10 transition">+ Add New Agent</button>
                 
                 <div id="output-area" class="mt-10 hidden">
-                    <p class="text-green-500 text-[10px] font-bold uppercase mb-2">Sync Code Generated:</p>
-                    <textarea id="final-code" class="w-full h-48 bg-black text-[10px] p-4 text-gray-500 font-mono" readonly></textarea>
+                    <textarea id="final-code" class="w-full h-64 bg-black text-[10px] p-4 text-gray-500 font-mono" readonly></textarea>
                 </div>
             </div>
         </section>
     </main>
 
     <script id="data-script">
-        let characters = []; 
+        let characters = [];
 
         function showSection(id) {
-            // 1. Скрываем ВСЕ секции абсолютно
-            document.querySelectorAll('section').forEach(s => {
-                s.classList.remove('active');
-            });
+            document.querySelectorAll('.content-section').forEach(s => s.classList.remove('active'));
+            document.querySelectorAll('.nav-link').forEach(l => l.classList.remove('active'));
             
-            // 2. Убираем активные классы со всей навигации
-            document.querySelectorAll('.nav-link, .nav-item').forEach(l => {
-                l.classList.remove('active');
-            });
-
-            // 3. Показываем только нужную
             const target = document.getElementById('sect-' + id);
-            if(target) {
-                target.classList.add('active');
-            }
-
-            // 4. Подсвечиваем навигацию
-            const nav = document.getElementById('nav-' + id);
-            const mNav = document.getElementById('m-nav-' + id);
-            if(nav) nav.classList.add('active');
-            if(mNav) mNav.classList.add('active');
+            if(target) target.classList.add('active');
             
-            window.scrollTo(0, 0);
+            const nav = document.getElementById('nav-' + id);
+            if(nav) nav.classList.add('active');
         }
 
         function toggleAccordion(contentId, chevronId) {
@@ -158,24 +127,24 @@
             container.innerHTML = '';
             characters.forEach((char, i) => {
                 container.innerHTML += `
-                <div class="bg-black/40 p-4 md:p-6 rounded-xl border border-white/5 relative">
+                <div class="bg-black/40 p-6 rounded-xl border border-white/5 relative">
                     <button onclick="deleteChar(${i})" class="absolute top-4 right-4 text-red-600 text-[10px] font-bold uppercase">Remove</button>
-                    <div class="grid grid-cols-1 md:grid-cols-4 gap-4 mb-4">
+                    <div class="grid grid-cols-4 gap-4 mb-4">
                         <div><label class="admin-label">Name</label><input type="text" value="${char.name}" class="edit-char-name admin-input"></div>
                         <div><label class="admin-label">Element</label><input type="text" value="${char.element || ''}" class="edit-char-element admin-input"></div>
                         <div><label class="admin-label">Tier</label><input type="text" value="${char.tier || ''}" class="edit-char-tier admin-input"></div>
                         <div><label class="admin-label">Img URL</label><input type="text" value="${char.img || ''}" class="edit-char-img admin-input"></div>
                     </div>
-                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                        <textarea class="edit-char-r1 admin-input h-20" placeholder="Resonance R1">${char.r1 || ''}</textarea>
-                        <textarea class="edit-char-r2 admin-input h-20" placeholder="Resonance R2">${char.r2 || ''}</textarea>
+                    <div class="grid grid-cols-2 gap-4">
+                        <textarea class="edit-char-r1 admin-input h-24" placeholder="Resonance R1">${char.r1 || ''}</textarea>
+                        <textarea class="edit-char-r2 admin-input h-24" placeholder="Resonance R2">${char.r2 || ''}</textarea>
                     </div>
                 </div>`;
             });
         }
 
-        function addCharEntry() { characters.push({name: "New Agent", element: "Fire", tier: "T0", img: "", r1: "", r2: ""}); renderAdminUI(); }
-        function deleteChar(i) { if(confirm("Delete Agent?")) { characters.splice(i, 1); renderAdminUI(); } }
+        function addCharEntry() { characters.push({name: "New Agent", element: "", tier: "T0", img: "", r1: "", r2: ""}); renderAdminUI(); }
+        function deleteChar(i) { if(confirm("Delete?")) { characters.splice(i, 1); renderAdminUI(); } }
 
         function commitAllChanges() {
             const divs = document.querySelectorAll('#admin-char-list > div');
@@ -193,7 +162,6 @@
             updateSiteContent();
             document.getElementById('output-area').classList.remove('hidden');
             document.getElementById('final-code').value = "<!DOCTYPE html>\n" + document.documentElement.outerHTML;
-            alert("Database updated! Sync code to GitHub.");
         }
 
         function updateSiteContent() {
@@ -202,5 +170,41 @@
             characters.forEach((char, index) => {
                 grid.innerHTML += `
                 <div onclick="viewChar(${index})" class="bg-[#16181b] border border-white/5 rounded-lg overflow-hidden cursor-pointer hover:border-red-600 transition group">
-                    <div class="aspect-[3/4] overflow-hidden"><img src="${char.img}" class="w-full h-full object-cover group-hover:scale-105 transition duration-500"></div>
-                    <div class="p-3 text-center text-
+                    <img src="${char.img}" class="aspect-[3/4] object-cover w-full group-hover:scale-105 transition duration-500">
+                    <div class="p-3 text-center text-[10px] font-bold text-white uppercase">${char.name}</div>
+                </div>`;
+            });
+        }
+
+        function viewChar(index) {
+            const char = characters[index];
+            const detail = document.getElementById('detail-view');
+            detail.innerHTML = `
+                <div class="bg-[#1a1c1e] rounded-2xl overflow-hidden border border-white/5 flex flex-row shadow-2xl mb-10">
+                    <div class="w-1/2 bg-[#090a0c] h-[500px]"><img src="${char.img}" class="w-full h-full object-cover"></div>
+                    <div class="p-10 w-1/2 flex flex-col justify-center">
+                        <span class="bg-red-600 text-white text-[10px] font-black px-3 py-1 rounded w-max mb-4 uppercase">${char.tier}</span>
+                        <h3 class="nte-title text-6xl text-white mb-2 uppercase">${char.name}</h3>
+                        <p class="text-red-500 text-sm font-bold uppercase tracking-widest">${char.element}</p>
+                    </div>
+                </div>
+                <div class="bg-[#1a1c1e] border border-white/5 rounded-xl p-8">
+                    <h4 class="nte-title text-xl text-white uppercase tracking-widest border-l-4 border-red-600 pl-4 mb-8">Resonance Data</h4>
+                    <div class="grid grid-cols-2 gap-8">
+                        <div class="bg-white/5 p-6 rounded-lg">
+                            <span class="text-red-500 text-[10px] font-black uppercase block mb-3">R1</span>
+                            <p class="text-sm leading-relaxed text-gray-400">${char.r1 || 'Empty'}</p>
+                        </div>
+                        <div class="bg-white/5 p-6 rounded-lg">
+                            <span class="text-red-500 text-[10px] font-black uppercase block mb-3">R2</span>
+                            <p class="text-sm leading-relaxed text-gray-400">${char.r2 || 'Empty'}</p>
+                        </div>
+                    </div>
+                </div>`;
+            showSection('char-detail');
+        }
+
+        window.onload = updateSiteContent;
+    </script>
+</body>
+</html>
