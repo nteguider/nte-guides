@@ -132,7 +132,7 @@
                     <button onclick="deleteItem('update', ${i})" class="text-red-600 font-bold p-2 text-xs">✕</button>
                 </div>`).join('');
 
-            // Characters
+            // Characters (Восстановил все скиллы)
             document.getElementById('admin-char-list').innerHTML = characters.map((char, i) => `
                 <div class="bg-black/40 p-6 rounded-xl border border-white/5 relative">
                     <button onclick="deleteItem('char', ${i})" class="absolute top-4 right-4 text-red-600 text-[10px] font-bold uppercase">Remove</button>
@@ -142,6 +142,17 @@
                         <div><label class="admin-label">Tier</label><input type="text" value="${char.tier || ''}" class="edit-char-tier admin-input"></div>
                         <div><label class="admin-label">Img URL</label><input type="text" value="${char.img || ''}" class="edit-char-img admin-input"></div>
                     </div>
+                    
+                    <div class="grid grid-cols-3 gap-4 mb-4">
+                        <div><label class="admin-label">Basic</label><textarea class="edit-char-basic admin-input h-20">${char.basic || ''}</textarea></div>
+                        <div><label class="admin-label">Skill</label><textarea class="edit-char-skill admin-input h-20">${char.skill || ''}</textarea></div>
+                        <div><label class="admin-label">Ult</label><textarea class="edit-char-ult admin-input h-20">${char.ult || ''}</textarea></div>
+                    </div>
+                    <div class="grid grid-cols-2 gap-4 mb-4">
+                        <div><label class="admin-label">R1</label><textarea class="edit-char-r1 admin-input h-20">${char.r1 || ''}</textarea></div>
+                        <div><label class="admin-label">R2</label><textarea class="edit-char-r2 admin-input h-20">${char.r2 || ''}</textarea></div>
+                    </div>
+
                     <div class="grid grid-cols-6 gap-2">
                         ${(char.awakening || ["","","","","",""]).map((v, idx) => `<div><label class="admin-label">A${idx+1}</label><input type="text" value="${v}" class="edit-char-awk-${idx} admin-input"></div>`).join('')}
                     </div>
@@ -175,6 +186,7 @@
                 text: div.querySelector('.edit-upd-text').value
             }));
 
+            // Сохраняем навыки персонажа обратно
             characters = Array.from(document.querySelectorAll('#admin-char-list > div')).map(div => {
                 const awk = [];
                 for(let i=0; i<6; i++) awk.push(div.querySelector(`.edit-char-awk-${i}`).value);
@@ -183,6 +195,11 @@
                     element: div.querySelector('.edit-char-element').value,
                     tier: div.querySelector('.edit-char-tier').value,
                     img: div.querySelector('.edit-char-img').value,
+                    basic: div.querySelector('.edit-char-basic').value,
+                    skill: div.querySelector('.edit-char-skill').value,
+                    ult: div.querySelector('.edit-char-ult').value,
+                    r1: div.querySelector('.edit-char-r1').value,
+                    r2: div.querySelector('.edit-char-r2').value,
                     awakening: awk
                 };
             });
@@ -241,7 +258,7 @@
                     </div>
                 </div>`).join('');
 
-            // Tier List (Simplified check)
+            // Tier List
             const tiers = ['T0','T0.5','T1','T2','T3'];
             document.getElementById('tier-list-container').innerHTML = tiers.map(t => {
                 const members = characters.filter(c => c.tier === t);
@@ -265,6 +282,19 @@
                         <span class="bg-red-600 text-white text-[10px] font-black px-2 py-1 rounded w-max mb-4 uppercase">${char.tier}</span>
                         <h3 class="nte-title text-5xl text-white mb-2 uppercase">${char.name}</h3>
                         <p class="text-red-500 text-sm font-bold uppercase tracking-widest">${char.element}</p>
+                    </div>
+                </div>
+                <!-- Ability Tabs Rendered Here -->
+                <div class="space-y-4">
+                    <div class="bg-[#1a1c1e] border border-white/5 rounded-xl p-6">
+                        <h4 class="nte-title text-white uppercase border-l-4 border-red-600 pl-4 mb-4">Abilities</h4>
+                        <div class="grid grid-cols-1 gap-4">
+                            <div class="bg-white/5 p-4 rounded"><span class="text-red-500 text-[10px] font-bold block uppercase mb-1">Basic</span><p class="text-sm">${char.basic || '---'}</p></div>
+                            <div class="bg-white/5 p-4 rounded"><span class="text-red-500 text-[10px] font-bold block uppercase mb-1">Skill</span><p class="text-sm">${char.skill || '---'}</p></div>
+                            <div class="bg-white/5 p-4 rounded"><span class="text-red-500 text-[10px] font-bold block uppercase mb-1">Ultimate</span><p class="text-sm">${char.ult || '---'}</p></div>
+                            <div class="bg-white/5 p-4 rounded"><span class="text-red-500 text-[10px] font-bold block uppercase mb-1">R1</span><p class="text-sm">${char.r1 || '---'}</p></div>
+                            <div class="bg-white/5 p-4 rounded"><span class="text-red-500 text-[10px] font-bold block uppercase mb-1">R2</span><p class="text-sm">${char.r2 || '---'}</p></div>
+                        </div>
                     </div>
                 </div>`;
             showSection('char-detail');
